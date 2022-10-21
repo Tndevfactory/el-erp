@@ -1,0 +1,38 @@
+{
+  "navbar component ": "-------------------------------------",
+   
+  "home": "Home",
+  "portal": "Portal",
+  "files": "Files",
+  "administration": "Administration",
+  "discussion": "Discussion",
+  "statistic": "Statistic",
+  "FAQ": "FAQ",
+  
+  "hello": "Welcome, ",
+  "my_account": "My account",
+  "sign_out": "Sign out",
+ 
+
+  "login page ": "-------------------------------------",
+  "name": "name",
+  "email": "email",
+  "password": "password",
+
+  "required": "required",  
+
+  "statistic page index ": "-------------------------------------",
+  "index": "Index",
+  "idarti": "Idarti",
+  "statistic page core ": "-------------------------------------",
+  "general_view":"General view",
+
+  "portail": "-------------------------------------",
+  "steg page index ": "-------------------------------------",
+  
+  "steg": "Ste Tunisienne de l'Electricité et du Gaz",
+  "steg page core ": "-------------------------------------"
+  
+
+
+}

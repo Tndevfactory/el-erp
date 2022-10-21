@@ -1,0 +1,155 @@
+  import preview from "@/assets/preview/carbon.svg";
+import { Button } from "antd";
+import themeConfig from "./utils/utils";
+  
+  
+  <div className="flex  justify-center items-center flex-col h-screen5 space-y-5 bg-dark-purple">
+      <h1 className="text-4xl font-bold text-linen text-center ">
+        Tailwind CSS - Ant-design - React - TypeScript
+      </h1>
+      <Button
+        type="primary"
+        className=" bg-teal-800 border-teal-600 text-white font-bold rounded-none "
+      >
+        Ant btn with a tailwind css styles
+      </Button>
+      <Button type="primary">Ant btn</Button>
+      <Button
+        type="primary"
+        style={{
+          background: themeConfig.theme.colors["slate-blue"],
+          borderColor: themeConfig.theme.colors["slate-blue"],
+        }}
+      >
+        Ant btn with a javascript variable colors
+      </Button>
+
+      <img src={preview} width={800} />
+    </div>
+
+    -------------------------------------------
+
+    {
+  "name": "tw-antd-start-react-ts",
+  "private": true,
+  "version": "1.0.0",
+  "license": "",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "@apollo/client": "^3.6.9",
+    "@react-three/fiber": "^8.3.1",
+    "@reduxjs/toolkit": "^1.8.4",
+    "animejs": "^3.2.1",
+    "antd": "^4.19.5",
+    "apexcharts": "^3.35.4",
+    "dayjs": "^1.11.5",
+    "graphql": "^16.5.0",
+    "gsap": "^3.10.4",
+    "react": "^18.0.0",
+    "react-apexcharts": "^1.4.0",
+    "react-dom": "^18.0.0",
+    "react-intl": "^6.0.5",
+    "react-query": "^3.39.2",
+    "react-redux": "^8.0.2",
+    "react-router-dom": "^6.3.0",
+    "react-spring": "^9.5.2",
+    "three": "^0.143.0"
+  },
+  "devDependencies": {
+    "@react-spring/types": "^9.5.2",
+    "@types/node": "^17.0.24",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/tailwindcss": "^3.0.10",
+    "@vitejs/plugin-react": "^1.3.0",
+    "autoprefixer": "^10.4.4",
+    "less": "^4.1.2",
+    "postcss": "^8.4.12",
+    "tailwindcss": "^3.0.24",
+    "typescript": "^4.6.3",
+    "vite": "^2.9.2",
+    "vite-plugin-imp": "^2.1.7"
+  }
+}
+----------------------------header ------------------------
+
+ <Space
+        size="small"
+        className="trigger_menu"
+        style={{
+          display: screens.lg ? "flex" : "none",
+        }}
+      >
+        {React.createElement(
+          collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+          {
+            className: "trigger",
+            onClick: () => setCollapsed(!collapsed),
+          }
+        )}
+
+        {/* <Menu
+          style={{ backgroundColor: "transparent", padding: 0 }}
+          theme="light"
+          mode="horizontal"
+          defaultSelectedKeys={["1"]}
+          items={navbarItems}
+        /> */}
+
+        <h1 className="bg-indigo-100 text-cyan-500">test</h1>
+      </Space>
+
+
+      <Space
+        size="small"
+        className="trigger_menu"
+        style={{
+          display: screens.lg ? "none" : "flex",
+          backgroundColor: "red",
+        }}
+      >
+        {React.createElement(
+          collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+          {
+            className: "trigger",
+            onClick: () => setCollapsed(!collapsed),
+          }
+        )}
+
+        <Menu
+          style={{ backgroundColor: "transparent", padding: 0 }}
+          theme="light"
+          mode="horizontal"
+          defaultSelectedKeys={["2"]}
+          items={navbarMobile}
+        />
+      </Space>
+
+      
+      {/* <Space size="small" className="search_logo">
+        <AutoComplete
+      dropdownMatchSelectWidth={188}
+      style={{ width: 200 }}
+      options={options}
+      onSelect={onSelect}
+      onSearch={handleSearch}
+    >
+      <Input.Search
+        size="small"
+        placeholder="Rechercher"
+        // enterButton
+      />
+    </AutoComplete>
+        <Space direction="vertical">
+          <Space wrap>
+            <Dropdown overlay={profilMenu} placement="bottomLeft">
+              <Avatar size={{ xs: 24, sm: 32 }} icon={<UserOutlined />} />
+            </Dropdown>
+          </Space>
+        </Space>
+      </Space> */}
