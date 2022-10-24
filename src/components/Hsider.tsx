@@ -6,8 +6,7 @@ import {
   AppstoreOutlined,
   BarChartOutlined,
   CloudOutlined,
-  UserOutlined,
-  TeamOutlined,
+  UnorderedListOutlined,
   UploadOutlined,
   MenuUnfoldOutlined,
   VideoCameraOutlined,
@@ -46,77 +45,25 @@ const { Sider, Content } = Layout;
 
 const sideMenus: MenuProps["items"] = [
   {
-    key: "Accueil",
-    icon: <DashboardOutlined />,
     label: (
       <NavLink
         // className={({ isActive }) =>
         //   isActive ? "text-red-500" : "text-gray-100"
         // }
-        to="home"
+        to="cautions"
       >
-        Dashboard
+        Cautions
       </NavLink>
     ),
-  },
-  {
-    label: "Map",
-    key: "rh",
-    icon: <VideoCameraOutlined />,
-    children: [
-      {
-        label: (
-          <NavLink
-            // className={({ isActive }) =>
-            //   isActive ? "text-red-500" : "text-gray-100"
-            // }
-            to="finance"
-          >
-            Outdoor
-          </NavLink>
-        ),
-        key: "setting:1",
-      },
-      {
-        label: "Indoor",
-        key: "setting:2",
-      },
-    ],
-  },
-  {
-    label: (
-      <NavLink
-        // className={({ isActive }) =>
-        //   isActive ? "text-red-500" : "text-gray-100"
-        // }
-        to="positions"
-      >
-        Positions
-      </NavLink>
-    ),
-    key: "Positions",
-    icon: <UploadOutlined />,
-  },
-  {
-    label: (
-      <NavLink
-        // className={({ isActive }) =>
-        //   isActive ? "text-red-500" : "text-gray-100"
-        // }
-        to="configuration"
-      >
-        Configuration
-      </NavLink>
-    ),
-    key: "configuration",
-    icon: <SettingOutlined />,
-  },
-  /* {
-    label: "Projet",
+    key: "Cautions",
+    icon: <UnorderedListOutlined />,
+  },{
+    label: "Projets",
     key: "projet",
-    icon: <CloudOutlined />,
+    icon: <AppstoreOutlined />,
   },
 
+  /*
   {
     label: "Ticketing",
     key: "ticketing",

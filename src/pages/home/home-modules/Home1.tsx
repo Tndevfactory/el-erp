@@ -55,7 +55,6 @@ import type { SelectProps } from "antd/es/select";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleCollapseLayout } from "../../../features/ui/uiSlice";
 import { useEffect } from "react";
-import Positions1 from "../../positions/positions-modules/Positions1";
 import { TinyLine, Column, Radar, Line } from "@ant-design/plots";
 import fr from "date-fns/esm/locale/fr/index.js";
 // chart

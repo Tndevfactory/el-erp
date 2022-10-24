@@ -32,6 +32,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.0.0",
+    "react-icons": "^4.6.0",
     "react-intl": "^6.0.5",
     "react-leaflet": "^4.0.2",
     "react-redux": "^8.0.2",
