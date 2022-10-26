@@ -1,0 +1,113 @@
+
+// Cautions
+.Cautions .table-row-en-attente {
+    background-color: #FCF3CF ;
+  animation: clignote 2s linear infinite;
+}
+@keyframes clignote {  
+  50% { background-color: #ffffff; }
+}
+.Cautions .table-row-warning {
+    background-color: #FDEDEC  ;
+  animation: clignote2 2s linear infinite;
+}
+@keyframes clignote2 {  
+    50% { background-color: #ffffff; }
+  }
+.Cautions .table-row-dark, .ProlongationListe .table-row-dark {
+    background-color: #fbfbfb;
+}
+.Cautions .ant-table-thead > tr > th, .ProlongationListe .ant-table-thead > tr > th{
+    background: #F2F3F4;
+}
+
+//Caution details
+.CautionDetails .ant-select-disabled .ant-select-arrow{
+    visibility: hidden;
+}
+
+.CautionDetails .btnFermer{
+    color: #52BE80;
+    // background: #58D68D;
+    border-color: #52BE80;
+}
+
+.CautionDetails .btnFermer:hover{
+    color: #ffffff;
+    background: #52BE80;
+    border-color: #52BE80;
+}
+
+.CautionDetails .btnProlonger{
+    color: #F1C40F;
+    // background: #F1C40F ;
+    border-color: #F1C40F ;
+}
+
+.CautionDetails .btnProlonger:hover{
+    color: #ffffff;
+    background: #F4D03F;
+    border-color: #F4D03F ;
+
+}
+
+.CautionDetails .btnModofier, .CautionForm .btnModofier{
+    color: #3498DB;
+    // background: #F4D03F ;
+    border-color: #3498DB ;
+}
+
+.CautionDetails .btnModofier:hover, .CautionForm .btnModofier:hover{
+    color: #ffffff;
+    background: #3498DB;
+}
+
+.CautionDetails .btnAnnuler, .CautionForm .btnAnnuler{
+    color: #909497;
+    // background: #F4D03F ;
+    border-color: #909497 ;
+}
+
+.CautionDetails .btnAnnuler:hover, .CautionForm .btnAnnuler:hover{
+    color: #ffffff;
+    background: #A6ACAF;
+    border-color: #A6ACAF ;
+
+}
+
+.CautionDetails .btnSupprimer{
+    color: #E74C3C;
+    // background: #F4D03F ;
+    border-color: #E74C3C ;
+}
+
+.CautionDetails .btnSupprimer:hover{
+    color: #ffffff;
+    background: #E74C3C;
+    border-color: #E74C3C ;
+
+}
+
+.CautionDetails .ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector{
+    color: black;
+    // background: #EAF2F8;
+    cursor: text;
+    // border: none;
+}
+
+.CautionDetails .ant-form-vertical .ant-form-item-label > label, .ant-col-24.ant-form-item-label > label, .ant-col-xl-24.ant-form-item-label > label{
+    font-weight: 500;
+}
+
+
+.CautionDetails .ant-input[disabled],.CautionDetails .ant-picker.ant-picker-disabled, .CautionDetails .ant-picker-input > input[disabled]{
+    color: rgb(0 0 0 / 85%);
+    // background: #EAF2F8;
+
+    cursor:text;
+}
+
+//card body
+.ant-card-body {
+    padding: 12px !important;
+}

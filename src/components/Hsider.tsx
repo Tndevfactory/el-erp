@@ -13,8 +13,11 @@ import {
   MenuFoldOutlined,
   DashboardOutlined,
   SettingOutlined,
+  TeamOutlined,
+  ShoppingCartOutlined,
+  DollarCircleOutlined
 } from "@ant-design/icons";
-
+import { TbTicket } from 'react-icons/tb';
 import {
   Layout,
   Menu,
@@ -45,6 +48,16 @@ const { Sider, Content } = Layout;
 
 const sideMenus: MenuProps["items"] = [
   {
+    label: "Ressources humaines",
+    key: "rh",
+    icon: <TeamOutlined />,
+  },
+  {
+    label: "Finance",
+    key: "finance",
+    icon: <DollarCircleOutlined />,
+  },
+  {
     label: (
       <NavLink
         // className={({ isActive }) =>
@@ -58,22 +71,26 @@ const sideMenus: MenuProps["items"] = [
     key: "Cautions",
     icon: <UnorderedListOutlined />,
   },{
-    label: "Projets",
+    label: (
+      <NavLink
+        to="projects"
+      >
+        Projects
+      </NavLink>
+    ),
     key: "projet",
     icon: <AppstoreOutlined />,
   },
-
-  /*
   {
     label: "Ticketing",
     key: "ticketing",
-    icon: <AppstoreOutlined />,
+    icon: <TbTicket />,
   },
   {
     label: "Achats",
     key: "achat",
-    icon: <TeamOutlined />,
-  }, */
+    icon: <ShoppingCartOutlined />
+  },
 ];
 
 const { Title } = Typography;
@@ -106,7 +123,7 @@ export default function Hsider() {
       collapsible
       collapsed={isCollapsed}
     >
-      <div className="border-0 mx-3 pt-5 bg-white p-2 flex justify-center ">
+      <div className="border-0 mx-3 pt-5 bg-white p-2 flex ">
         <Image width={20} src={elasticLogo} />
         {!isCollapsed ? (
           <Text
@@ -114,7 +131,7 @@ export default function Hsider() {
             className="text-blue-600 ml-2 text-lg subpixel-antialiased font-semibold
             tracking-tighter uppercase"
           >
-            elastic watch
+            elastic erp
           </Text>
         ) : (
           ""

@@ -15,9 +15,9 @@ import {
   Popover,
   InputNumber,
   Upload,
+  Divider,
   Typography,
 } from 'antd'
-import '../../../style/modules/Project.less'
 import { QuestionCircleOutlined, InboxOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
@@ -25,13 +25,14 @@ import {
   addDuration,
   deleteCaution,
   updateCaution,
+  CautionApprove
 } from '@/features/caution/cautionSlice'
 import {
   getOneCaution,
   closeCaution,
 } from '@/features/caution/cautionSlice'
-import { MdMoreTime } from 'react-icons/md'
-import FormItem from 'antd/es/form/FormItem'
+import ListeProlongation from './ListeProlongation'
+
 const { Dragger } = Upload
 const { Option } = Select
 const { Title } = Typography
@@ -108,6 +109,10 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
             : caution.Durée,
         },
         {
+          name: ['ligne'],
+          value: caution.ligne,
+        },
+        {
           name: ['Etat_main_levée'],
           value: caution.Etat_main_levée,
         },
@@ -153,6 +158,7 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
           Montant: values.montant,
           Frais_mois: 20,
           Durée: values.durée,
+          ligne: values.ligne,
           Etat_main_levée: values.Etat_main_levée,
           Date_réception_PV_définitif:
             values.Date_réception_PV_définitif &&
@@ -272,28 +278,6 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
               label={
                 <>
                   Durée
-                  {/* <Popover
-                    content={
-                      <Form
-                        onFinish={handleAddDuration}
-                        style={{ display: 'flex' }}
-                      >
-                        <FormItem name="duréeAdditionnelle">
-                          <InputNumber min={1} />
-                        </FormItem>
-                        <Button type="primary" htmlType="submit">
-                          {' '}
-                          Ajouter
-                        </Button>
-                      </Form>
-                    }
-                    title="Ajouter une durée"
-                    trigger="hover"
-                  >
-                    <MdMoreTime
-                      style={{ marginLeft: '10px', cursor: 'pointer' }}
-                    />
-                  </Popover> */}
                 </>
               }
             >
@@ -314,15 +298,17 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="Date_réception_PV_définitif"
-              label="Date réception PV définitif"
+              name="ligne"
+              label="Ligne"
             >
-              <DatePicker
-                format={'DD/MM/YYYY'}
-                style={{ width: '100%' }}
-                placement="topLeft"
-                disabled={!update}
-              />
+              <Select disabled={!update}>
+                <Option value={"EPS"}>
+                  EPS
+                </Option>
+                <Option value={"Compte courant"}>
+                  Compte courant
+                </Option>
+              </Select>
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -431,7 +417,7 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
               )}
               {visible && caution.Etat_main_levée === 'En attente' && (
                 <Space>
-                  <Button className="btnFermer" onClick={() => {}}>
+                  <Button className="btnFermer" onClick={() => {dispatch(CautionApprove({ id: caution.id }));forceRefresh(Math.random()); onClose()}}>
                     Approuver
                   </Button>
                   <Button
@@ -484,6 +470,7 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
         </Form.Item>
       </Form>
       <div ref={drawerEndRef} />
+      {caution?.Prolongation?.length!==0&&<><Divider>Liste de prolongation</Divider><ListeProlongation prolongation={caution.Prolongation} /></>}
     </Drawer>
   )
 }

@@ -59,14 +59,16 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
         DateD: moment(values.dateTime._d).format("DD/MM/YYYY"),
         Client: values.client,
         Montant: values.montant,
+        ligne:values.ligne,
         Frais_mois: 20,
         Durée: values.Durée,
-        Etat_main_levée: false,
+        Etat_main_levée: "En attente",
         Observation: values.Observation,
       })
     );
     forceRefresh(Math.random());
     setVisible(false);
+    console.log(values)
   };
   return (
     <Drawer
@@ -192,16 +194,16 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
                 style={{ width: "100%" }}
                 placeholder="Veuillez entrer le montant"
                 onBlur={(e)=>{
-                  if(parseFloat(e.target.value)<1000){
+                  if(parseFloat(e.target.value)>=1000){
                     form.setFieldsValue(
                       {
-                        ligne:1,
+                        ligne:"EPS",
                       }
                     )
                   }else{
                     form.setFieldsValue(
                       {
-                        ligne:0,
+                        ligne:"Compte courant",
                       }
                     )
                   }
@@ -282,8 +284,8 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
               ]}
             >
        <Radio.Group defaultValue={eps}>
-            <Radio value={0}> Ligne eps </Radio>
-            <Radio value={1}> Compte courant </Radio>
+            <Radio value={'EPS'}> Ligne eps </Radio>
+            <Radio value={'Compte courant'}> Compte courant </Radio>
           </Radio.Group>
             </Form.Item>
           </Col>
@@ -316,10 +318,10 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
           </Col>
         </Row>
         <Form.Item style={{ textAlign: "right" }}>
-          <Button htmlType="reset" style={{ marginRight: "10px" }}>
+          <Button className="btnAnnuler" htmlType="reset" style={{ marginRight: "10px" }}>
             Annuler
           </Button>
-          <Button type="primary" htmlType="submit">
+          <Button className="btnModofier" htmlType="submit">
             Envoyer
           </Button>
         </Form.Item>

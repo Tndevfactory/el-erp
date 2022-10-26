@@ -27,6 +27,8 @@ import RequireAuth from "./components/RequireAuth";
 import Unauthorized from "./components/Unauthorized";
 import GuestPath from "./components/GuestPath";
 import Layout from "./components/Layout";
+import Index from "./components/Index";
+
 
 // Auth
 import Login from "./pages/auth/Login";
@@ -36,8 +38,10 @@ import Home from "./pages/home/Index";
 import Home1 from "./pages/home/home-modules/Home1";
 
 // Cautions
-import CautionsIndex from "./pages/cautions/Index";
 import Cautions from "./pages/cautions/caution-modules/Cautions";
+
+// Project
+import Projects from "./pages/project/project-modules/Projects";
 
 // check localstorage here
 //console.log(`${process.env.REACT_APP_BASE_PUBLIC_URL}/`);
@@ -78,8 +82,11 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
                 <Route path={`dashboard1`} element={<Home1 />} />
               </Route>
               
-              <Route path={`cautions/*`} element={<CautionsIndex />}>
+              <Route path={`cautions/*`} element={<Index />}>
                   <Route path={`*`} element={<Cautions />} />
+              </Route>
+              <Route path={`projects/*`} element={<Index />}>
+                  <Route path={`*`} element={<Projects />} />
               </Route>
               </Route>
             <Route path={`unauthorized`} element={<Unauthorized />} />
