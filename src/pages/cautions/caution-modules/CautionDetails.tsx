@@ -62,15 +62,21 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
     setVisible(true)
   }
   const drawerEndRef = useRef(null)
+  const drawerTopRef = useRef(null)
+
 
   const scrollToBottom = () => {
     drawerEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+  const scrollToTop = () => {
+    drawerTopRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
   const onClose = () => {
     setVisible(false)
     setUpdate(false)
     setProlongation(false)
+    scrollToTop()
   }
 
   useEffect(() => {
@@ -196,8 +202,9 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
       visible={visible}
       bodyStyle={{
         paddingBottom: 80,
-      }}
+      }} 
     >
+      <div ref={drawerTopRef}/>
       <Form
         layout="vertical"
         fields={fields}
@@ -332,7 +339,7 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
           </Col>
         </Row>
         {prolongation && (
-          <>
+          <div ref={drawerEndRef}>
             <Title level={4} style={{ color: '#3498DB' }}>
               Demande de prolongation
             </Title>
@@ -389,7 +396,7 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
                 </Col>
               </Row>
             </Form>{' '}
-          </>
+          </div>
         )}
         <Form.Item style={{ textAlign: 'right' }}>
           {update ? (
@@ -469,8 +476,7 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
           )}
         </Form.Item>
       </Form>
-      <div ref={drawerEndRef} />
-      {caution?.Prolongation?.length!==0&&<><Divider>Liste de prolongation</Divider><ListeProlongation prolongation={caution.Prolongation} /></>}
+      {caution?.Prolongations?.length!==0&&<><Divider>Liste de prolongation</Divider><ListeProlongation prolongation={caution.Prolongations} /></>}
     </Drawer>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import '../../../style/modules/Caution.less'
+import "../../../style/modules/Caution.less";
 import {
   Button,
   Space,
@@ -17,6 +17,7 @@ import {
   Dropdown,
   Menu,
   Checkbox,
+  Tooltip,
 } from "antd";
 import {
   SearchOutlined,
@@ -27,6 +28,11 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   CheckOutlined,
+  AimOutlined,
+  MinusCircleOutlined,
+  PlusCircleOutlined,
+  EyeOutlined,
+  EyeInvisibleOutlined,
 } from "@ant-design/icons";
 import { MdMoreTime } from "react-icons/md";
 import moment from "moment";
@@ -34,21 +40,28 @@ import { Console } from "console";
 import CautionForm from "./CautionForm";
 import CautionDetails from "./CautionDetails";
 import { useDispatch, useSelector } from "react-redux";
-import { getOneCaution, CautionApprove, ICaution } from "@/features/caution/cautionSlice";
+import {
+  getOneCaution,
+  CautionApprove,
+  ICaution,
+  closeCaution,
+} from "@/features/caution/cautionSlice";
 import ListeProlongation from "./ListeProlongation";
-import type { ColumnsType } from 'antd/es/table';
+import type { ColumnsType } from "antd/es/table";
 const { Paragraph, Title } = Typography;
 
 function Cautions() {
   const dispatch = useDispatch();
   var { cautions } = useSelector((store: any) => store.caution);
-  cautions = cautions.map((item) =>
+  cautions = cautions.map((item, index) =>
     Object.assign({}, item, {
       DateE: moment(
         moment(item.DateD, "DDMMYYYY").valueOf() + 86400000 * item.Durée
       ).format("DD/MM/YYYY"),
+      key: index.toString(),
     })
   );
+  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
   const [update, setUpdate] = useState(false);
   const [prolongation, setProlongation] = useState(false);
   const [visibleForm, setVisibleForm] = useState(false);
@@ -88,7 +101,16 @@ function Cautions() {
         },
         {
           key: "1",
-          label: <a onClick={() => {dispatch(CautionApprove({ id: caution.id }));forceRefresh(Math.random());}}>Approuver</a>,
+          label: (
+            <a
+              onClick={() => {
+                dispatch(CautionApprove({ id: caution.id }));
+                forceRefresh(Math.random());
+              }}
+            >
+              Approuver
+            </a>
+          ),
           icon: <CheckOutlined />,
           disabled: caution.Etat_main_levée !== "En attente",
         },
@@ -110,22 +132,47 @@ function Cautions() {
         },
         {
           key: "3",
+          label: (
+            <a
+              onClick={() => {
+                if (expandedRowKeys.indexOf(caution.key) === -1) {
+                  setExpandedRowKeys([...expandedRowKeys, caution.key]);
+                } else {
+                  setExpandedRowKeys(
+                    expandedRowKeys.filter((item) => item !== caution.key)
+                  );
+                }
+              }}
+            >
+              Liste de prolongation
+            </a>
+          ),
+          icon:
+            expandedRowKeys.indexOf(caution.key) === -1 ? (
+              <EyeOutlined />
+            ) : (
+              <EyeInvisibleOutlined />
+            ),
+          disabled: caution?.Prolongations?.length === 0,
+        },
+        {
+          key: "4",
           danger: caution.Etat_main_levée === "En attente",
           label: "Supprimer",
           icon: <DeleteOutlined />,
           disabled: caution.Etat_main_levée !== "En attente",
         },
         {
-          key: "4",
+          key: "5",
           danger: caution.Etat_main_levée === "En cours",
-          label: "Fermer",
+          label: <a onClick={() => handleCloseCaution(caution.id)}>Fermer</a>,
           icon: <InboxOutlined />,
           disabled: caution.Etat_main_levée !== "En cours",
         },
       ]}
     />
   );
-  const columns : ColumnsType<ICaution> = [
+  const columns: ColumnsType<ICaution> = [
     {
       title: "Nom du Projet ",
       dataIndex: "Nom_Projet",
@@ -170,7 +217,7 @@ function Cautions() {
       title: "Demandeur",
       dataIndex: "Demandeur",
       key: 1,
-      responsive: ['xxl'],
+      responsive: ["xxl"],
       filterDropdown: (
         <div style={{ display: "flex" }}>
           <Input
@@ -250,7 +297,7 @@ function Cautions() {
       title: "Date de début ",
       key: 3,
       dataIndex: "DateD",
-      responsive:['xxl'],
+      responsive: ["xxl"],
       onHeaderCell: (column) => {
         return {
           onClick: () => {
@@ -311,7 +358,7 @@ function Cautions() {
       title: "Montant",
       key: 5,
       dataIndex: "Montant",
-      responsive:["xl"],
+      responsive: ["xl"],
       // width:"7%",
       onHeaderCell: (column) => {
         return {
@@ -330,15 +377,34 @@ function Cautions() {
     {
       title: "Durée",
       key: 6,
-      dataIndex: "Durée",
-      // width:"5%"
-      responsive:["xxl"]
+      render: (caution) => (
+        <Space size="small">
+          {caution.Durée}
+          {caution?.Prolongations?.length !== 0 && (
+            <Tooltip title="Voir liste prolongations">
+              <MdMoreTime
+                style={{cursor:'pointer'}}
+                onClick={() => {
+                  if (expandedRowKeys.indexOf(caution.key) === -1) {
+                    setExpandedRowKeys([...expandedRowKeys, caution.key]);
+                  } else {
+                    setExpandedRowKeys(
+                      expandedRowKeys.filter((item) => item !== caution.key)
+                    );
+                  }
+                }}
+              />
+            </Tooltip>
+          )}
+        </Space>
+      ),
+      responsive: ["xl"],
     },
     {
       title: "Ligne",
       key: 7,
       dataIndex: "ligne",
-      responsive: ['xxl'],
+      responsive: ["xxl"],
       render: (ligne: string) => (
         <Tag color={ligne === "EPS" ? "geekblue" : "volcano"}>{ligne}</Tag>
       ),
@@ -358,7 +424,7 @@ function Cautions() {
       title: "Date d'échéance ",
       key: 8,
       dataIndex: "DateE",
-      responsive: ['md'],
+      responsive: ["md"],
       onHeaderCell: (column) => {
         return {
           onClick: () => {
@@ -441,6 +507,10 @@ function Cautions() {
   const handleOpenChange = (flag: boolean) => {
     setOpenSelectMenu(flag);
   };
+  const handleCloseCaution = (id) => {
+    dispatch(closeCaution({ id: id }));
+    forceRefresh(Math.random());
+  };
   const obj = {
     visible: visibleForm,
     setVisible: setVisibleForm,
@@ -458,7 +528,6 @@ function Cautions() {
   };
   useEffect(() => {
     setData(cautions);
-    console.log(cautions);
   }, [refresh]);
 
   return (
@@ -562,10 +631,19 @@ function Cautions() {
                 pageSize: 7,
               }}
               expandable={{
-                expandedRowRender: record => <div style={{textAlign:"center"}} className="flex justify-center" ><div style={{width:"70%"}}><ListeProlongation prolongation={record.Prolongations}/></div></div>,
-                rowExpandable: record => record?.Prolongations?.length!==0,
-                // columnTitle:"Prolongation",
-                // showExpandColumn:false,
+                expandedRowRender: (record) => (
+                  <div
+                    style={{ textAlign: "center" }}
+                    className="flex justify-center"
+                  >
+                    <div style={{ width: "60%" }}>
+                      <ListeProlongation prolongation={record.Prolongations} />
+                    </div>
+                  </div>
+                ),
+                rowExpandable: (record) => record?.Prolongations?.length !== 0,
+                showExpandColumn: false,
+                expandedRowKeys: expandedRowKeys,
               }}
             />
           </Card>

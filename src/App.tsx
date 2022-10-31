@@ -42,7 +42,7 @@ import Cautions from "./pages/cautions/caution-modules/Cautions";
 
 // Project
 import Projects from "./pages/project/project-modules/Projects";
-
+import Kanban from "./pages/project/project-modules/kanban/Kanban";
 // check localstorage here
 //console.log(`${process.env.REACT_APP_BASE_PUBLIC_URL}/`);
 
@@ -78,8 +78,7 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
               </Route>
 
               <Route path={`home/*`} element={<Home />}>
-                <Route path={`*`} element={<Home1 />} />
-                <Route path={`dashboard1`} element={<Home1 />} />
+
               </Route>
               
               <Route path={`cautions/*`} element={<Index />}>
@@ -87,6 +86,7 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
               </Route>
               <Route path={`projects/*`} element={<Index />}>
                   <Route path={`*`} element={<Projects />} />
+                  <Route path={`kanban`} element={<Kanban />} />
               </Route>
               </Route>
             <Route path={`unauthorized`} element={<Unauthorized />} />

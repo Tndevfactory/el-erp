@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Card, Col, Row, Badge, Breadcrumb } from "antd";
 import CreateProject from './createProject/CreateProject';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AppstoreAddOutlined } from "@ant-design/icons";
-
 const Projects = () => {
+  let navigate = useNavigate();
   const [createProject, setCreateProject] = useState(false);
   let [projects, setProjects] = useState([
     {
@@ -61,7 +61,7 @@ const Projects = () => {
         {projects.map((project) => (
           <Col xs={12} md={8} lg={8} xl={6} xxl={4}>
             <Badge.Ribbon text={project.etat} color={color(project.etat)}>
-              <NavLink to="#">
+              <NavLink to="/projects/kanban">
                 <Card
                   hoverable={true}
                   bordered={false}
