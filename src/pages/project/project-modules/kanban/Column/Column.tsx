@@ -17,12 +17,6 @@ function Column({column,tasks, setTasks, forceRefresh}) {
   }))
 
   const moveTask = (item) => {
-    // dispatch(moveCard({
-    //     newColumnId:column.id,
-    //     task:item.task
-    // }))
-    // setData(data.columns[column.id].cards.push(item.task))
-    // forceRefresh(Math.random())
     item.task.state=column;
     setTasks([...tasks.filter(task=>task.id!==item.task.id),item.task])
 }

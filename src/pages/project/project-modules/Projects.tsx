@@ -43,7 +43,7 @@ const Projects = () => {
     <div className="Projects">
       <Breadcrumb separator=">" style={{marginBottom:"20px"}} className="mt-5">
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
-        <Breadcrumb.Item href="">Projects</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Projets</Breadcrumb.Item>
       </Breadcrumb>
       <Row gutter={24}>
         <Col xs={12} md={8} lg={8} xl={6} xxl={4}>

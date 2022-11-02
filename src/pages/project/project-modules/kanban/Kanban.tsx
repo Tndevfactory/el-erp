@@ -96,7 +96,7 @@ const Kanban = () => {
       
         <Row gutter={16} className="Kanban">
           {columns.map((column) => (
-            <Col span={6}>
+            <Col flex={100}>
             <Column
               column={column}
               tasks={tasks}
@@ -105,9 +105,9 @@ const Kanban = () => {
             />
            </Col>
           ))}
-          {/* <Col  flex={1}>
+          <Col  flex={1}>
           <KanbanSideMenu/>
-          </Col> */}
+          </Col>
         </Row>
       </div>
     </DndProvider>

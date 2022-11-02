@@ -15,7 +15,8 @@ import {
   SettingOutlined,
   TeamOutlined,
   ShoppingCartOutlined,
-  DollarCircleOutlined
+  DollarCircleOutlined,
+  HistoryOutlined,
 } from "@ant-design/icons";
 import { TbTicket } from 'react-icons/tb';
 import {
@@ -70,16 +71,28 @@ const sideMenus: MenuProps["items"] = [
     ),
     key: "Cautions",
     icon: <UnorderedListOutlined />,
-  },{
+  },
+  {
     label: (
       <NavLink
         to="projects"
       >
-        Projects
+        Projets
       </NavLink>
     ),
     key: "projet",
     icon: <AppstoreOutlined />,
+  },
+  {
+    label: (
+      <NavLink
+        to="timesheet"
+      >
+        Timesheet
+      </NavLink>
+    ),
+    key: "timesheet",
+    icon: <HistoryOutlined />,
   },
   {
     label: "Ticketing",

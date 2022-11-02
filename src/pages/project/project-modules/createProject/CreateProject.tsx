@@ -34,8 +34,48 @@ const CreateProject = ({ setVisible, visible }) => {
               Donnez à votre projet un nom distinct et discriptif. Vouz pouvez le modifier à tout moment.{" "}
             </p>
             <br></br>
-              <span style={{ fontWeight: "bold" }}>Nom du projet</span>
-              <div style={{display:"flex"}}>
+              <div>
+              <span style={{ fontWeight: "bold" }}>Departement</span>
+              <Form.Item
+                style={{
+                  marginBottom: "0px",
+                  width:"60%"
+                }}
+                name="Title"
+                rules={[
+                  {
+                    required: true,
+                    message: "Veuillez entrer le titre du projet!",
+                  },
+                ]}
+              >
+                <Input
+                  defaultValue={title}
+                  placeholder="Nom du projet"
+                  className='input'
+                />
+              </Form.Item>
+              <span style={{ fontWeight: "bold" }}>Client</span>
+              <Form.Item
+                style={{
+                  marginBottom: "0px",
+                  width:"60%"
+                }}
+                name="Title"
+                rules={[
+                  {
+                    required: true,
+                    message: "Veuillez entrer le titre du projet!",
+                  },
+                ]}
+              >
+                <Input
+                  defaultValue={title}
+                  placeholder="Nom du projet"
+                  className='input'
+                />
+              </Form.Item>
+              <span style={{ fontWeight: "bold" }}>Titre du projet</span>
               <Form.Item
                 style={{
                   marginBottom: "0px",
