@@ -41,18 +41,20 @@ const Task = ({ task }) => {
       isDragging: !!monitor.isDragging(),
     }),
   }));
+  const cardStyle : React.CSSProperties =  {
+    background:task.state==="Backlog"?"#F2F3F4":task.state==="Doing"?"#EBF5FB":task.state==="Test"?"#FEF5E7":"#EAFAF1",
+    marginBottom: 10,
+    borderRadius: 5,
+    opacity: isDragging ? 0.3 : 1,
+  }
+
   return (
     <Card
       ref={drag}
       hoverable={true}
       bordered={false}
       className="Task"
-      style={{
-        background:task.state==="Backlog"?"#F2F3F4":task.state==="Doing"?"#EBF5FB":task.state==="Test"?"#FEF5E7":"#EAFAF1",
-        marginBottom: 10,
-        borderRadius: 5,
-        opacity: isDragging ? 0.1 : 1,
-      }}
+      style={cardStyle}
     >
       <div className="title" style={{ backgroundColor: color(task.state) }}>
         {task.title}

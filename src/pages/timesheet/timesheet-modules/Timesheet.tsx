@@ -122,7 +122,8 @@ function Timesheet() {
             onClick={() => {
               if (expandedRowKeys.indexOf(data.key) === -1) {
                 setExpandedRowKeys([...expandedRowKeys, data.key]);
-              } else {
+              } 
+              else {
                 setExpandedRowKeys(
                   expandedRowKeys.filter((item) => item !== data.key)
                 );
@@ -172,7 +173,7 @@ function Timesheet() {
                     <Title level={5} type="secondary">
                       {" "}
                       Entreprise :
-                    </Title>
+                    </Title>   
                     <Select
                       placeholder="Entreprise"
                       showSearch
@@ -181,10 +182,8 @@ function Timesheet() {
                           .toLowerCase()
                           .includes(input.toLowerCase())
                       }
-
                       onSelect={(e) => {
                         let x = sheet;
-
                         setData(x.filter((data) => e==="Toutes"?true:data.entreprise === e));
                       }}
                     >

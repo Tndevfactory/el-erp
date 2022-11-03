@@ -45,6 +45,7 @@ import Projects from "./pages/project/project-modules/Projects";
 import Kanban from "./pages/project/project-modules/kanban/Kanban";
 //Timesheet
 import Timesheet from "./pages/timesheet/timesheet-modules/Timesheet";
+import ChartsTest from "./pages/home/home-modules/ChartsTest";
 // check localstorage here
 //console.log(`${process.env.REACT_APP_BASE_PUBLIC_URL}/`);
 
@@ -78,7 +79,8 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
               <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
                 {/* <Route path={`home`} element={<Home />} /> */}
               </Route>
-                <Route path={`home/*`} element={<Home />}>
+              <Route path={`home/*`} element={<Home />}>
+                <Route path={`*`} element={<ChartsTest />} />
               </Route>
               <Route path={`cautions/*`} element={<Index />}>
                   <Route path={`*`} element={<Cautions />} />

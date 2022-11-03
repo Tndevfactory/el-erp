@@ -8,7 +8,7 @@ import Column from "./Column/Column";
 import { DndProvider, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import KanbanSideMenu from "./kanbanSideMenu/KanbanSideMenu";
-
+import moment from "moment";
 const columns = ["Backlog", "Doing", "Test", "Finish"];
 const data = {
   cards: [
@@ -82,11 +82,32 @@ const data = {
 };
 const Kanban = () => {
   const dispatch = useDispatch();
-  let [tasks, setTasks] = useState(data.cards);
+  let [tasks, setTasks] = useState(data.cards.map((item, index) =>
+    Object.assign({}, item, {
+      lastMove: moment().valueOf(),
+  })));
+  let [backlogTasks, setBacklogTasks] = useState([]);
+  let [doingTasks, setDoingTasks] = useState([]);
+  let [testTasks, setTestTasks] = useState([]);
+  let [finishTasks, setFinishTasks] = useState([]);
   const [refresh, forceRefresh] = useState(0);
-  useEffect(() => {}, [refresh]);
+
+  const moveTask = (item,column) => {
+    if(item.task.state!==column){
+      item.task.state=column;
+      item.task.lastMove=moment().valueOf()
+      setTasks([...tasks.filter(task=>task.id!==item.task.id),item.task])
+    }
+  }
+  useEffect(() => {
+    console.log(tasks)
+    setBacklogTasks(tasks.filter(item=>item.state==="Backlog").sort((a, b) => a.lastMove - b.lastMove));
+    setDoingTasks(tasks.filter(item=>item.state==="Doing").sort((a, b) => a.lastMove - b.lastMove));
+    setTestTasks(tasks.filter(item=>item.state==="Test").sort((a, b) => a.lastMove - b.lastMove));
+    setFinishTasks(tasks.filter(item=>item.state==="Finish").sort((a, b) => a.lastMove - b.lastMove));
+  }, [tasks]);
   return (
-    <DndProvider backend={HTML5Backend} >
+    <DndProvider backend={HTML5Backend} options={{ enableMouseEvents: true }}>
       <div>
       <Breadcrumb separator=">" className="mt-5" style={{marginBottom:"20px"}}>
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
@@ -99,9 +120,11 @@ const Kanban = () => {
             <Col flex={100}>
             <Column
               column={column}
-              tasks={tasks}
-              setTasks={setTasks}
-              forceRefresh={forceRefresh}
+              tasks={column==="Backlog"?backlogTasks:column==="Doing"?doingTasks:column==="Test"?testTasks:finishTasks}
+              // setTasks={column==="Backlog"?setBacklogTasks:column==="Doing"?setDoingTasks:column==="Test"?setTestTasks:setFinishTasks}
+              moveTask={moveTask}
+              // setTasks={setTasks}
+              // forceRefresh={forceRefresh}
             />
            </Col>
           ))}
