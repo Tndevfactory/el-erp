@@ -111,7 +111,7 @@ const Kanban = () => {
       <div>
       <Breadcrumb separator=">" className="mt-5" style={{marginBottom:"20px"}}>
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
-        <Breadcrumb.Item href="">Projet</Breadcrumb.Item>
+        <Breadcrumb.Item href="/projects">Projet</Breadcrumb.Item>
         <Breadcrumb.Item href="">Titre de projet</Breadcrumb.Item>
       </Breadcrumb>
       

@@ -24,7 +24,6 @@ const ChartsTest = () => {
     { "employe": "Emna", "projet": "EW", "nbrHeures": 9 },
     { "employe": "Emna", "projet": "MC", "nbrHeures": 8 },
     { "employe": "Emna", "projet": "MSA", "nbrHeures": 12 },
-   
   ]);
 
   useEffect(() => {
@@ -35,7 +34,10 @@ const ChartsTest = () => {
     xField: 'employe',
     yField: 'nbrHeures',
     seriesField: 'projet',
+    height: 300,
     isGroup: true,
+    // isStack: true,
+    // seriesField: 'type',
     columnStyle: {
       radius: [20, 20, 0, 0],
     },

@@ -15,7 +15,7 @@ import {
 import { SearchOutlined } from "@ant-design/icons";
 import type { DatePickerProps } from "antd";
 import moment from "moment";
-import TimesheetDetails from "./TimesheetDetails";
+import TimesheetDetails from "./details/TimesheetDetails";
 import * as XLSX from "xlsx/xlsx.mjs";
 const { Title } = Typography;
 const { Option } = Select;
@@ -25,25 +25,109 @@ const sheet = [
     key: 0,
     entreprise: "TAC-TIC",
     employe: "Bassem Soua",
-    nbrHeures: "28h",
+    detail: [
+      {
+        id: 0,
+        projet: "GIP",
+        tache: "Authentification",
+        typeTache: "développement",
+        nbrHeures: 8,
+        date:"29/10"
+      },
+      {
+        id: 1,
+        projet: "MSA",
+        tache: "Gestion de fichiers",
+        typeTache: "Conception",
+        nbrHeures: 8,
+        date:"31/10"
+      },
+      {
+        id: 2,
+        projet: "ERP",
+        tache: "Gestion de cautions",
+        typeTache: "Conception",
+        nbrHeures: 3,
+        date:"01/11"
+      },
+      {
+        id: 2,
+        projet: "EW",
+        tache: "Gestion des espace",
+        typeTache: "Conception",
+        nbrHeures: 5,
+        date:"01/11"
+      },
+    ],
   },
   {
     key: 1,
     entreprise: "TAC-TIC",
     employe: "Wael Machlouch",
-    nbrHeures: "30h",
+    detail: [
+      {
+        id: 0,
+        projet: "MSA",
+        typeTache: "développement",
+        tache: "Authentification",
+        nbrHeures: 8,
+        date:"01/11"
+      },
+      {
+        id: 1,
+        projet: "EW",
+        tache: "Gestion de sites",
+        typeTache: "développement",
+        nbrHeures: 6,
+        date:"30/10"
+      },
+      {
+        id: 2,
+        projet: "ERP",
+        tache: "Gestion de cautions",
+        typeTache: "développement",
+        nbrHeures: 2,
+        date:"30/10"
+      },
+      {
+        id: 3,
+        projet: "ERP",
+        tache: "TimeSheet",
+        typeTache: "développement",
+        nbrHeures: 6,
+        date:"29/10"
+      },
+    ],
   },
   {
     key: 2,
     entreprise: "TAC-TIC",
     employe: "Amira Riahi",
-    nbrHeures: "24h",
+    detail: [
+      {
+        id: 0,
+        projet: "EW",
+        tache: "Authentification",
+        typeTache: "test",
+        nbrHeures: 8,
+        date:"30/10"
+      },
+    ],
   },
   {
     key: 3,
     employe: "Asma Manaii",
     entreprise: "Smart Skills",
-    nbrHeures: "32h",
+    detail: [
+      {
+        id: 0,
+        projet: "MSA",
+        tache: "Cautions",
+        typeTache: "other",
+        nbrHeures: 8,
+        date:"01/11"
+      },
+    ],
   },
 ];
 type PickerType = "date" | "week" | "month" | "quarter" | "year";
@@ -110,8 +194,14 @@ function Timesheet() {
     },
     {
       title: "Nombre d'heures",
-      dataIndex: "nbrHeures",
       key: 2,
+      render: (data) => {
+        let sum = 0;
+        data.detail.map((item) => {
+          sum += item.nbrHeures;
+        });
+        return <>{sum}h</>;
+      },
     },
     {
       title: "Action",
@@ -122,8 +212,7 @@ function Timesheet() {
             onClick={() => {
               if (expandedRowKeys.indexOf(data.key) === -1) {
                 setExpandedRowKeys([...expandedRowKeys, data.key]);
-              } 
-              else {
+              } else {
                 setExpandedRowKeys(
                   expandedRowKeys.filter((item) => item !== data.key)
                 );
@@ -142,20 +231,33 @@ function Timesheet() {
       .endOf("week")
       .format(weekFormat)}`;
   const handleOnExport = () => {
-    let data=sheet
-    data.map((item, index) =>{
-    delete item.key}
-  );
+    let data = sheet;
+    data.map((item, index) => {
+      delete item.key;
+      delete item.detail;
+    });
     var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(data)
-    ws["!cols"] = [
-      {wpx: 120 },
-      {wpx: 180},
-      {wpx: 80},
-    ];
+      ws = XLSX.utils.json_to_sheet(data);
+    ws["!cols"] = [{ wpx: 120 }, { wpx: 180 }, { wpx: 80 }];
+
     XLSX.utils.book_append_sheet(wb, ws, "TimeSheet");
     XLSX.writeFile(wb, "TimeSheet.xlsx");
   };
+  const handleOnExportPerEmploye = () => {
+    let data = sheet;
+    var wb = XLSX.utils.book_new(),
+      ws = [];
+    data.map((item, index) => {
+      item.detail.map((x) => {
+        delete x.id;
+      });
+      ws[index] = XLSX.utils.json_to_sheet(item.detail);
+      ws[index]["!cols"] = [{ wpx: 120 }, { wpx: 200 }, { wpx: 80 }];
+      XLSX.utils.book_append_sheet(wb, ws[index], item.employe);
+    });
+    XLSX.writeFile(wb, "TimeSheet.xlsx");
+  };
+
   return (
     <div className="Timesheet">
       <Breadcrumb separator=">" className="mt-5">
@@ -166,14 +268,14 @@ function Timesheet() {
         <Col xs={24}>
           <Card
             title={
-              <Space size={100}>
+              <Space size={50}>
                 <Title level={4}>Timesheet</Title>
                 <Space size="large">
                   <Space>
                     <Title level={5} type="secondary">
                       {" "}
                       Entreprise :
-                    </Title>   
+                    </Title>
                     <Select
                       placeholder="Entreprise"
                       showSearch
@@ -184,7 +286,11 @@ function Timesheet() {
                       }
                       onSelect={(e) => {
                         let x = sheet;
-                        setData(x.filter((data) => e==="Toutes"?true:data.entreprise === e));
+                        setData(
+                          x.filter((data) =>
+                            e === "Toutes" ? true : data.entreprise === e
+                          )
+                        );
                       }}
                     >
                       {[
@@ -197,6 +303,48 @@ function Timesheet() {
                           value={entreprise.entreprise}
                         >
                           {entreprise.entreprise}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Space>
+                  <Space>
+                    <Title level={5} type="secondary">
+                      {" "}
+                      Projet :
+                    </Title>
+                    <Select
+                      placeholder="Projet"
+                      showSearch
+                      filterOption={(input, option) =>
+                        (option!.children as unknown as string)
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      }
+                      onSelect={(e) => {
+                        if(e==="Toutes"){
+                          setData(sheet)
+                        }else{
+                          var x = sheet;
+                          x.map((item)=>{
+                            item.detail=item.detail.filter((subItem)=>subItem.projet===e)
+                          })
+                          setData(
+                            x.filter((data) =>
+                              data.detail.length!==0?true:false
+                            )
+                          );
+                        }
+                      }}
+                    >
+                      {[
+                        { projet: "Toutes" },
+                        { projet: "MSA" },
+                        { projet: "ERP" },
+                        { projet: "EW" },
+                        { projet: "GIP" },
+                      ]?.map((item) => (
+                        <Option key={item.projet} value={item.projet}>
+                          {item.projet}
                         </Option>
                       ))}
                     </Select>
@@ -229,12 +377,18 @@ function Timesheet() {
             }
             bordered={false}
             extra={
-              <Button type="primary" onClick={handleOnExport}>
-                Exporter excel
-              </Button>
+              <Space>
+                <Button type="primary" onClick={handleOnExport}>
+                  Exporter
+                </Button>
+                <Button type="primary" onClick={handleOnExportPerEmploye}>
+                  Exporter par employe
+                </Button>
+              </Space>
             }
           >
             <Table
+              // bordered
               columns={columns}
               dataSource={data}
               pagination={{
@@ -243,11 +397,9 @@ function Timesheet() {
               }}
               expandable={{
                 expandedRowRender: (record) => (
-                  <div
-                    className="flex justify-center"
-                  >
+                  <div className="flex justify-center">
                     <div style={{ width: "80%" }}>
-                      <TimesheetDetails detail={record}/>
+                      <TimesheetDetails detail={record} />
                     </div>
                   </div>
                 ),
