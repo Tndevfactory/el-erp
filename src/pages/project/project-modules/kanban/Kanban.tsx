@@ -50,7 +50,7 @@ const data = {
       dateD: "06-05-2022",
       dateF: "06-06-2022",
       title: "gerer notification",
-      description: "description dhvsdh",
+      description: "To be, or not to be, that is a question: Whether it is nobler in the mind to suffer. The slings and arrows of outrageous fortune Or to take arms against a sea of troubles",
       state: "Test",
     },
     {

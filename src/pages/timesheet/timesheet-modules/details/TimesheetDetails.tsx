@@ -75,6 +75,7 @@ function TimesheetDetails({ detail }) {
         // bordered
         columns={columns}
         dataSource={data}
+        size="middle"
         pagination={
           detail.detail.length <= 6
             ? false

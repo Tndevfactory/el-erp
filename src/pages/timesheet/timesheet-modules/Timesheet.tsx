@@ -313,109 +313,6 @@ function Timesheet() {
             title={
               <Space size={50}>
                 <Title level={4}>Timesheet</Title>
-                {/* <Row gutter={24}>
-                  <Col>
-                  <Title level={5} type="secondary">
-                      {" "}
-                      Entreprise :
-                    </Title>
-                    <Select
-                      placeholder="Entreprise"
-                      showSearch
-                      filterOption={(input, option) =>
-                        (option!.children as unknown as string)
-                          .toLowerCase()
-                          .includes(input.toLowerCase())
-                      }
-                      onSelect={(e) => {
-                        let x = sheet;
-                        setData(
-                          x.filter((data) =>
-                            e === "Toutes" ? true : data.entreprise === e
-                          )
-                        );
-                      }}
-                    >
-                      {[
-                        { entreprise: "Toutes" },
-                        { entreprise: "TAC-TIC" },
-                        { entreprise: "Smart Skills" },
-                      ]?.map((entreprise) => (
-                        <Option
-                          key={entreprise.entreprise}
-                          value={entreprise.entreprise}
-                        >
-                          {entreprise.entreprise}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Col>
-                  <Col>
-                  <Title level={5} type="secondary">
-                      {" "}
-                      Projet :
-                    </Title>
-                    <Select
-                      placeholder="Projet"
-                      showSearch
-                      filterOption={(input, option) =>
-                        (option!.children as unknown as string)
-                          .toLowerCase()
-                          .includes(input.toLowerCase())
-                      }
-                      onSelect={(e) => {
-                        if(e==="Toutes"){
-                          setData(sheet)
-                        }else{
-                          var x = sheet;
-                          x.map((item)=>{
-                            item.detail=item.detail.filter((subItem)=>subItem.projet===e)
-                          })
-                          setData(
-                            x.filter((data) =>
-                              data.detail.length!==0?true:false
-                            )
-                          );
-                        }
-                      }}
-                    >
-                      {[
-                        { projet: "Toutes" },
-                        { projet: "MSA" },
-                        { projet: "ERP" },
-                        { projet: "EW" },
-                        { projet: "GIP" },
-                      ]?.map((item) => (
-                        <Option key={item.projet} value={item.projet}>
-                          {item.projet}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Col>
-                  <Col>
-                  <Title level={5} type="secondary">
-                      Date :
-                    </Title>
-                    <Select value={type} onChange={setType}>
-                      <Option value="date">Date</Option>
-                      <Option value="week">Week</Option>
-                      <Option value="month">Month</Option>
-                      <Option value="quarter">Quarter</Option>
-                      <Option value="year">Year</Option>
-                    </Select>
-                    {type === "date" ? (
-                      <RangePicker />
-                    ) : type === "week" ? (
-                      <DatePicker
-                        picker={type}
-                        format={customWeekStartEndFormat}
-                        onChange={() => {}}
-                      />
-                    ) : (
-                      <DatePicker picker={type} onChange={() => {}} />
-                    )}
-                  </Col>
-                </Row> */}
                 <Space size="large">
                   <Space >
                     <Title level={5} type="secondary">
@@ -537,6 +434,7 @@ function Timesheet() {
               // bordered
               columns={columns}
               dataSource={data}
+              // size="middle"
               pagination={{
                 size: "small",
                 pageSize: 7,

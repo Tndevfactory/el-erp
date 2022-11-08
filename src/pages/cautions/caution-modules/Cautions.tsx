@@ -43,6 +43,7 @@ import {
 } from "@/features/caution/cautionSlice";
 import ListeProlongation from "./ListeProlongation";
 import type { ColumnsType } from "antd/es/table";
+import { NumericFormat } from 'react-number-format';
 const { Paragraph, Title } = Typography;
 
 function Cautions() {
@@ -353,6 +354,7 @@ function Cautions() {
       title: "Montant",
       key: 5,
       dataIndex: "Montant",
+      // render:((montant) =><NumericFormat value={montant} allowLeadingZeros thousandSeparator="," decimalScale={3} style={{backgroundColor:"transparent", width:"100%"}}/>),
       responsive: ["xl"],
       // width:"7%",
       onHeaderCell: (column) => {
