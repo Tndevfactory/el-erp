@@ -4,6 +4,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BiTimeFive } from "react-icons/bi";
 import "@/style/modules/Project.less";
 import { useDrag } from "react-dnd";
+import TaskModal from "./taskModal/TaskModal";
 var months = [
   "Jan",
   "Feb",
@@ -30,7 +31,7 @@ const color = (etat: string): string => {
   }
 };
 const Task = ({ task }) => {
-  const [visible, setVisible] = useState(false);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "card",
     item: { task: task },
@@ -41,65 +42,76 @@ const Task = ({ task }) => {
       isDragging: !!monitor.isDragging(),
     }),
   }));
-  const cardStyle : React.CSSProperties =  {
-    background:task.state==="Backlog"?"#F2F3F4":task.state==="Doing"?"#EBF5FB":task.state==="Test"?"#FEF5E7":"#EAFAF1",
+  const cardStyle: React.CSSProperties = {
+    background:
+      task.state === "Backlog"
+        ? "#F2F3F4"
+        : task.state === "Doing"
+        ? "#EBF5FB"
+        : task.state === "Test"
+        ? "#FEF5E7"
+        : "#EAFAF1",
     marginBottom: 10,
     borderRadius: 5,
     opacity: isDragging ? 0.3 : 1,
-  }
+  };
 
   return (
-    <Card
-      ref={drag}
-      hoverable={true}
-      bordered={false}
-      className="Task"
-      style={cardStyle}
-    >
-      <div className="title" style={{ backgroundColor: color(task.state) }}>
-        {task.title}
-      </div>
-      <div style={{ display: "flex" }}>
-        <div
-          style={{
-            fontSize: "12px",
-            fontWeight: "500",
-            color: "#707B7C ",
-            display: "flex",
-            marginLeft: "2px",
-          }}
-        >
-          <BiTimeFive
-            style={{ fontSize: "15px", marginRight: "4px", marginTop: "2px" }}
-          ></BiTimeFive>{" "}
-          {String("2021/02/01").substr(8, 2) +
-            " " +
-            months[parseInt(String("2021/02/01").substr(5, 2)) - 1] +
-            " - " +
-            String("2021/05/01").substr(8, 2) +
-            " " +
-            months[parseInt(String("2021/05/01").substr(5, 2)) - 1]}
+    <div>
+      <Card
+        ref={drag}
+        hoverable={true}
+        bordered={false}
+        className="Task"
+        style={cardStyle}
+        onClick={() => setIsTaskModalOpen(true)}
+      >
+        <div className="title" style={{ backgroundColor: color(task.state) }}>
+          {task.title}
         </div>
-        <Avatar.Group
-          style={{
-            position: "absolute",
-            right: "8px",
-          }}
-          maxCount={2}
-          maxStyle={{
-            color: "",
-            backgroundColor: "#D0D3D4",
-          }}
-        >
-          <Avatar src="https://joeschmoe.io/api/v1/2" />
-          <Avatar src="https://joeschmoe.io/api/v1/1" />
-          <Avatar src="https://joeschmoe.io/api/v1/6" />
-          {/* {members.map((member) => (
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              fontSize: "12px",
+              fontWeight: "500",
+              color: "#707B7C ",
+              display: "flex",
+              marginLeft: "2px",
+            }}
+          >
+            <BiTimeFive
+              style={{ fontSize: "15px", marginRight: "4px", marginTop: "2px" }}
+            ></BiTimeFive>{" "}
+            {String("2021/02/01").substr(8, 2) +
+              " " +
+              months[parseInt(String("2021/02/01").substr(5, 2)) - 1] +
+              " - " +
+              String("2021/05/01").substr(8, 2) +
+              " " +
+              months[parseInt(String("2021/05/01").substr(5, 2)) - 1]}
+          </div>
+          <Avatar.Group
+            style={{
+              position: "absolute",
+              right: "8px",
+            }}
+            maxCount={2}
+          >
+            <Avatar src="https://joeschmoe.io/api/v1/2" />
+            <Avatar src="https://joeschmoe.io/api/v1/1" />
+            <Avatar src="https://joeschmoe.io/api/v1/6" />
+            {/* {members.map((member) => (
               <Avatar key={member.id} src={member.photo} />
             ))} */}
-        </Avatar.Group>
-      </div>
-    </Card>
+          </Avatar.Group>
+        </div>
+      </Card>
+      <TaskModal
+        isTaskModalOpen={isTaskModalOpen}
+        setIsTaskModalOpen={setIsTaskModalOpen}
+        task={task}
+      />
+    </div>
   );
 };
 

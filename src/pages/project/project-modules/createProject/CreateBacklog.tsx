@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Input, Button, List, Form, Tooltip } from "antd";
+import { Input, Button, List, Form, Tooltip, Typography, Space } from "antd";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import VirtualList from 'rc-virtual-list';
 import { CloseOutlined } from "@ant-design/icons";
-
+const { Title } = Typography;
 const CreateBacklog = ({ setCurrent, backlog, setBacklog }) => {
   const [form] = Form.useForm();
   const appendData = () => {
@@ -22,7 +22,7 @@ const CreateBacklog = ({ setCurrent, backlog, setBacklog }) => {
     <div>
       <div>
         <div style={{ display: "flex" }}>
-          <h1 className="Title">Créer un backlog de projet</h1>
+          <Title level={3}>Créer le backlog de projet</Title>
           <BsArrowReturnLeft
             style={{
               position: "absolute",
@@ -35,40 +35,19 @@ const CreateBacklog = ({ setCurrent, backlog, setBacklog }) => {
             }}
           ></BsArrowReturnLeft>
         </div>
-        <p className="subTitle">
+        <Title level={5} type="secondary">
         Entrez les tâches principales de votre projet. Vous pouvez les modifier et ajouter d'autres
           plus tard.
-        </p>
-        <br></br>
-          <span style={{ fontWeight: "bold" }}>Ajouter tâche</span>
-          <Form
-            form={form}
-            onFinish={(values) => {
-            }}
-            style={{display:"flex"}}
-          >
-            <Form.Item
-              name="task"
-              style={{
-                marginBottom: "0px",
-                width:"60%"
-              }}
-            >
+        </Title>
+        <Title level={5}>Ajouter tâche</Title>
+        <Space>
               <Input
                 placeholder="Ajouter tâche"
                 className="input"
               />
-            </Form.Item>
               <Button
                 type="primary"
                 htmlType="submit"
-                style={{
-                  width: "20%",
-                  backgroundColor: "#28B463",
-                  color: "white",
-                  borderRadius: "4px",
-                  borderColor: "white",
-                }}
               >
                 Add
               </Button>
@@ -76,16 +55,11 @@ const CreateBacklog = ({ setCurrent, backlog, setBacklog }) => {
                 onClick={() => {
                   setCurrent(3);
                 }}
-                style={{
-                  width: "20%",
-                  backgroundColor: "#5499C7",
-                  color: "white",
-                  borderRadius: "4px",
-                }}
               >
                 Next
               </Button>
-          </Form>
+        </Space>
+          <br />
           <br />
           <List >
       <VirtualList

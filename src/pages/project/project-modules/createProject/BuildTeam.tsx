@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Button, AutoComplete, Tooltip, Form, Avatar, List } from "antd";
+import { Button, AutoComplete, Tooltip, Form, Avatar, List, Typography, Select, Row, Col, Space } from "antd";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import { UserDeleteOutlined } from "@ant-design/icons";
 import VirtualList from 'rc-virtual-list';
+const { Title } = Typography;
+const { Option } = Select;
 const BuildTeam = ({ setCurrent, team, setTeam }) => {
   const [form] = Form.useForm();
   let [options, setOptions] = useState([]);
@@ -21,9 +23,9 @@ const BuildTeam = ({ setCurrent, team, setTeam }) => {
   }, []);
 
   return (
-      <div>
+      <div >
         <div style={{ display: "flex" }}>
-          <h1 className="Title">Inviter votre équipe</h1>
+          <Title level={3} >Inviter votre équipe</Title>
           <BsArrowReturnLeft
             style={{
               position: "absolute",
@@ -36,61 +38,49 @@ const BuildTeam = ({ setCurrent, team, setTeam }) => {
             }}
           ></BsArrowReturnLeft>
         </div>
-        <p className="subTitle">
+        <Title level={5} type='secondary'>
          Constituez votre équipe. Vous pouvez le modifier et en ajouter plus tard.
-        </p>
-        <br></br>
-          <span style={{ fontWeight: "bold" }}>Ajouter employé</span>
-          <Form
-            style={{display:"flex"}}
-            form={form}
-            onFinish={(values) => {
+        </Title>
+        <Title level={5} >Ajouter employé</Title>
+        <Space>
+          <Select
+            placeholder="Ajouter des collaborateurs  "
+            showSearch
+            onClear={() => {
+
+            }}
+            allowClear
+            filterOption={(input, option) => 
+              (option!.children as unknown as string)
+                .toLowerCase()
+                .includes(input.toLowerCase())
+            }
+            onSelect={(e) => {
             }}
           >
-            <Form.Item
-              name="member"
-              style={{
-                width:"60%"
-              }}
-            >
-              <AutoComplete
-                className='input'
-                options={options}
-                placeholder="Employe"
-                filterOption={(inputValue, option) =>
-                  option.value
-                    .toUpperCase()
-                    .indexOf(inputValue.toUpperCase()) !== -1
-                }
-              />
-            </Form.Item>
-              <Button
+            {['Wael machlouch','Bassem soua','Emna ahmadi']?.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
+          <Button
                 type="primary"
                 htmlType="submit"
-                style={{
-                  width: "20%",
-                  backgroundColor: "#28B463",
-                  color: "white",
-                  borderRadius: "4px",
-                  borderColor: "white",
-                }}
               >
                 Add
               </Button>
-              <Button
+          <Button
                 onClick={() => {
                   setCurrent(2);
-                }}
-                style={{
-                  width: "20%",
-                  backgroundColor: "#5499C7",
-                  color: "white",
-                  borderRadius: "4px",
                 }}
               >
                 Next
               </Button>
-          </Form>
+      </Space>
+      <br />
+      <br />
+
         <List >
       <VirtualList
         data={team}

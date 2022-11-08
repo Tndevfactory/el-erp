@@ -78,7 +78,6 @@ const Projects = () => {
                 x.filter((item) => item.name === e)
               );
             }}
-            
           >
             {data?.map((item) => (
               <Option key={item.name} value={item.name}>
@@ -92,7 +91,7 @@ const Projects = () => {
         <Col xs={12} md={8} lg={8} xl={6} xxl={4}>
           <Card
             hoverable={true}
-            bordered={false}
+            bordered={true}
             style={{ marginBottom: 15, borderRadius: 5, height: "100px" }}
             onClick={() => {
               setCreateProject(true);
@@ -107,7 +106,7 @@ const Projects = () => {
               <NavLink to="/projects/kanban">
                 <Card
                   hoverable={true}
-                  bordered={false}
+                  bordered={true}
                   style={{ marginBottom: 15, borderRadius: 5, height: "100px" }}
                 >
                   {project.name}

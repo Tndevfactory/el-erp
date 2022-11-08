@@ -99,12 +99,10 @@ const projectSlice = createSlice({
   name: "project",
   initialState,
   reducers: {
-    moveCard: (state, action) => {
-      state.tasks = [...state.tasks.filter(task=>task.id!==action.payload.item.task.id),action.payload.item.task]
-    },
+
   },
 });
 
-export const { moveCard } = projectSlice.actions;
+export const {  } = projectSlice.actions;
 
 export default projectSlice.reducer;

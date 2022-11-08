@@ -1,14 +1,15 @@
 import React from "react";
-import { Button, DatePicker, Form } from "antd";
+import { Button, DatePicker, Space, Typography } from "antd";
 import { BsArrowReturnLeft } from "react-icons/bs";
+const { Title }= Typography;
 const { RangePicker } = DatePicker;
 const AddDates = ({ setCurrent, setDates, dates }) => {
   return (
     <div>
       <div style={{ display: "flex" }}>
-        <h1 className="Title">
+        <Title level={3}>
         Enfin, ajoutez les dates de début et de fin du projet
-        </h1>
+        </Title>
         <BsArrowReturnLeft
           style={{
             position: "absolute",
@@ -21,50 +22,24 @@ const AddDates = ({ setCurrent, setDates, dates }) => {
           }}
         ></BsArrowReturnLeft>
       </div>
-      <p className="subTitle">Ajoutez les dates estimées de début et de fin du projet. Vous pouvez les modifier plus tard.</p>
+      <Title level={5} type="secondary">
+Ajoutez les dates estimées de début et de fin du projet. Vous pouvez les modifier plus tard.</Title>
       <br />
-      <span style={{ fontWeight: "bold" }}>Ajouter date</span>
-        <Form
-          onFinish={(values) => {
-            setCurrent(4);
-          }}
-          style={{display:"flex"}}
-        >
-          <Form.Item
-            name="date"
-            rules={[
-              {
-                required: true,
-                message: "Veuillez saisir les dates estimées de début et de fin du projet!",
-              },
-            ]}
-            style={{
-                width:"60%"
-              }}
-          >
+      <Title level={5}>Ajouter date</Title>
+        <Space>
             <RangePicker
               className="input"
               onChange={(value, dateString) => {
                 console.log(dateString);
                 setDates(dateString);
               }}
-              style={{
-                width:"100%"
-              }}
             />
-          </Form.Item>
           <Button
-            htmlType="submit"
-            style={{
-              width: "20%",
-              backgroundColor: "#5499C7",
-              color: "white",
-              borderRadius: "4px",
-            }}
+            onClick={()=>{setCurrent(4)}}
           >
             Next
           </Button>
-        </Form>
+        </Space>
     </div>
   );
 };

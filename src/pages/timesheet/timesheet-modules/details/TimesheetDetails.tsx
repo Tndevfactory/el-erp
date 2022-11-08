@@ -43,6 +43,11 @@ function TimesheetDetails({ detail }) {
       render: (data) => <>{data}h</>,
       key: 3,
     },
+    {
+      title: "Date",
+      dataIndex: 'date',
+      key: 4,
+    },
   ]
   const handleOnExport = () => {
     let data = detail.detail
@@ -81,7 +86,7 @@ function TimesheetDetails({ detail }) {
       />
       <Row>
         <Col span={12}>
-          <ChartsTest />
+          <ChartsTest sheets={detail.detail}/>
         </Col>
         <Col span={12}>
           <Stat sheets={detail.detail}/>
