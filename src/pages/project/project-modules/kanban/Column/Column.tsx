@@ -3,7 +3,6 @@ import { Col } from "antd";
 import Task from '../Task/Task';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from "react-redux";
-import { moveCard } from "@/features/project/projectSlice";
 import { setDate } from 'date-fns';
 
 function Column({column,tasks,moveTask}) {

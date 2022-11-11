@@ -98,4 +98,40 @@
     bottom: 5px;
 }
 
+//TaskComments
+.TaskCommentsScrollZone {
+    width: 105%;
+    padding-right: 1%;
+    height: 360px;
+    overflow: auto;
+}
+#TaskCommentsScrollZone::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Track */
+    #TaskCommentsScrollZone::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    // visibility: hidden;
 
+  }
+   
+  /* Handle */
+  #TaskCommentsScrollZone::-webkit-scrollbar-thumb {
+    background: #B3B6B7; 
+    border-radius:5px;
+    // visibility: hidden;
+
+  }
+  
+  /* Handle on hover */
+  #TaskCommentsScrollZone::-webkit-scrollbar-thumb:hover {
+    background: #888; 
+  }
+
+  #TaskComments p{
+    display:inline-block;
+    background: #F2F3F4;
+    padding: 8px;
+    border-radius: 8px;
+}

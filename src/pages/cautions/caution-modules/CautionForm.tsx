@@ -192,9 +192,11 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
             >
               <InputNumber
                 style={{ width: "100%" }}
+                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={value => value!.replace(/\$\s?|(,*)/g, '')}
                 placeholder="Veuillez entrer le montant"
                 onBlur={(e)=>{
-                  if(parseFloat(e.target.value)>=1000){
+                  if(parseFloat(e.target.value.replace(',',''))>=1000){
                     form.setFieldsValue(
                       {
                         ligne:"EPS",

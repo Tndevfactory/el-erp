@@ -6,6 +6,9 @@ const RequireAuth = ({ allowedRoles }: { allowedRoles: string[] }) => {
   const role = ["admin"];
   const location = useLocation();
 
+   // appel backend pour avoir un retour concernant les droits d'acces
+
+
   return auth ? (
     role.find((role) => allowedRoles.includes(role)) ? (
       <Outlet />

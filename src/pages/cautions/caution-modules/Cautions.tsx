@@ -16,6 +16,7 @@ import {
   Menu,
   Checkbox,
   Tooltip,
+  Statistic
 } from "antd";
 import {
   SearchOutlined,
@@ -43,7 +44,6 @@ import {
 } from "@/features/caution/cautionSlice";
 import ListeProlongation from "./ListeProlongation";
 import type { ColumnsType } from "antd/es/table";
-import { NumericFormat } from 'react-number-format';
 const { Paragraph, Title } = Typography;
 
 function Cautions() {
@@ -354,7 +354,7 @@ function Cautions() {
       title: "Montant",
       key: 5,
       dataIndex: "Montant",
-      // render:((montant) =><NumericFormat value={montant} allowLeadingZeros thousandSeparator="," decimalScale={3} style={{backgroundColor:"transparent", width:"100%"}}/>),
+      render:((montant) =><Statistic value={montant} precision={3} style={{}}/>),
       responsive: ["xl"],
       // width:"7%",
       onHeaderCell: (column) => {
@@ -630,7 +630,6 @@ function Cautions() {
               expandable={{
                 expandedRowRender: (record) => (
                   <div
-                    style={{ textAlign: "center" }}
                     className="flex justify-center"
                   >
                     <div style={{ width: "60%" }}>
