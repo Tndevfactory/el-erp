@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface ConfigState {
+  selectedMenu:number,
   isCollapsed: boolean;
   isVisibleDrawer: boolean;
   lang: "ar" | "fr" | "en";
+
 }
 const initialState = {
   isCollapsed: false,

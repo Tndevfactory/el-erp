@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Table, Card, Typography, Tag, Row, Col, Space } from 'antd'
 import * as XLSX from 'xlsx/xlsx.mjs'
 import Stat from './Stat'
-import ChartsTest from '@/pages/timesheet/timesheet-modules/details/ChartsTest'
+import ChartsTest from '@/pages/project/timesheet-modules/details/ChartsTest'
 const { Title } = Typography
 function TimesheetDetails({ detail }) {
   const [data, setData] = useState(detail.detail)

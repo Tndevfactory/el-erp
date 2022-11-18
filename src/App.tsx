@@ -38,13 +38,13 @@ import Home from "./pages/home/Index";
 import Home1 from "./pages/home/home-modules/Home1";
 
 // Cautions
-import Cautions from "./pages/cautions/caution-modules/Cautions";
+import Cautions from "./pages/finance/caution-modules/Cautions";
 
 // Project
 import Projects from "./pages/project/project-modules/Projects";
 import Kanban from "./pages/project/project-modules/kanban/Kanban";
 //Timesheet
-import Timesheet from "./pages/timesheet/timesheet-modules/Timesheet";
+import Timesheet from "./pages/project/timesheet-modules/Timesheet";
 // check localstorage here
 //console.log(`${process.env.REACT_APP_BASE_PUBLIC_URL}/`);
 
@@ -80,15 +80,13 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
               </Route>
               <Route path={`home/*`} element={<Home />}>
               </Route>
-              <Route path={`cautions/*`} element={<Index />}>
+              <Route path={`finance/*`} element={<Index />}>
                   <Route path={`*`} element={<Cautions />} />
               </Route>
               <Route path={`projects/*`} element={<Index />}>
                   <Route path={`*`} element={<Projects />} />
                   <Route path={`kanban`} element={<Kanban />} />
-              </Route>
-              <Route path={`timesheet/*`} element={<Index />}>
-                  <Route path={`*`} element={<Timesheet />} />
+                  <Route path={`timesheet`} element={<Timesheet />} />
               </Route>
               </Route>
             <Route path={`unauthorized`} element={<Unauthorized />} />

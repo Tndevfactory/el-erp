@@ -17,7 +17,6 @@ import {
   AudioOutlined,
   MessageOutlined,
   SettingOutlined,
-  MailOutlined,
 } from '@ant-design/icons'
 import {
   Layout,
@@ -42,7 +41,7 @@ import {
 const { Content } = Layout
 import type { SelectProps } from 'antd/es/select'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleCollapseLayout, showDrawer } from '../features/ui/uiSlice'
+import { toggleCollapseLayout, showDrawer, selectModule } from '../features/ui/uiSlice'
 import { useEffect } from 'react'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 // profil menu
@@ -149,9 +148,9 @@ const searchResult = (query: string) =>
     })
 // --------end-Search
 
-const navbarItems: MenuProps['items'] = [
+const navbarMobile: MenuProps['items'] = [
   {
-    label: 'Accueil',
+    label: 'Elastic mobile',
     key: 'Accueil',
     icon: <UserOutlined />,
   },
@@ -160,8 +159,25 @@ const navbarItems: MenuProps['items'] = [
     key: 'rh',
     icon: <VideoCameraOutlined />,
   },
+]
+const { useBreakpoint } = Grid
+
+const navbarItems: MenuProps['items'] = [
   {
-    label: 'Immobilisation',
+    label: ( <Link to="home"> hey
+    </Link> ),
+    key: 'Accueil',
+    icon: <UserOutlined />,
+  },
+  {
+    label: ( <Link to="finance"> hey
+    </Link> ),
+    key: 'rh',
+    icon: <VideoCameraOutlined />,
+  },
+  {
+    label: ( <Link to="projects"> hey
+    </Link> ),
     key: 'Immobilisation',
     icon: <UploadOutlined />,
   },
@@ -188,25 +204,12 @@ const navbarItems: MenuProps['items'] = [
     ],
   },
 ]
-const navbarMobile: MenuProps['items'] = [
-  {
-    label: 'Elastic mobile',
-    key: 'Accueil',
-    icon: <UserOutlined />,
-  },
-  {
-    label: 'Ressource humaine',
-    key: 'rh',
-    icon: <VideoCameraOutlined />,
-  },
-]
-const { useBreakpoint } = Grid
-
 export default function Navbar() {
   // redux toolkit store
-  const { isCollapsed } = useSelector((store: any) => store.ui)
+  const { isCollapsed, menu, selectedModule } = useSelector((store: any) => store.ui)
   const dispatch = useDispatch()
 
+  
   // --- search
   const [options, setOptions] = useState<SelectProps<object>['options']>([])
 
@@ -276,147 +279,13 @@ export default function Navbar() {
       description: 'see map3 loremmmmmmmmmmmmmmmmmmmm',
     },
   ]
-  const menu = [
-    {
-      "id": 1,
-      "designation_fr": "GRH",
-      "designation_ar": null,
-      "ordre": 1,
-      "menu_parant": null,
-      "active": 1,
-      "link": null,
-      "created_at": null,
-      "updated_at": null,
-      "deleted_at": null,
-      "child_recursive": [
-        {
-          "id": 2,
-          "designation_fr": "gestion des congés",
-          "designation_ar": null,
-          "ordre": null,
-          "menu_parant": 1,
-          "active": 1,
-          "link": null,
-          "created_at": null,
-          "updated_at": null,
-          "deleted_at": null,
-          "child_recursive": [
-            {
-              "id": 3,
-              "designation_fr": "mes congés",
-              "designation_ar": null,
-              "ordre": null,
-              "menu_parant": 2,
-              "active": 1,
-              "link": null,
-              "created_at": null,
-              "updated_at": null,
-              "deleted_at": null,
-              "child_recursive": []
-            },
-            {
-              "id": 4,
-              "designation_fr": "list des congé",
-              "designation_ar": null,
-              "ordre": null,
-              "menu_parant": 2,
-              "active": 1,
-              "link": null,
-              "created_at": null,
-              "updated_at": null,
-              "deleted_at": null,
-              "child_recursive": [
-                {
-                  "id": 5,
-                  "designation_fr": "en attente",
-                  "designation_ar": null,
-                  "ordre": null,
-                  "menu_parant": 4,
-                  "active": 1,
-                  "link": null,
-                  "created_at": null,
-                  "updated_at": null,
-                  "deleted_at": null,
-                  "child_recursive": []
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "designation_fr": "Projet",
-      "designation_ar": null,
-      "ordre": 1,
-      "menu_parant": null,
-      "active": 1,
-      "link": null,
-      "created_at": null,
-      "updated_at": null,
-      "deleted_at": null,
-      "child_recursive": [
-        {
-          "id": 10,
-          "designation_fr": "Gestion de projet",
-          "designation_ar": null,
-          "ordre": null,
-          "menu_parant": 2,
-          "active": 1,
-          "link": null,
-          "created_at": null,
-          "updated_at": null,
-          "deleted_at": null,
-          "child_recursive": []
-        },
-        {
-          "id": 12,
-          "designation_fr": "Timesheet",
-          "designation_ar": null,
-          "ordre": null,
-          "menu_parant": 2,
-          "active": 1,
-          "link": null,
-          "created_at": null,
-          "updated_at": null,
-          "deleted_at": null,
-          "child_recursive": []
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "designation_fr": "Finance",
-      "designation_ar": null,
-      "ordre": 1,
-      "menu_parant": null,
-      "active": 1,
-      "link": null,
-      "created_at": null,
-      "updated_at": null,
-      "deleted_at": null,
-      "child_recursive": [
-        {
-          "id": 14,
-          "designation_fr": "Cautions",
-          "designation_ar": null,
-          "ordre": null,
-          "menu_parant": 3,
-          "active": 1,
-          "link": null,
-          "created_at": null,
-          "updated_at": null,
-          "deleted_at": null,
-          "child_recursive": []
-        },
-      ]
-    }
-    
-  ]
+
+  const handleSelectModule=(info)=>{
+    localStorage.setItem("module",info.key);
+  }
+
   return (
     <>
-
       <Header
         className="header-desktop site-layout-background border-b-2  border-gray-200 
         sticky top-0 z-50 s bg-white text-gray-500"
@@ -432,18 +301,21 @@ export default function Navbar() {
           )}
               <Menu
               disabledOverflow={true}
-              
         theme="light"
         mode="horizontal"
-        defaultSelectedKeys={["2"]}
-        items={menu.map((_, index) => {
-          const key = index + 1;
-          return {
-            key,
-            label: _.designation_fr,
-          };
-        })}
-      /></Space>
+        selectedKeys={[localStorage.getItem("module")]}
+        onClick={handleSelectModule}
+        // items={navbarItems}
+        >
+          {menu.map((item,index)=>(
+                        <Menu.Item key={item.id} >
+            <NavLink to={item.link}>
+                         {item.designation_fr}
+                        </NavLink>
+                      </Menu.Item>
+                      ))}
+        </Menu>
+      </Space>
         <Space direction="horizontal">
           <Space wrap onClick={()=>{}}>
             {/*   <Avatar size={{ xs: 24, sm: 24 }} icon={<SearchOutlined />} /> */}

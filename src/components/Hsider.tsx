@@ -18,7 +18,7 @@ import {
   DollarCircleOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
-import { TbTicket } from 'react-icons/tb';
+import { TbTicket } from "react-icons/tb";
 import {
   Layout,
   Menu,
@@ -39,14 +39,13 @@ import {
   Tag,
   Image,
 } from "antd";
-
 import type { SelectProps } from "antd/es/select";
 import type { MenuProps } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleCollapseLayout } from "../features/ui/uiSlice";
 import { useEffect } from "react";
+import MenuIcon from "./MenuIcon";
 const { Sider, Content } = Layout;
-
 const sideMenus: MenuProps["items"] = [
   {
     label: "Ressources humaines",
@@ -73,24 +72,12 @@ const sideMenus: MenuProps["items"] = [
     icon: <UnorderedListOutlined />,
   },
   {
-    label: (
-      <NavLink
-        to="projects"
-      >
-        Projets
-      </NavLink>
-    ),
+    label: <NavLink to="projects">Projets</NavLink>,
     key: "projet",
     icon: <AppstoreOutlined />,
   },
   {
-    label: (
-      <NavLink
-        to="timesheet"
-      >
-        Timesheet
-      </NavLink>
-    ),
+    label: <NavLink to="timesheet">Timesheet</NavLink>,
     key: "timesheet",
     icon: <HistoryOutlined />,
   },
@@ -102,7 +89,7 @@ const sideMenus: MenuProps["items"] = [
   {
     label: "Achats",
     key: "achat",
-    icon: <ShoppingCartOutlined />
+    icon: <ShoppingCartOutlined />,
   },
 ];
 
@@ -110,14 +97,17 @@ const { Title } = Typography;
 const { useBreakpoint } = Grid;
 
 export default function Hsider() {
-  const { isCollapsed } = useSelector((store: any) => store.ui);
+  const { isCollapsed, menu, selectedModule } = useSelector(
+    (store: any) => store.ui
+  );
+  const [current, setCurrent] = useState('0')
+
   // console.log("isCollapsed");
   // console.log(isCollapsed);
   const dispatch = useDispatch();
 
   const screens = useBreakpoint();
   /* console.log(screens.lg); */
-
   const styleHSider: React.CSSProperties = {
     display: screens.lg ? "block" : "none",
     overflow: "auto",
@@ -128,6 +118,12 @@ export default function Hsider() {
     bottom: 0,
   };
   const { Title, Text, Link } = Typography;
+const test=()=>{
+  return window["faFootball"]
+}
+  useEffect(()=>{
+    setCurrent('0')
+  },[])
   return (
     <Sider
       className="bg-white  text-gray-500   shadow  "
@@ -137,7 +133,7 @@ export default function Hsider() {
       collapsed={isCollapsed}
     >
       <div className="border-0 mx-3 pt-5 bg-white p-2 flex ">
-        <Image width={20} src={elasticLogo} />
+        <Image width={30} src={elasticLogo} />
         {!isCollapsed ? (
           <Text
             strong
@@ -154,9 +150,19 @@ export default function Hsider() {
         /* theme="light" */
         className="bg-tranparent text-gray-600  border-1 border-transparent"
         mode={isCollapsed ? "vertical" : "inline"}
-        defaultSelectedKeys={["4"]}
-        items={sideMenus}
-      />
+        defaultSelectedKeys={["0"]}
+        defaultOpenKeys={["0"]}
+      >
+        {menu.filter((item)=>item.id===parseInt(localStorage.getItem("module")))[0]?.child_recursive.map((item,index) =>
+          item.child_recursive.length === 0 ? (
+            <Menu.Item key={index}  icon={<div><MenuIcon icon={item.icon}/></div>}><NavLink to={item.link}>{item.designation_fr}</NavLink></Menu.Item>
+          ) : (
+            <Menu.SubMenu key={index}  title={item.designation_fr} icon={<div><MenuIcon icon={item.icon}/></div>}>
+              {item.child_recursive.map((item,index) =><Menu.Item key={index}  >{item.designation_fr}</Menu.Item>)}
+            </Menu.SubMenu>
+          )
+        )}
+      </Menu>
       <Card className="absolute bottom-0 left-0 border-0 bg-transparent  flex justify-start gap-x-8">
         {!isCollapsed ? (
           <Text
@@ -172,9 +178,10 @@ export default function Hsider() {
             className="text-blue-600  text-sm subpixel-antialiased 
           tracking-tighter uppercase"
           >
-            &copy; ew
+            &copy; ew  
           </Text>
         )}
+
       </Card>
     </Sider>
   );

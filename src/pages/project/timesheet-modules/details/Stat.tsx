@@ -4,22 +4,6 @@ import { Pie } from '@ant-design/plots';
 
 const Stat = ({sheets}) => {
   const [data, setData] = useState([
-  //   {
-  //     type: 'GIP',
-  //     value: 8,
-  //   },
-  //   {
-  //     type: 'MSA',
-  //     value: 8,
-  //   },
-  //   {
-  //     type: 'ERP',
-  //     value: 8,
-  //   },
-  //   {
-  //     type: 'EW',
-  //     value: 5,
-  //   },
   ])
   const sum = ()=>{
     var count=0

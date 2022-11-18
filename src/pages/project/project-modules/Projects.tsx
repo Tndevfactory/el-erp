@@ -100,8 +100,8 @@ const Projects = () => {
             <AppstoreAddOutlined /> Ajouter un projet
           </Card>
         </Col>
-        {projects.map((project) => (
-          <Col xs={12} md={8} lg={8} xl={6} xxl={4}>
+        {projects.map((project, index) => (
+          <Col xs={12} md={8} lg={8} xl={6} xxl={4} key={index}>
             <Badge.Ribbon text={project.etat} color={color(project.etat)}>
               <NavLink to="/projects/kanban">
                 <Card
@@ -116,6 +116,7 @@ const Projects = () => {
           </Col>
         ))}
       </Row>
+
       <CreateProject
         visible={createProject}
         setVisible={setCreateProject}
