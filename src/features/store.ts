@@ -5,6 +5,10 @@ import uiReducer from "./ui/uiSlice";
 import cautionReducer from "./caution/cautionSlice"
 import projectReducer from "./project/projectSlice"
 import timesheetReducer from "./timesheet/timesheetSlice"
+import flotteContractReducer from "./flotte/contract/flotteContractSlice"
+import flotteClientReducer from "./flotte/client/flotteClientSlice"
+import flotteVehiculeReducer from "./flotte/vehicule/flotteVehiculeSlice"
+
 export const store = configureStore({
   reducer: {
     cart: cartReducer,
@@ -12,6 +16,9 @@ export const store = configureStore({
     ui: uiReducer,
     caution:cautionReducer,
     project:projectReducer,
-    timesheet:timesheetReducer
+    timesheet:timesheetReducer,
+    flotteContract:flotteContractReducer,
+    flotteClient:flotteClientReducer,
+    flotteVehicule:flotteVehiculeReducer
   },
 });

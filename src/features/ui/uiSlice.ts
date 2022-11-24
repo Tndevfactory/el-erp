@@ -5,6 +5,7 @@ const menu = [
     "designation_fr": "GRH",
     "designation_ar": null,
     "ordre": 1,
+    "icon":null,
     "menu_parant": null,
     "active": 1,
     "link": "/home",
@@ -123,8 +124,78 @@ const menu = [
         "child_recursive": []
       },
     ]
+  },
+  {
+    "id": 4,
+    "designation_fr": "Gestion des flottes",
+    "designation_ar": null,
+    "ordre": 1,
+    "menu_parant": null,
+    "active": 1,
+    "link": "/flottes",
+    "created_at": null,
+    "updated_at": null,
+    "deleted_at": null,
+    "child_recursive": [
+      {
+        "id": 14,
+        "icon":"gestionContrats",
+        "designation_fr": "Gestion des contrats",
+        "designation_ar": null,
+        "ordre": null,
+        "menu_parant": 4,
+        "active": 1,
+        "link": "/flottes/gestion-des-contrat",
+        "created_at": null,
+        "updated_at": null,
+        "deleted_at": null,
+        "child_recursive": []
+      },
+      {
+        "id": 14,
+        "icon":"gestionVehicules",
+        "designation_fr": "Gestion des vehicules",
+        "designation_ar": null,
+        "ordre": null,
+        "menu_parant": 4,
+        "active": 1,
+        "link": "/flottes/gestion-des-vehicules",
+        "created_at": null,
+        "updated_at": null,
+        "deleted_at": null,
+        "child_recursive": []
+      },
+      {
+        "id": 15,
+        "icon":"gestionClients",
+        "designation_fr": "Gestion des clients",
+        "designation_ar": null,
+        "ordre": null,
+        "menu_parant": 4,
+        "active": 1,
+        "link": "/flottes/gestion-des-clients",
+        "created_at": null,
+        "updated_at": null,
+        "deleted_at": null,
+        "child_recursive": []
+      },{
+        "id": 16,
+        "icon":"gestionLivraison",
+        "designation_fr": "Gestion des Livraison",
+        "designation_ar": null,
+        "ordre": null,
+        "menu_parant": 4,
+        "active": 1,
+        "link": "/flottes/test",
+        "created_at": null,
+        "updated_at": null,
+        "deleted_at": null,
+        "child_recursive": []
+      },
+    
+    ]
   }
-  
+
 ]
 export interface MenuRecursive {
   id: number;

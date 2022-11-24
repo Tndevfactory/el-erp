@@ -45,6 +45,11 @@ import Projects from "./pages/project/project-modules/Projects";
 import Kanban from "./pages/project/project-modules/kanban/Kanban";
 //Timesheet
 import Timesheet from "./pages/project/timesheet-modules/Timesheet";
+//flottes
+import FlottesContract from "./pages/flottes/contracts-modules/Contracts";
+import FlottesClients from "./pages/flottes/clients-modules/Clients";
+import Vehicules from "./pages/flottes/vehicules-modules/Vehicules";
+
 // check localstorage here
 //console.log(`${process.env.REACT_APP_BASE_PUBLIC_URL}/`);
 
@@ -82,6 +87,12 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
               </Route>
               <Route path={`finance/*`} element={<Index />}>
                   <Route path={`*`} element={<Cautions />} />
+              </Route>
+              <Route path={`flottes/*`} element={<Index />}>
+                  <Route path={`*`} element={<FlottesContract />} />
+                  <Route path={`gestion-des-contrat`} element={<FlottesContract />} />
+                  <Route path={`gestion-des-clients`} element={<FlottesClients />} />
+                  <Route path={`gestion-des-vehicules`} element={<Vehicules />} />
               </Route>
               <Route path={`projects/*`} element={<Index />}>
                   <Route path={`*`} element={<Projects />} />
