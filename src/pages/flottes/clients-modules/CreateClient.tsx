@@ -121,7 +121,7 @@ function CreateClient({ visible, setVisible, forceRefresh }) {
           <Button className="btnAnnuler" htmlType="reset" style={{ marginRight: "10px" }}>
             Annuler
           </Button>
-          <Button className="btnModofier" htmlType="submit">
+          <Button type="primary" htmlType="submit">
             Envoyer
           </Button>
         </Form.Item>

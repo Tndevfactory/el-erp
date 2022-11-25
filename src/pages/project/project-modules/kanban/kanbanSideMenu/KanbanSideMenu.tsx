@@ -23,7 +23,8 @@ const KanbanSideMenu = () => {
     <div>
       <Menu
         className="KanbanSideMenu"
-        style={{ borderRadius:"5px", width:"60px"}}  
+        style={{ borderRadius:"5px", width:"60px",     borderWidth: "1px",
+        borderColor: "#e5e7eb" }}  
         mode="inline"
         inlineCollapsed={true}
       >

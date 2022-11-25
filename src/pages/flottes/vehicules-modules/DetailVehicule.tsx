@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Space,
@@ -38,16 +38,18 @@ const props: UploadProps = {
     console.log("Dropped files", e.dataTransfer.files);
   },
 };
-function UpdateVehicule({ visible, setVisible, forceRefresh }) {
+function DetailVehicule({ visible, setVisible, vehicule, modify, setModify, forceRefresh }) {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const [eps,setEps]= useState(0)
+  const [fields, setFields] = useState([])
+
   const showDrawer = () => {
     setVisible(true);
   };
 
   const onClose = () => {
     setVisible(false);
+    setModify(false)
   };
   const handleSubmit = (values) => {
     dispatch(
@@ -70,9 +72,63 @@ function UpdateVehicule({ visible, setVisible, forceRefresh }) {
     setVisible(false);
     console.log(values)
   };
+  useEffect(() => {
+    if (visible) {
+      setFields([
+        {
+          name: ['immatriculation'],
+          value: vehicule.immatriculation,
+        },
+        {
+          name: ['modele'],
+          value: vehicule.modele,
+        },
+        {
+          name: ['marque'],
+          value: vehicule.marque,
+        },
+        {
+          name: ['numero_chassis'],
+          value: vehicule.numero_chassis,
+        },
+        {
+          name: ['puissance_fiscale'],
+          value: vehicule.puissance_fiscale,
+        },
+        {
+          name: ['puissance_cylindrée'],
+          value: vehicule.puissance_cylindrée,
+        },
+        {
+          name: ['type_carburant'],
+          value: "Essence",
+        },
+        {
+          name: ['kilometrage_initial'],
+          value: "25000",
+        },
+        {
+          name: ['nombre_places'],
+          value: "5",
+        },
+        {
+          name: ['echeance_taxe'],
+          value: moment(vehicule.echeance_taxe, 'DD/MM/YYYY'),
+        },
+        {
+          name: ['echeance_assurance'],
+          value: moment(vehicule.echeance_assurance, 'DD/MM/YYYY'),
+        },
+        {
+          name: ['echeance_visite'],
+          value: moment(vehicule.echeance_visite, 'DD/MM/YYYY'),
+        },
+      ])
+    }
+  }, [vehicule])
   return (
     <Drawer
-      title="Modifier véhicule"
+      title={modify?"Modifier véhicule":"Détail de véhicule"}
       width={720}
       className="CautionForm"
       onClose={onClose}
@@ -81,7 +137,7 @@ function UpdateVehicule({ visible, setVisible, forceRefresh }) {
         paddingBottom: 80,
       }}
     >
-      <Form layout="vertical" hideRequiredMark onFinish={handleSubmit} form={form}>
+      <Form layout="vertical" hideRequiredMark onFinish={handleSubmit} form={form} fields={fields} disabled={!modify}>
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
@@ -201,8 +257,8 @@ function UpdateVehicule({ visible, setVisible, forceRefresh }) {
         <Row gutter={16}>
         <Col span={12}>
             <Form.Item
-              name="Type du carburant"
-              label="type_carburant"
+              label="Type du carburant"
+              name="type_carburant"
               rules={[
                 {
                   required: true,
@@ -301,7 +357,7 @@ function UpdateVehicule({ visible, setVisible, forceRefresh }) {
           </Col>
           <Col span={12}>
             <Form.Item
-              name="echeance_technique"
+              name="echeance_visite"
               label="Echéance de visite technique"
               rules={[
                 {
@@ -346,17 +402,23 @@ function UpdateVehicule({ visible, setVisible, forceRefresh }) {
             </Form.Item>
           </Col>
         </Row>
+        {modify&&
         <Form.Item style={{ textAlign: "right" }}>
-          <Button className="btnAnnuler" htmlType="reset" style={{ marginRight: "10px" }}>
+          <Button className="btnAnnuler" onClick={()=>{setModify(false)}} style={{ marginRight: "10px" }}>
             Annuler
           </Button>
-          <Button className="btnModofier" htmlType="submit">
+          <Button type="primary" htmlType="submit">
             Envoyer
           </Button>
-        </Form.Item>
+        </Form.Item>}
       </Form>
+      {!modify&&
+      <div style={{ width:"100%", textAlign: "right" }}>  
+      <Button  className="btnAnnuler" onClick={()=>{setModify(true)}} style={{ marginRight: "10px" }}>
+      Modifier 
+    </Button></div>}
     </Drawer>
   );
 }
 
-export default UpdateVehicule;
+export default DetailVehicule;

@@ -1,59 +1,57 @@
-import React, { useEffect, useState, useRef } from 'react'
-import {
-  Button,
-  Drawer,
-  Input,
-  Form,
-  Row,
-  Col,
-} from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState, useRef } from "react";
+import { Button, Drawer, Input, Form, Row, Col, message } from "antd";
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { addDuration, updateCaution } from "@/features/caution/cautionSlice";
 
-function CautionDetails({ visible, setVisible, client, forceRefresh  }) {
-  var { caution } = useSelector((store: any) => store.caution)
-  const dispatch = useDispatch()
-  const [fields, setFields] = useState([])
-
+function ClientDetails({ visible, setVisible, client, modify, setModify, forceRefresh }) {
+  var { caution } = useSelector((store: any) => store.caution);
+  const dispatch = useDispatch();
+  const [fields, setFields] = useState([]);
+  const showDrawer = () => {
+    setVisible(true);
+  };
   useEffect(() => {
     if (visible) {
-      console.log("detail")
       setFields([
         {
-          name: ['code_client'],
+          name: ["code_client"],
           value: client.code_client,
         },
         {
-          name: ['designation'],
+          name: ["designation"],
           value: client.designation,
         },
         {
-          name: ['code_dossier'],
+          name: ["code_dossier"],
           value: client.code_dossier,
         },
         {
-          name: ['telephone'],
+          name: ["telephone"],
           value: client.telephone,
         },
-      ])
+        {
+          name: ["adresse"],
+          value: "Ariana Essoughra, Cebalat Ben Ammar",
+        },
+      ]);
     }
-  }, [visible])
-
+  }, [visible]);
   return (
     <Drawer
-      title={'Détails de client'}
+      title={modify?"Modifier client":"Détail de client"}
       className="CautionDetails"
       width={500}
-      onClose={()=>{setVisible(false)}}
+      onClose={() => {
+        setModify(false)
+        setVisible(false);
+      }}
       open={visible}
       bodyStyle={{
         paddingBottom: 80,
-      }} 
+      }}
     >
-      <Form layout="vertical" hideRequiredMark fields={fields}
-        onFinish={(values)=>{
-          console.log(values)
-        }} 
-      >
+      <Form layout="vertical" hideRequiredMark fields={fields} disabled={!modify}>
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item
@@ -66,10 +64,10 @@ function CautionDetails({ visible, setVisible, client, forceRefresh  }) {
                 },
               ]}
             >
-              <Input placeholder="Veuillez entrer le code client"/>
+              <Input placeholder="Veuillez entrer le code client" />
             </Form.Item>
           </Col>
-          </Row>
+        </Row>
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item
@@ -82,7 +80,7 @@ function CautionDetails({ visible, setVisible, client, forceRefresh  }) {
                 },
               ]}
             >
-              <Input placeholder="Veuillez entrer le type de caution"/>
+              <Input placeholder="Veuillez entrer le type de caution" />
             </Form.Item>
           </Col>
         </Row>
@@ -90,7 +88,7 @@ function CautionDetails({ visible, setVisible, client, forceRefresh  }) {
           <Col span={24}>
             <Form.Item
               name="telephone"
-              label="Téléphone"
+              label="Téléphone "
               rules={[
                 {
                   required: true,
@@ -98,7 +96,7 @@ function CautionDetails({ visible, setVisible, client, forceRefresh  }) {
                 },
               ]}
             >
-              <Input placeholder="Veuillez entrer le numéro"/>
+              <Input placeholder="Veuillez entrer le numéro" />
             </Form.Item>
           </Col>
         </Row>
@@ -114,22 +112,31 @@ function CautionDetails({ visible, setVisible, client, forceRefresh  }) {
                 },
               ]}
             >
-              <Input placeholder="Veuillez entrer l'adresse"/>
+              <Input placeholder="Veuillez entrer l'adresse" />
             </Form.Item>
           </Col>
         </Row>
-        
-        <Form.Item style={{ textAlign: "right" }}>
-          <Button className="btnAnnuler" htmlType="reset" style={{ marginRight: "10px" }}>
+
+       {modify&& <Form.Item style={{ textAlign: "right" }}>
+          <Button
+            className="btnAnnuler"
+            htmlType="reset"
+            style={{ marginRight: "10px" }}
+          >
             Annuler
           </Button>
-          <Button className="btnModofier" htmlType="submit">
+          <Button type="primary" htmlType="submit">
             Envoyer
           </Button>
-        </Form.Item>
+        </Form.Item>}
       </Form>
+      {!modify&&
+      <div style={{ width:"100%", textAlign: "right" }}>  
+      <Button  className="btnAnnuler" onClick={()=>{setModify(true)}} style={{ marginRight: "10px" }}>
+      Modifier 
+    </Button></div>}
     </Drawer>
-  )
+  );
 }
 
-export default CautionDetails
+export default ClientDetails;

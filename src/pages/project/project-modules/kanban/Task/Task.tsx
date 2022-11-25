@@ -54,6 +54,7 @@ const Task = ({ task }) => {
     marginBottom: 10,
     borderRadius: 5,
     opacity: isDragging ? 0.3 : 1,
+    // borderWidth:"0px"
   };
 
   return (

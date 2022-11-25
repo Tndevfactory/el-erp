@@ -19,8 +19,6 @@ import {
   Row,
   Col,
   Typography,
-  Empty,
-  Comment,
 } from "antd";
 import {
   PlusOutlined,
@@ -177,7 +175,7 @@ const TaskModal = ({ isTaskModalOpen, setIsTaskModalOpen, task }) => {
               ></EditOutlined>
             </Tooltip>
           </div>
-          <RangePicker
+          {/* <RangePicker
             style={{
               borderRadius: "15px",
               width: "250px",
@@ -189,7 +187,7 @@ const TaskModal = ({ isTaskModalOpen, setIsTaskModalOpen, task }) => {
             format={"DD-MM-YYYY"}
             allowClear={false}
             onChange={(value, dateString) => {}}
-          />
+          /> */}
           <Tooltip title="Archive task">
             <Popconfirm
               title="Are you sure to archive this task?"

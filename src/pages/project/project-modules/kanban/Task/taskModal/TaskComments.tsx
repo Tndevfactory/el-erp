@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Avatar, Typography, Comment, Tooltip, Row, Col, Input, Button, Space } from "antd";
+import { Avatar, Typography, Tooltip, Row, Col, Input, Button, Space } from "antd";
 import {
     SendOutlined,
   } from "@ant-design/icons";
@@ -8,10 +8,10 @@ const TaskComments = () => {
     useEffect(()=>{
         // var TaskCommentsHeight = document.getElementById('TaskComments').clientHeight;
         // var TaskCommentsInputHeight = document.getElementById('TaskCommentsInput').clientHeight;
-        var TaskCommentsScrollZone = document.getElementById("TaskCommentsScrollZone");
+        // var TaskCommentsScrollZone = document.getElementById("TaskCommentsScrollZone");
         // TaskCommentsScrollZone.style.height = (TaskCommentsHeight-TaskCommentsInputHeight).toString+"px";
         // console.log((TaskCommentsHeight-TaskCommentsInputHeight).toString+"px")
-        TaskCommentsScrollZone.scrollTop = TaskCommentsScrollZone.scrollHeight;
+        // TaskCommentsScrollZone.scrollTop = TaskCommentsScrollZone.scrollHeight;
 
     },[])
   return (
@@ -19,7 +19,7 @@ const TaskComments = () => {
       <Space direction="vertical" style={{width:'100%'}}>
       <Title level={5}>Commentaires</Title>
       {/* <br/><br/><br/><Empty description={"Aucun Message"}/> */}
-      <div className="TaskCommentsScrollZone" id="TaskCommentsScrollZone">
+      {/* <div className="TaskCommentsScrollZone" id="TaskCommentsScrollZone">
         <Comment
           // actions={actions}
           author={<a>Wael Machlouch</a>}
@@ -81,7 +81,7 @@ const TaskComments = () => {
             </Tooltip>
           }
         />
-      </div>
+      </div> */}
       <Row
         gutter={24}
         style={{ position: "absolute", bottom: "0px", width: "100%" }}

@@ -28,7 +28,7 @@ import {
   IClient
 } from "@/features/flotte/client/flotteClientSlice";
 import type { ColumnsType } from "antd/es/table";
-import UpdateClient from "./UpdateClient";
+// import UpdateClient from "./UpdateClient";
 const { Paragraph, Title } = Typography;
 
 function Clients() {
@@ -37,10 +37,11 @@ function Clients() {
 
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
-  const [visibleUpdate, setVisibleUpdate] = useState(false);
+  // const [visibleUpdate, setVisibleUpdate] = useState(false);
   let [search, setSearch] = useState("");
   const [client, setClient] = useState({});
   const [refresh, forceRefresh] = useState(0);
+  const [modify, setModify] = useState(false)
 
   const columns: ColumnsType<IClient> = [
     {
@@ -223,7 +224,9 @@ function Clients() {
           <a
             onClick={() => {
               setClient(client)
-              setVisibleUpdate(true);
+              setModify(true)
+
+              setVisibleDetails(true);
             }}
           >
            <EditOutlined/>
@@ -264,14 +267,16 @@ function Clients() {
     visible: visibleDetails,
     setVisible: setVisibleDetails,
     client: client,
+    modify:modify, 
+    setModify:setModify,
     forceRefresh: forceRefresh,
   };
-  const updateObj = {
-    visible: visibleUpdate,
-    setVisible: setVisibleUpdate,
-    client: client,
-    forceRefresh: forceRefresh,
-  };
+  // const updateObj = {
+  //   visible: visibleUpdate,
+  //   setVisible: setVisibleUpdate,
+  //   client: client,
+  //   forceRefresh: forceRefresh,
+  // };
   useEffect(() => {
     setData(clients);
   }, [refresh]);
@@ -311,7 +316,7 @@ function Clients() {
       </Row>
       <CreateClient {...obj}></CreateClient>
       <ClientDetails {...detailsObj}></ClientDetails>
-      <UpdateClient {...updateObj}/>
+      {/* <UpdateClient {...updateObj}/> */}
     </div>
   );
 }

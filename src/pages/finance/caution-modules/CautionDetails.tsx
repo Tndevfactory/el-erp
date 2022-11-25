@@ -410,7 +410,7 @@ function CautionDetails({ visible, setVisible, forceRefresh ,update, setUpdate, 
             </Space>
           ) : (
             <>
-            <Button hidden={true}>fake button</Button>
+            {/* <Button hidden={true}>fake button</Button> */}
               {visible && prolongation && (
                 <Space>
                   <Button

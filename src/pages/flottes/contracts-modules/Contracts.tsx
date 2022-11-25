@@ -12,7 +12,8 @@ import {
   Col,
   Row,
   Typography,
-  Divider
+  Divider,
+  Popconfirm
 } from "antd";
 import {
   SearchOutlined,
@@ -216,11 +217,15 @@ function Contracts() {
           </a>
           <Divider type="vertical" />
           <a
-            onClick={() => {
-              setVisibleDetails(true);
-            }}
           >
-            <DeleteOutlined/>
+                       <Popconfirm
+              title="voulez-vous vraiment supprimer ce contrat ?"
+              onConfirm={() => {}}
+              okText="Oui"
+              cancelText="Non"
+            >
+              <DeleteOutlined />
+            </Popconfirm>
           </a>
         </Space>
       ),

@@ -24,6 +24,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { IVehicule } from "@/features/flotte/vehicule/flotteVehiculeSlice";
 import type { ColumnsType } from "antd/es/table";
 import AddVehicule from "./AddVehicule";
+import DetailVehicule from "./DetailVehicule";
+import moment from "moment";
 const { Paragraph, Title } = Typography;
 
 function Vehicules() {
@@ -34,8 +36,9 @@ function Vehicules() {
   const [visibleDetails, setVisibleDetails] = useState(false);
   const [visibleUpdate, setVisibleUpdate] = useState(false);
   let [search, setSearch] = useState("");
-  const [client, setClient] = useState({});
+  const [vehicule, setVehicule] = useState({});
   const [refresh, forceRefresh] = useState(0);
+  const [modify, setModify] = useState(false)
 
   const columns: ColumnsType<IVehicule> = [
     {
@@ -51,7 +54,7 @@ function Vehicules() {
               setSearch(e.target.value);
               setData(
                 x.filter((data) =>
-                  data.code_client.toString().search(e.target.value) === -1
+                  data.immatriculation.toUpperCase().search(search.toUpperCase())  === -1
                     ? false
                     : true
                 )
@@ -65,7 +68,7 @@ function Vehicules() {
               let x = vehicules;
               setData(
                 x.filter((data) =>
-                  data.code_client.toString().search(search) === -1
+                  data.immatriculation.toUpperCase().search(search.toUpperCase())  === -1
                     ? false
                     : true
                 )
@@ -87,7 +90,7 @@ function Vehicules() {
               let x = vehicules;
               setData(
                 x.filter((data) =>
-                  data.designation
+                  data.marque
                     .toUpperCase()
                     .search(e.target.value.toUpperCase()) === -1
                     ? false
@@ -103,7 +106,7 @@ function Vehicules() {
               let x = vehicules;
               setData(
                 x.filter((data) =>
-                  data.designation
+                  data.marque
                     .toUpperCase()
                     .search(search.toUpperCase()) === -1
                     ? false
@@ -118,7 +121,7 @@ function Vehicules() {
     {
       title: "Modèle",
       dataIndex: "modele",
-      key: 2,
+      key: 3,
       filterDropdown: (
         <div style={{ display: "flex" }}>
           <Input
@@ -127,7 +130,7 @@ function Vehicules() {
               setSearch(e.target.value);
               setData(
                 x.filter((data) =>
-                  data.telephone.toString().search(e.target.value) === -1
+                  data.modele.toUpperCase().search(search.toUpperCase()) === -1
                     ? false
                     : true
                 )
@@ -141,7 +144,7 @@ function Vehicules() {
               let x = vehicules;
               setData(
                 x.filter((data) =>
-                  data.telephone.toString().search(search) === -1 ? false : true
+                  data.modele.toUpperCase().search(search.toUpperCase()) === -1 ? false : true
                 )
               );
             }}
@@ -153,7 +156,7 @@ function Vehicules() {
       title: "Puissance fiscale",
       dataIndex: "puissance_fiscale",
       render: (code) => <a>{code}</a>,
-      key: 3,
+      key: 4,
       filterDropdown: (
         <div style={{ display: "flex" }}>
           <Input
@@ -162,7 +165,7 @@ function Vehicules() {
               setSearch(e.target.value);
               setData(
                 x.filter((data) =>
-                  data.code_dossier.toString().search(e.target.value) === -1
+                  data.puissance_fiscale.toString().search(e.target.value) === -1
                     ? false
                     : true
                 )
@@ -176,7 +179,7 @@ function Vehicules() {
               let x = vehicules;
               setData(
                 x.filter((data) =>
-                  data.code_dossier.toString().search(search) === -1
+                  data.puissance_fiscale.toString().search(search) === -1
                     ? false
                     : true
                 )
@@ -190,7 +193,7 @@ function Vehicules() {
       title: "Puissance cylindrée",
       dataIndex: "puissance_cylindrée",
       render: (code) => <a>{code}</a>,
-      key: 3,
+      key: 5,
       filterDropdown: (
         <div style={{ display: "flex" }}>
           <Input
@@ -199,7 +202,7 @@ function Vehicules() {
               setSearch(e.target.value);
               setData(
                 x.filter((data) =>
-                  data.code_dossier.toString().search(e.target.value) === -1
+                  data.puissance_cylindrée.toString().search(e.target.value) === -1
                     ? false
                     : true
                 )
@@ -213,7 +216,7 @@ function Vehicules() {
               let x = vehicules;
               setData(
                 x.filter((data) =>
-                  data.code_dossier.toString().search(search) === -1
+                  data.puissance_cylindrée.toString().search(search) === -1
                     ? false
                     : true
                 )
@@ -227,121 +230,37 @@ function Vehicules() {
       title: "Echéance de taxe",
       dataIndex: "echeance_taxe",
       responsive: ["xl"],
-      key: 3,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = vehicules;
-              setSearch(e.target.value);
-              setData(
-                x.filter((data) =>
-                  data.code_dossier.toString().search(e.target.value) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = vehicules;
-              setData(
-                x.filter((data) =>
-                  data.code_dossier.toString().search(search) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: 6,
+      sorter: (a, b) =>
+        moment(a.echeance_taxe, "DDMMYYYY").valueOf() -
+        moment(b.echeance_taxe, "DDMMYYYY").valueOf(),
     },
     {
       title: "Echéance de l'assurance",
       dataIndex: "echeance_assurance",
-      key: 3,
+      key: 7,
       responsive: ["xl"],
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = vehicules;
-              setSearch(e.target.value);
-              setData(
-                x.filter((data) =>
-                  data.code_dossier.toString().search(e.target.value) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = vehicules;
-              setData(
-                x.filter((data) =>
-                  data.code_dossier.toString().search(search) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      sorter: (a, b) =>
+        moment(a.echeance_assurance, "DDMMYYYY").valueOf() -
+        moment(b.echeance_assurance, "DDMMYYYY").valueOf(),
     },
     {
       title: "Echéance de visite",
       dataIndex: "echeance_visite",
       responsive: ["xl"],
-      key: 3,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = vehicules;
-              setSearch(e.target.value);
-              setData(
-                x.filter((data) =>
-                  data.code_dossier.toString().search(e.target.value) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = vehicules;
-              setData(
-                x.filter((data) =>
-                  data.code_dossier.toString().search(search) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: 8,
+      sorter: (a, b) =>
+      moment(a.echeance_visite, "DDMMYYYY").valueOf() -
+      moment(b.echeance_visite, "DDMMYYYY").valueOf(),
     },
     {
       title: "Action",
       key: "10",
-      render: (client) => (
+      render: (vehicule) => (
         <Space size="small">
           <a
             onClick={() => {
-              setClient(client);
+              setVehicule(vehicule);
               setVisibleDetails(true);
             }}
           >
@@ -350,8 +269,9 @@ function Vehicules() {
           <Divider type="vertical" />
           <a
             onClick={() => {
-              setClient(client);
-              setVisibleUpdate(true);
+              setVehicule(vehicule);
+              setModify(true)
+              setVisibleDetails(true);
             }}
           >
             <EditOutlined />
@@ -387,15 +307,12 @@ function Vehicules() {
   const detailsObj = {
     visible: visibleDetails,
     setVisible: setVisibleDetails,
-    client: client,
+    vehicule: vehicule,
+    modify:modify,
+    setModify:setModify,
     forceRefresh: forceRefresh,
   };
-  const updateObj = {
-    visible: visibleUpdate,
-    setVisible: setVisibleUpdate,
-    client: client,
-    forceRefresh: forceRefresh,
-  };
+
   useEffect(() => {
     setData(vehicules);
   }, [refresh]);
@@ -478,6 +395,8 @@ function Vehicules() {
         </Col>
       </Row>
       <AddVehicule {...createObj}/>
+      <DetailVehicule {...detailsObj}/>
+
     </div>
   );
 }
