@@ -3,10 +3,7 @@ import "../../../style/modules/Caution.less";
 import {
   Button,
   Space,
-  Table,
-  Input,
   Tag,
-  message,
   Breadcrumb,
   Card,
   Col,
@@ -15,15 +12,14 @@ import {
   Divider,
   Popconfirm
 } from "antd";
+import { ProTable, TableDropdown, ProColumns } from '@ant-design/pro-components';
 import {
-  SearchOutlined,
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
+  PlusOutlined
 } from "@ant-design/icons";
-import { MdMoreTime } from "react-icons/md";
 import moment from "moment";
-import { Console } from "console";
 import CreateContract from "./CreateContract";
 import ContarctDetails from "./ContarctDetails";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,96 +41,26 @@ function Contracts() {
   const [refresh, forceRefresh] = useState(0);
   
 
-  const columns: ColumnsType<IContract> = [
+  const columns: ProColumns<IContract>[] = [
     {
       title: "Code dossier",
       dataIndex: "code_dossier",
-      render:(code)=>(<a>{code}</a>),
-      key: 0,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = contracts;
-              setSearch(e.target.value)
-              setData(
-                x.filter((data) =>
-                  data.code_dossier.toString().search(
-                    e.target.value
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = contracts;
-              setData(
-                x.filter((data) =>
-                  data.code_dossier.toString().search(
-                    search
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      render: (code) => <a>{code}</a>,
+      key: "code_dossier",
     },
     {
       title: "Code client",
       dataIndex: "code_client",
       responsive: ["md"],
-      render:(code)=>(<a>{code}</a>),
-      key: 1,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = contracts;
-              setSearch(e.target.value)
-              setData(
-                x.filter((data) =>
-                  data.code_client.toString().search(
-                    e.target.value
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = contracts;
-              setData(
-                x.filter((data) =>
-                  data.code_client.toString().search(
-                    search
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: "code_client",
     },
-    
+
     {
       title: "Date établissement",
-      key: 3,
+      key: "date_etablissement",
       dataIndex: "date_etablissement",
       responsive: ["xl"],
+      search: false,
       sorter: (a, b) =>
         moment(a.date_etablissement, "DDMMYYYY").valueOf() -
         moment(b.date_etablissement, "DDMMYYYY").valueOf(),
@@ -142,6 +68,7 @@ function Contracts() {
     {
       title: "Date de fin prévue",
       key: 4,
+      search: false,
       dataIndex: "date_fin_prevue",
       sorter: (a, b) =>
         moment(a.date_fin_prevue, "DDMMYYYY").valueOf() -
@@ -149,44 +76,61 @@ function Contracts() {
     },
     {
       title: "Nature échéance",
-      key: 9,
+      key: "nature_echeance",
       dataIndex: "nature_echeance",
-      render: (Etat_main_levée: string) => (
+      search:false,
+      // valueType: "select",
+      // valueEnum: {
+      //   all: { text: "Tout" },
+      //   annuelle: {
+      //     text: "Annuelle",
+      //     status: "annuelle",
+      //   },
+      //   trimestrielle: {
+      //     text: "Trimestrielle",
+      //     status: "trimestrielle",
+      //   },
+      //   mensuel: {
+      //     text: "Mensuel",
+      //     status: "mensuel",
+      //   },
+      // },
+      render: (_, contrat) => (
         <Tag
           color={
-            Etat_main_levée === "annuelle"
+            contrat.nature_echeance === "annuelle"
               ? "blue"
-              : Etat_main_levée === "trimestrielle"
+              : contrat.nature_echeance === "trimestrielle"
               ? "gold"
-              : Etat_main_levée === "mensuel"
+              : contrat.nature_echeance === "mensuel"
               ? "green"
               : "red"
           }
         >
-          {Etat_main_levée}
+          {contrat.nature_echeance}
         </Tag>
       ),
       filters: [
         {
-          text: "Fermée",
-          value: "Fermée",
+          text: "Annuelle",
+          value: "annuelle",
         },
         {
-          text: "En cours",
-          value: "En cours",
+          text: "Trimestrielle",
+          value: "trimestrielle",
         },
         {
-          text: "En attente",
-          value: "En attente",
+          text: "Mensuel",
+          value: "mensuel",
         },
       ],
       onFilter: (value, record) => record.nature_echeance === value,
     },
-    
     {
       title: "Dernière règlement",
-      key: 8,
+      key: "derniere_reglement",
       dataIndex: "derniere_reglement",
+      search: false,
       sorter: (a, b) => {
         return (
           moment(a.derniere_reglement, "DDMMYYYY").valueOf() -
@@ -196,8 +140,9 @@ function Contracts() {
     },
 
     {
-      title: "Action",
-      key: "10",
+      title: 'Action',
+      valueType: 'option',
+      key: 'option',
       render: (caution) => (
         <Space size="small">
           <a
@@ -205,7 +150,7 @@ function Contracts() {
               setVisibleDetails(true);
             }}
           >
-            <EyeOutlined/>
+            <EyeOutlined />
           </a>
           <Divider type="vertical" />
           <a
@@ -213,12 +158,11 @@ function Contracts() {
               setVisibleDetails(true);
             }}
           >
-           <EditOutlined/>
+            <EditOutlined />
           </a>
           <Divider type="vertical" />
-          <a
-          >
-                       <Popconfirm
+          <a>
+            <Popconfirm
               title="voulez-vous vraiment supprimer ce contrat ?"
               onConfirm={() => {}}
               okText="Oui"
@@ -269,25 +213,53 @@ function Contracts() {
           <Card
             title={<Title level={4}>Gestion des contrats LLD</Title>}
             bordered={false}
-            extra={
-              <Button
-                type="primary"
-                onClick={() => {
-                  setVisibleForm(true);
-                }}
-              >
-                Ajouter un contrat
-              </Button>
-            }
           >
-            <Table
-              columns={columns}
-              dataSource={data}
-              pagination={{
-                size: "small",
-                pageSize: 7,
-              }}
-            />
+    <ProTable<IContract>
+      columns={columns}
+      cardBordered
+      columnsState={{
+        persistenceKey: 'pro-table-singe-demos',
+        persistenceType: 'localStorage',
+        onChange(value) {
+          console.log('value: ', value);
+        },
+      }}
+      search={{
+        labelWidth: "auto",
+      }}
+      options={{
+        setting: {
+          listsHeight: 400,
+        },
+      }}
+      pagination={{
+        pageSize: 4,
+        onChange: (page) => console.log(page),
+      }}
+      headerTitle="Liste de contrats"
+      request={async (params) => {
+        console.log(`request params:`, params);
+        var dataFilter=contracts
+        if(params.code_client) dataFilter=dataFilter.filter((item)=>item.code_client.toString().toUpperCase().search(params.code_client.toString().toUpperCase())===-1?false:true);
+        if(params.code_dossier) dataFilter=dataFilter.filter((item)=>item.code_dossier.toString().toUpperCase().search(params.code_dossier.toString().toUpperCase())===-1?false:true);
+        // if(params.nature_echeance) dataFilter=dataFilter.filter((item)=>item.nature_echeance.toString().toUpperCase().search(params.nature_echeance.toString().toUpperCase())===-1?false:true);
+        return {
+          data: dataFilter,
+          success: true,
+        };
+      }}
+      toolBarRender={() => [
+        <Button
+        type="primary"
+        icon={<PlusOutlined/>}
+        onClick={() => {
+          setVisibleForm(true);
+        }}
+      >
+        Ajouter un contrat
+      </Button>
+      ]}
+    />
           </Card>
         </Col>
       </Row>

@@ -1,7 +1,6 @@
 import * as React from "react";
 import "./style/app.less";
 import { useState } from "react";
-
 import {
   BrowserRouter,
   Routes,
@@ -9,7 +8,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-
+import enFR from 'antd/lib/locale/fr_FR';
 // ltr rtl
 import { ConfigProvider } from "antd";
 // translator
@@ -28,7 +27,7 @@ import Unauthorized from "./components/Unauthorized";
 import GuestPath from "./components/GuestPath";
 import Layout from "./components/Layout";
 import Index from "./components/Index";
-
+import Livraison from "./pages/flottes/livraison-modules/Livraison";
 
 // Auth
 import Login from "./pages/auth/Login";
@@ -68,7 +67,7 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
   };
 
   return (
-    <ConfigProvider direction="ltr">
+    <ConfigProvider direction="ltr" locale={enFR} >
       <IntlProvider
         messages={messages["fr"]}
         locale={"fr"}
@@ -93,6 +92,8 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
                   <Route path={`gestion-des-contrat`} element={<FlottesContract />} />
                   <Route path={`gestion-des-clients`} element={<FlottesClients />} />
                   <Route path={`gestion-des-vehicules`} element={<Vehicules />} />
+                  <Route path={`gestion-des-livraisons`} element={<Livraison />} />
+
               </Route>
               <Route path={`projects/*`} element={<Index />}>
                   <Route path={`*`} element={<Projects />} />

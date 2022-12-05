@@ -1,6 +1,5 @@
 import React,{ useState, useCallback, useRef, useEffect } from "react";
 import {
-  Comment,
   Tooltip,
   List,
   Input,

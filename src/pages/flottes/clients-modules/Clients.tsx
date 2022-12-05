@@ -18,7 +18,9 @@ import {
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
+  PlusOutlined
 } from "@ant-design/icons";
+import { ProTable, TableDropdown, ProColumns } from '@ant-design/pro-components';
 
 import moment from "moment";
 import CreateClient from "./CreateClient";
@@ -28,7 +30,6 @@ import {
   IClient
 } from "@/features/flotte/client/flotteClientSlice";
 import type { ColumnsType } from "antd/es/table";
-// import UpdateClient from "./UpdateClient";
 const { Paragraph, Title } = Typography;
 
 function Clients() {
@@ -37,217 +38,90 @@ function Clients() {
 
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
-  // const [visibleUpdate, setVisibleUpdate] = useState(false);
   let [search, setSearch] = useState("");
   const [client, setClient] = useState({});
   const [refresh, forceRefresh] = useState(0);
   const [modify, setModify] = useState(false)
 
-  const columns: ColumnsType<IClient> = [
+  const columns: ProColumns<IClient>[] = [
     {
       title: "Code client",
       dataIndex: "code_client",
       key: 0,
-      render:(code)=>(<a>{code}</a>),
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = clients;
-              setSearch(e.target.value)
-              setData(
-                x.filter((data) =>
-                  data.code_client.toString().search(
-                    e.target.value
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = clients;
-              setData(
-                x.filter((data) =>
-                  data.code_client.toString().search(
-                    search
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      ellipsis: true,
     },
     {
       title: "Désignation",
       dataIndex: "designation",
-      key: 1,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              setSearch(e.target.value);
-              let x = clients;
-              setData(
-                x.filter((data) =>
-                  data.designation.toUpperCase().search(
-                    e.target.value.toUpperCase()
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = clients;
-              setData(
-                x.filter((data) =>
-                  data.designation.toUpperCase().search(search.toUpperCase()) ===
-                  -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: "designation",
+      filters: true,
+      onFilter: true,
+      ellipsis: true,
     },
     {
       title: "Numéro de téléphone",
       dataIndex: "telephone",
       render:(code)=>(<a>+216{code}</a>),
-      key: 2,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = clients;
-              setSearch(e.target.value)
-              setData(
-                x.filter((data) =>
-                  data.telephone.toString().search(
-                    e.target.value
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = clients;
-              setData(
-                x.filter((data) =>
-                  data.telephone.toString().search(
-                    search
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: "telephone",
     },
     {
-      title: "Code dossier",
-      dataIndex: "code_dossier",
-      render:(code)=>(<a>{code}</a>),
-      key: 3,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = clients;
-              setSearch(e.target.value)
-              setData(
-                x.filter((data) =>
-                  data.code_dossier.toString().search(
-                    e.target.value
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = clients;
-              setData(
-                x.filter((data) =>
-                  data.code_dossier.toString().search(
-                    search
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
-    },
-  
-    {
-      title: "Action",
-      key: "10",
-      render: (client) => (
+      title: 'Action',
+      valueType: 'option',
+      key: 'option',
+      render: (text, client, _, action) => [
         <Space size="small">
-          <a
-            onClick={() => {
-              setClient(client)
-              setVisibleDetails(true);
-            }}
-          >
-            <EyeOutlined/>
-          </a>
-          <Divider type="vertical" />
-          <a
-            onClick={() => {
-              setClient(client)
-              setModify(true)
+        <a
+          onClick={() => {
+            setClient(client)
+            setVisibleDetails(true);
+          }}
+        >
+          <EyeOutlined/>
+        </a>
+        <Divider type="vertical" />
+        <a
+          onClick={() => {
+            setClient(client)
+            setModify(true)
 
-              setVisibleDetails(true);
-            }}
-          >
-           <EditOutlined/>
-          </a>
-          <Divider type="vertical" />
-          <a>
+            setVisibleDetails(true);
+          }}
+        >
+         <EditOutlined/>
+        </a>
+        <Divider type="vertical" />
+        <a>
 
-            <Popconfirm
-                    title="voulez-vous vraiment supprimer ce client ?"
-                    onConfirm={() => {
-            
-                    }}
-                    okText="Oui"
-                    cancelText="Non"
-                  >
-            <DeleteOutlined/>
-                  </Popconfirm>
-          </a>
-
-        </Space>
-      ),
+          <Popconfirm
+                  title="voulez-vous vraiment supprimer ce client ?"
+                  onConfirm={() => {
+          
+                  }}
+                  okText="Oui"
+                  cancelText="Non"
+                >
+          <DeleteOutlined/>
+                </Popconfirm>
+        </a>
+      </Space>
+        // <a
+        //   key="editable"
+        //   onClick={() => {
+        //     setClient(client)
+        //     setVisibleDetails(true)
+        //   }}
+        // >
+        //   Détail
+        // </a>,
+        // <TableDropdown
+        //   key="actionGroup"
+        //   onSelect={() => action?.reload()}
+        //   menus={[
+        //     { key: 'copy', name: 'copy' },
+        //     { key: 'delete', name: 'delete' },
+        //   ]}
+        // />,
+      ],
     },
   ];
   const [openSelectMenu, setOpenSelectMenu] = useState(false);
@@ -271,12 +145,6 @@ function Clients() {
     setModify:setModify,
     forceRefresh: forceRefresh,
   };
-  // const updateObj = {
-  //   visible: visibleUpdate,
-  //   setVisible: setVisibleUpdate,
-  //   client: client,
-  //   forceRefresh: forceRefresh,
-  // };
   useEffect(() => {
     setData(clients);
   }, [refresh]);
@@ -292,31 +160,58 @@ function Clients() {
           <Card
             title={<Title level={4}>Gestion des clients</Title>}
             bordered={false}
-            extra={
-              <Button
-                type="primary"
-                onClick={() => {
-                  setVisibleForm(true);
-                }}
-              >
-                Ajouter un client
-              </Button>
-            }
           >
-            <Table
-              columns={columns}
-              dataSource={data}
-              pagination={{
-                size: "small",
-                pageSize: 7,
-              }}
-            />
+    <ProTable<IClient>
+      columns={columns}
+      cardBordered
+      columnsState={{
+        persistenceKey: 'pro-table-singe-demos',
+        persistenceType: 'localStorage',
+        onChange(value) {
+          console.log('value: ', value);
+        },
+      }}
+      search={{
+        labelWidth: "auto",
+      }}
+      options={{
+        setting: {
+          listsHeight: 400,
+        },
+      }}
+      pagination={{
+        pageSize: 4,
+        onChange: (page) => console.log(page),
+      }}
+      headerTitle="Liste de clients"
+      request={async (params) => {
+        console.log(`request params:`, params);
+        var dataFilter=clients
+        if(params.code_client) dataFilter=dataFilter.filter((item)=>item.code_client.toString().toUpperCase().search(params.code_client.toString().toUpperCase())===-1?false:true);
+        if(params.telephone) dataFilter=dataFilter.filter((item)=>item.telephone.toString().toUpperCase().search(params.telephone.toString().toUpperCase())===-1?false:true);
+        if(params.designation) dataFilter=dataFilter.filter((item)=>item.designation.toString().toUpperCase().search(params.designation.toString().toUpperCase())===-1?false:true);
+        return {
+          data: dataFilter,
+          success: true,
+        };
+      }}
+      toolBarRender={() => [
+        <Button
+        type="primary"
+        icon={<PlusOutlined/>}
+        onClick={() => {
+          setVisibleForm(true);
+        }}
+      >
+        Ajouter un client
+      </Button>
+      ]}
+    />
           </Card>
         </Col>
       </Row>
       <CreateClient {...obj}></CreateClient>
       <ClientDetails {...detailsObj}></ClientDetails>
-      {/* <UpdateClient {...updateObj}/> */}
     </div>
   );
 }

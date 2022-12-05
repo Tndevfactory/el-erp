@@ -190,7 +190,6 @@ function TaskTimesheet({ detail }) {
               ]}
             >
                           <DatePicker
-              defaultValue={moment()}
               format={'DD/MM/YYYY'}
               onChange={(value, dateString: string) => {}}
             />

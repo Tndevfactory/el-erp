@@ -269,7 +269,7 @@ function Timesheet() {
   ];
   const weekFormat = "DD/MM/YY";
   const customWeekStartEndFormat: DatePickerProps["format"] = (value) =>
-    `${moment(value).startOf("week").format(weekFormat)} ~ ${moment(value)
+    `${moment().startOf("week").format(weekFormat)} ~ ${moment()
       .endOf("week")
       .format(weekFormat)}`;
   //export Excel

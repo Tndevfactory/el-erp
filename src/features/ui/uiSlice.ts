@@ -186,7 +186,7 @@ const menu = [
         "ordre": null,
         "menu_parant": 4,
         "active": 1,
-        "link": "/flottes/test",
+        "link": "/flottes/gestion-des-livraisons",
         "created_at": null,
         "updated_at": null,
         "deleted_at": null,

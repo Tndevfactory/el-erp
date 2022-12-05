@@ -12,12 +12,12 @@ export default defineConfig({
           libList: [
               {
                   libName: "antd",
-                  style: (name) => {
-                      if (name === "col" || name === "row") {
-                          return "antd/lib/style/index.less";
-                      }
-                      return `antd/es/${name}/style/index.less`;
-                  },
+                //   style: (name) => {
+                //       if (name === "col" || name === "row") {
+                //           return "antd/lib/style/index.less";
+                //       }
+                //       return `antd/es/${name}/style/index.less`;
+                //   },
               },
           ],
       }),

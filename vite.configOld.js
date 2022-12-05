@@ -13,12 +13,12 @@ exports["default"] = (0, vite_1.defineConfig)({
             libList: [
                 {
                     libName: "antd",
-                    style: function (name) {
-                        if (name === "col" || name === "row") {
-                            return "antd/lib/style/index.less";
-                        }
-                        return "antd/es/".concat(name, "/style/index.less");
-                    }
+                    // style: function (name) {
+                    //     if (name === "col" || name === "row") {
+                    //         return "antd/lib/style/index.less";
+                    //     }
+                    //     return "antd/es/".concat(name, "/style/index.less");
+                    // }
                 },
             ]
         }),

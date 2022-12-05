@@ -85,7 +85,7 @@ function TimesheetDetails({ detail }) {
               }
         }
       />
-      <Row>
+      <Row style={{marginLeft:"25px"}}>
         <Col span={12}>
           <ChartsTest sheets={detail.detail}/>
         </Col>

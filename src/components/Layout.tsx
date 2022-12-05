@@ -35,7 +35,7 @@ export default function () {
   return (
     <>
       <Navbar />
-      <Layout className="  bg-slate-100  ">
+      <Layout className="bg-slate-100">
         <Outlet />
       </Layout>
     </>

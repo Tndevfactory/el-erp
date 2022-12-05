@@ -8,6 +8,7 @@ function ClientDetails({ visible, setVisible, client, modify, setModify, forceRe
   var { caution } = useSelector((store: any) => store.caution);
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
+  const [refresh, refreshDrawer] = useState(0)
   const showDrawer = () => {
     setVisible(true);
   };
@@ -36,7 +37,7 @@ function ClientDetails({ visible, setVisible, client, modify, setModify, forceRe
         },
       ]);
     }
-  }, [visible]);
+  }, [visible, refresh]);
   return (
     <Drawer
       title={modify?"Modifier client":"Détail de client"}
@@ -120,7 +121,7 @@ function ClientDetails({ visible, setVisible, client, modify, setModify, forceRe
        {modify&& <Form.Item style={{ textAlign: "right" }}>
           <Button
             className="btnAnnuler"
-            htmlType="reset"
+            onClick={()=>{refreshDrawer(Math.random()); setModify(false)}}
             style={{ marginRight: "10px" }}
           >
             Annuler

@@ -13,13 +13,16 @@ import {
   Divider,
   Popconfirm,
   Tabs,
+  Badge,
 } from "antd";
 import {
   SearchOutlined,
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
+  PlusOutlined
 } from "@ant-design/icons";
+import { ProTable, TableDropdown, ProColumns } from '@ant-design/pro-components';
 import { useDispatch, useSelector } from "react-redux";
 import { IVehicule } from "@/features/flotte/vehicule/flotteVehiculeSlice";
 import type { ColumnsType } from "antd/es/table";
@@ -40,197 +43,44 @@ function Vehicules() {
   const [refresh, forceRefresh] = useState(0);
   const [modify, setModify] = useState(false)
 
-  const columns: ColumnsType<IVehicule> = [
+  const columns: ProColumns<IVehicule>[] = [
     {
       title: "Immatriculation",
       dataIndex: "immatriculation",
-      key: 0,
-      render: (code) => <a>{code}</a>,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = vehicules;
-              setSearch(e.target.value);
-              setData(
-                x.filter((data) =>
-                  data.immatriculation.toUpperCase().search(search.toUpperCase())  === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = vehicules;
-              setData(
-                x.filter((data) =>
-                  data.immatriculation.toUpperCase().search(search.toUpperCase())  === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: "immatriculation",
     },
     {
       title: "Marque",
       dataIndex: "marque",
-      key: 1,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              setSearch(e.target.value);
-              let x = vehicules;
-              setData(
-                x.filter((data) =>
-                  data.marque
-                    .toUpperCase()
-                    .search(e.target.value.toUpperCase()) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = vehicules;
-              setData(
-                x.filter((data) =>
-                  data.marque
-                    .toUpperCase()
-                    .search(search.toUpperCase()) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: "marque",
     },
     {
       title: "Modèle",
       dataIndex: "modele",
-      key: 3,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = vehicules;
-              setSearch(e.target.value);
-              setData(
-                x.filter((data) =>
-                  data.modele.toUpperCase().search(search.toUpperCase()) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = vehicules;
-              setData(
-                x.filter((data) =>
-                  data.modele.toUpperCase().search(search.toUpperCase()) === -1 ? false : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: "modele",
     },
     {
       title: "Puissance fiscale",
       dataIndex: "puissance_fiscale",
       render: (code) => <a>{code}</a>,
-      key: 4,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = vehicules;
-              setSearch(e.target.value);
-              setData(
-                x.filter((data) =>
-                  data.puissance_fiscale.toString().search(e.target.value) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = vehicules;
-              setData(
-                x.filter((data) =>
-                  data.puissance_fiscale.toString().search(search) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: "puissance_fiscale",
+      // search:false,
+      valueType: 'digit',
     },
     {
       title: "Puissance cylindrée",
       dataIndex: "puissance_cylindrée",
       render: (code) => <a>{code}</a>,
-      key: 5,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              let x = vehicules;
-              setSearch(e.target.value);
-              setData(
-                x.filter((data) =>
-                  data.puissance_cylindrée.toString().search(e.target.value) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = vehicules;
-              setData(
-                x.filter((data) =>
-                  data.puissance_cylindrée.toString().search(search) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: "puissance_cylindrée",
+      // search:false,
+      valueType: 'digit',
     },
     {
       title: "Echéance de taxe",
       dataIndex: "echeance_taxe",
       responsive: ["xl"],
       key: 6,
+      search:false,
       sorter: (a, b) =>
         moment(a.echeance_taxe, "DDMMYYYY").valueOf() -
         moment(b.echeance_taxe, "DDMMYYYY").valueOf(),
@@ -239,7 +89,9 @@ function Vehicules() {
       title: "Echéance de l'assurance",
       dataIndex: "echeance_assurance",
       key: 7,
+      search:false,
       responsive: ["xl"],
+      render: (date)=><>{date}</>,
       sorter: (a, b) =>
         moment(a.echeance_assurance, "DDMMYYYY").valueOf() -
         moment(b.echeance_assurance, "DDMMYYYY").valueOf(),
@@ -249,14 +101,16 @@ function Vehicules() {
       dataIndex: "echeance_visite",
       responsive: ["xl"],
       key: 8,
+      search:false,
       sorter: (a, b) =>
       moment(a.echeance_visite, "DDMMYYYY").valueOf() -
       moment(b.echeance_visite, "DDMMYYYY").valueOf(),
     },
     {
-      title: "Action",
-      key: "10",
-      render: (vehicule) => (
+      title: 'Action',
+      valueType: 'option',
+      key: 'option',
+      render: (text,vehicule) => (
         <Space size="small">
           <a
             onClick={() => {
@@ -291,6 +145,59 @@ function Vehicules() {
       ),
     },
   ];
+  const Table=(etat: string)=>(
+    <ProTable<IVehicule>
+    columns={columns}
+    cardBordered
+    columnsState={{
+      persistenceKey: 'pro-table-singe-demos',
+      persistenceType: 'localStorage',
+      onChange(value) {
+        console.log('value: ', value);
+      },
+    }}
+    search={{
+      labelWidth: "auto",
+    }}
+    options={{
+      setting: {
+        listsHeight: 400,
+      },
+    }}
+    pagination={{
+      pageSize: 4,
+      onChange: (page) => console.log(page),
+    }}
+    headerTitle="Liste de véhicules"
+    request={async (params) => {
+      console.log(`request params:`, params);
+      var dataFilter
+      if(etat==="all") dataFilter=vehicules
+      else if (etat==="contrat") dataFilter=vehicules.filter((item)=>item.puissance_fiscale>4)
+      else dataFilter=vehicules.filter((item)=>item.puissance_fiscale<=4)
+      if(params.immatriculation) dataFilter=dataFilter.filter((item)=>item.immatriculation.toString().toUpperCase().search(params.immatriculation.toString().toUpperCase())===-1?false:true);
+      if(params.marque) dataFilter=dataFilter.filter((item)=>item.marque.toString().toUpperCase().search(params.marque.toString().toUpperCase())===-1?false:true);
+      if(params.modele) dataFilter=dataFilter.filter((item)=>item.modele.toString().toUpperCase().search(params.modele.toString().toUpperCase())===-1?false:true);
+      if(params.puissance_fiscale) dataFilter=dataFilter.filter((item)=>item.puissance_fiscale.toString().toUpperCase().search(params.puissance_fiscale.toString().toUpperCase())===-1?false:true);
+      if(params.puissance_cylindrée) dataFilter=dataFilter.filter((item)=>item.puissance_cylindrée.toString().toUpperCase().search(params.puissance_cylindrée.toString().toUpperCase())===-1?false:true);
+      return {
+        data: dataFilter,
+        success: true,
+      };
+    }}
+    toolBarRender={() => [
+      <Button
+      type="primary"
+      icon={<PlusOutlined/>}
+      onClick={() => {
+        setVisibleForm(true);
+      }}
+    >
+      Ajouter une véhicule
+    </Button>
+    ]}
+  />
+  )
   const [openSelectMenu, setOpenSelectMenu] = useState(false);
   const [data, setData] = useState([]);
   const handleOpenChange = (flag: boolean) => {
@@ -328,66 +235,25 @@ function Vehicules() {
           <Card
             title={<Title level={4}>Gestion des véhicules</Title>}
             bordered={false}
-            extra={
-              <Button
-                type="primary"
-                onClick={() => {
-                  setVisibleForm(true);
-                }}
-              >
-                Ajouter une véhicule
-              </Button>
-            }
           >
             <Tabs
               defaultActiveKey="1"
               onChange={() => {}}
               items={[
                 {
-                  label: `Tout les véhicules`,
+                  label: <Space><>Tout les véhicules</><Badge count={6} showZero color='#CACFD2' /></Space >,
                   key: "1",
-                  children: (
-                    <Table
-                      columns={columns}
-                      dataSource={data}
-                      pagination={{
-                        size: "small",
-                        pageSize: 7,
-                      }}
-                    />
-                  ),
+                  children: Table("all"),
                 },
                 {
-                  label: `Véhicules sous contrat`,
+                  label: <Space><>Véhicules sous contrat</><Badge count={2} showZero color='#CACFD2' /></Space >,
                   key: "2",
-                  children: (
-                    <Table
-                      columns={columns}
-                      dataSource={data.filter(
-                        (item) => item.puissance_fiscale <= 4
-                      )}
-                      pagination={{
-                        size: "small",
-                        pageSize: 7,
-                      }}
-                    />
-                  ),
+                  children: Table("contrat")
                 },
                 {
-                  label: `Véhicules disponibles`,
+                  label: <Space><>Véhicules disponibles</><Badge count={4} showZero color='#CACFD2' /></Space >,
                   key: "3",
-                  children: (
-                    <Table
-                      columns={columns}
-                      dataSource={data.filter(
-                        (item) => item.puissance_fiscale > 4
-                      )}
-                      pagination={{
-                        size: "small",
-                        pageSize: 7,
-                      }}
-                    />
-                  ),
+                  children: Table("dispo")
                 },
               ]}
             />
