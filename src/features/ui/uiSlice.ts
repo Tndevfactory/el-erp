@@ -52,6 +52,19 @@ const menu = [
             "deleted_at": null,
           }
         ]
+      },{
+        "id": 22,
+        "icon":"hey",
+        "designation_fr": "hey",
+        "designation_ar": null,
+        "ordre": null,
+        "menu_parant": 1,
+        "active": 1,
+        "link": null,
+        "created_at": null,
+        "updated_at": null,
+        "deleted_at": null,
+        "child_recursive": []
       }
     ]
   },

@@ -4,47 +4,143 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { addDuration, updateCaution } from "@/features/caution/cautionSlice";
 
-function ClientDetails({ visible, setVisible, client, modify, setModify, forceRefresh }) {
+export const FormClient = (client,modify,refreshDrawer?,setModify?) => (
+  <Form
+    layout="vertical"
+    hideRequiredMark
+    fields={[
+      {
+        name: ["code_client"],
+        value: client.code_client,
+      },
+      {
+        name: ["designation"],
+        value: client.designation,
+      },
+      {
+        name: ["code_dossier"],
+        value: client.code_dossier,
+      },
+      {
+        name: ["telephone"],
+        value: client.telephone,
+      },
+      {
+        name: ["adresse"],
+        value: "Ariana Essoughra, Cebalat Ben Ammar",
+      },
+    ]}
+    disabled={!modify}
+  >
+    <Row gutter={16}>
+      <Col span={24}>
+        <Form.Item
+          name="code_client"
+          label="Code client"
+          rules={modify&&[
+            {
+              required: true,
+              message: "Veuillez entrer le code client",
+            },
+          ]}
+        >
+          <Input placeholder="Veuillez entrer le code client" />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
+      <Col span={24}>
+        <Form.Item
+          name="designation"
+          label="Désignation "
+          rules={modify&&[
+            {
+              required: true,
+              message: "Veuillez entrer le type de caution",
+            },
+          ]}
+        >
+          <Input placeholder="Veuillez entrer le type de caution" />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
+      <Col span={24}>
+        <Form.Item
+          name="telephone"
+          label="Téléphone "
+          rules={modify&&[
+            {
+              required: true,
+              message: "Veuillez entrer le numéro",
+            },
+          ]}
+        >
+          <Input placeholder="Veuillez entrer le numéro" />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
+      <Col span={24}>
+        <Form.Item
+          name="adresse"
+          label="Adresse"
+          rules={modify&&[
+            {
+              required: true,
+              message: "Veuillez entrer l'adresse",
+            },
+          ]}
+        >
+          <Input placeholder="Veuillez entrer l'adresse" />
+        </Form.Item>
+      </Col>
+    </Row>
+
+    {modify && (
+      <Form.Item style={{ textAlign: "right" }}>
+        <Button
+          className="btnAnnuler"
+          onClick={() => {
+            refreshDrawer(Math.random());
+            setModify(false);
+          }}
+          style={{ marginRight: "10px" }}
+        >
+          Annuler
+        </Button>
+        <Button type="primary" htmlType="submit">
+          Envoyer
+        </Button>
+      </Form.Item>
+    )}
+  </Form>
+);
+function ClientDetails({
+  visible,
+  setVisible,
+  client,
+  modify,
+  setModify,
+  forceRefresh,
+}) {
   var { caution } = useSelector((store: any) => store.caution);
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
-  const [refresh, refreshDrawer] = useState(0)
+  const [refresh, refreshDrawer] = useState(0);
   const showDrawer = () => {
     setVisible(true);
   };
-  useEffect(() => {
-    if (visible) {
-      setFields([
-        {
-          name: ["code_client"],
-          value: client.code_client,
-        },
-        {
-          name: ["designation"],
-          value: client.designation,
-        },
-        {
-          name: ["code_dossier"],
-          value: client.code_dossier,
-        },
-        {
-          name: ["telephone"],
-          value: client.telephone,
-        },
-        {
-          name: ["adresse"],
-          value: "Ariana Essoughra, Cebalat Ben Ammar",
-        },
-      ]);
-    }
-  }, [visible, refresh]);
+
+  
+  useEffect(() => {}, [visible, refresh]);
   return (
     <Drawer
-      title={modify?"Modifier client":"Détail de client"}
+      title={modify ? "Modifier client" : "Détail de client"}
       className="CautionDetails"
       width={500}
       onClose={() => {
-        setModify(false)
+        setModify(false);
         setVisible(false);
       }}
       open={visible}
@@ -52,90 +148,22 @@ function ClientDetails({ visible, setVisible, client, modify, setModify, forceRe
         paddingBottom: 80,
       }}
     >
-      <Form layout="vertical" hideRequiredMark fields={fields} disabled={!modify}>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              name="code_client"
-              label="Code client"
-              rules={[
-                {
-                  required: true,
-                  message: "Veuillez entrer le code client",
-                },
-              ]}
+      <>
+        {FormClient(client,modify,refreshDrawer,setModify)}
+        {!modify && (
+          <div style={{ width: "100%", textAlign: "right" }}>
+            <Button
+              className="btnAnnuler"
+              onClick={() => {
+                setModify(true);
+              }}
+              style={{ marginRight: "10px" }}
             >
-              <Input placeholder="Veuillez entrer le code client" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              name="designation"
-              label="Désignation "
-              rules={[
-                {
-                  required: true,
-                  message: "Veuillez entrer le type de caution",
-                },
-              ]}
-            >
-              <Input placeholder="Veuillez entrer le type de caution" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              name="telephone"
-              label="Téléphone "
-              rules={[
-                {
-                  required: true,
-                  message: "Veuillez entrer le numéro",
-                },
-              ]}
-            >
-              <Input placeholder="Veuillez entrer le numéro" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              name="adresse"
-              label="Adresse"
-              rules={[
-                {
-                  required: true,
-                  message: "Veuillez entrer l'adresse",
-                },
-              ]}
-            >
-              <Input placeholder="Veuillez entrer l'adresse" />
-            </Form.Item>
-          </Col>
-        </Row>
-
-       {modify&& <Form.Item style={{ textAlign: "right" }}>
-          <Button
-            className="btnAnnuler"
-            onClick={()=>{refreshDrawer(Math.random()); setModify(false)}}
-            style={{ marginRight: "10px" }}
-          >
-            Annuler
-          </Button>
-          <Button type="primary" htmlType="submit">
-            Envoyer
-          </Button>
-        </Form.Item>}
-      </Form>
-      {!modify&&
-      <div style={{ width:"100%", textAlign: "right" }}>  
-      <Button  className="btnAnnuler" onClick={()=>{setModify(true)}} style={{ marginRight: "10px" }}>
-      Modifier 
-    </Button></div>}
+              Modifier
+            </Button>
+          </div>
+        )}
+      </>
     </Drawer>
   );
 }

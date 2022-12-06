@@ -64,7 +64,10 @@ const Stat = ({sheets}) => {
     })
     setData(t)
   },[])
-  return <div style={{position:"absolute", top:"50px"}}>{data.length&&<Pie {...config} />}</div>;
+  return <div style={{height:"85%",  margin: 0,
+  position: "absolute",
+  top: "55%",
+  transform: "translateY(-50%)"}}>{data.length&&<Pie {...config} />}</div>;
 };
 
 export default Stat;

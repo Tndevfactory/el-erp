@@ -106,6 +106,7 @@ function AddVehicule({ visible, setVisible, forceRefresh }) {
     setVisible(false)
     form.resetFields()
   }
+
   const addMarque = (values) => {
     setMarques([
       ...marques,
@@ -113,6 +114,7 @@ function AddVehicule({ visible, setVisible, forceRefresh }) {
     ])
     marqueForm.resetFields()
   }
+
   const addModele = (values) => {
     setModeles([
       ...modeles,
@@ -127,6 +129,8 @@ function AddVehicule({ visible, setVisible, forceRefresh }) {
     ])
     typeCarburantForm.resetFields()
   }
+
+  //select search and sort
   const filterOption=(input, option) =>  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
   const filterSort=(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
 

@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import { compareAsc, format } from 'date-fns'
-
 import {
   AppstoreOutlined,
   BarChartOutlined,
@@ -15,30 +13,19 @@ import {
   SearchOutlined,
   BellOutlined,
   AudioOutlined,
-  MessageOutlined,
-  SettingOutlined,
 } from '@ant-design/icons'
 import {
   Layout,
   Menu,
-  Divider,
   MenuProps,
   Space,
   Avatar,
-  AutoComplete,
   Input,
   Dropdown,
-  Button,
   Badge,
-  Card,
-  Row,
-  Col,
   Grid,
-  Tag,
   Typography,
-  Drawer,
 } from 'antd'
-const { Content } = Layout
 import type { SelectProps } from 'antd/es/select'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleCollapseLayout, showDrawer, selectModule } from '../features/ui/uiSlice'
@@ -47,7 +34,6 @@ import { NavLink, Link, useLocation } from 'react-router-dom'
 // profil menu
 
 import Hsider from './Hsider'
-import { TbRuler2 } from 'react-icons/tb'
 
 const profilMenu = (
   <Menu
@@ -60,24 +46,6 @@ const profilMenu = (
         key: '2',
         label: <Link to="#">Déconnexion</Link>,
         onClick: () => alert('test logout'),
-      },
-    ]}
-  />
-)
-const chatMenu = (
-  <Menu
-    items={[
-      {
-        key: '1',
-        label: <Link to="#"> Public room</Link>,
-      },
-      {
-        key: '2',
-        label: <Link to="#"> Responsable Maintenance Mohamed Amine ...</Link>,
-      },
-      {
-        key: '3',
-        label: <Link to="#"> Technicien IOT Mehdi ...</Link>,
       },
     ]}
   />
@@ -148,140 +116,29 @@ const searchResult = (query: string) =>
     })
 // --------end-Search
 
-const navbarMobile: MenuProps['items'] = [
-  {
-    label: 'Elastic mobile',
-    key: 'Accueil',
-    icon: <UserOutlined />,
-  },
-  {
-    label: 'Ressource humaine',
-    key: 'rh',
-    icon: <VideoCameraOutlined />,
-  },
-]
 const { useBreakpoint } = Grid
 
-const navbarItems: MenuProps['items'] = [
-  {
-    label: ( <Link to="home"> hey
-    </Link> ),
-    key: 'Accueil',
-    icon: <UserOutlined />,
-  },
-  {
-    label: ( <Link to="finance"> hey
-    </Link> ),
-    key: 'rh',
-    icon: <VideoCameraOutlined />,
-  },
-  {
-    label: ( <Link to="projects"> hey
-    </Link> ),
-    key: 'Immobilisation',
-    icon: <UploadOutlined />,
-  },
-  {
-    label: 'Finance',
-    key: 'finance',
-    icon: <BarChartOutlined />,
-  },
-  {
-    label: 'Projet',
-    key: 'projet',
-    icon: <CloudOutlined />,
-    children: [
-      {
-        label: 'Ticketing',
-        key: 'ticketing',
-        icon: <AppstoreOutlined />,
-      },
-      {
-        label: 'Achats',
-        key: 'achat',
-        icon: <TeamOutlined />,
-      },
-    ],
-  },
-]
 export default function Navbar() {
   // redux toolkit store
   const { isCollapsed, menu, selectedModule } = useSelector((store: any) => store.ui)
   const dispatch = useDispatch()
 
-  
-  // --- search
-  const [options, setOptions] = useState<SelectProps<object>['options']>([])
-
-  const handleSearch = (value: string) => {
-    setOptions(value ? searchResult(value) : [])
-  }
-
-  const onSelect = (value: string) => {
-    console.log('onSelect', value)
-  }
-  // --- endsearch
-
   const { Header } = Layout
   const screens = useBreakpoint()
-  // console.log(screens.lg);
 
   React.useEffect(() => {
-    // console.log(screens);
   }, [screens])
-
-  const [dateElastic, setDateElastic] = useState(new Date())
-
-  useEffect(() => {
-    const interval = setInterval(() => setDateElastic(new Date()), 1000)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
 
   let location = useLocation()
 
-  /*  console.log(location.pathname); */
 
   const styleHeaderDesktop: React.CSSProperties = {
     marginLeft: !isCollapsed ? '200px' : '80px',
   }
-  const { Search } = Input
-
-  const suffix = (
-    <AudioOutlined
-      style={{
-        fontSize: 16,
-        color: '#1890ff',
-      }}
-    />
-  )
-
-  const { Title, Text, Link } = Typography
-
-  const sdata = [
-    {
-      id: 1,
-      url: '/finance',
-      q: 'map',
-      description: 'see map  loremmmmmmmmmmmmmmmmmmmm',
-    },
-    {
-      id: 2,
-      url: '/finance',
-      q: 'map1',
-      description: 'see map loremmmmmmmmmmmmmmmmmmmm',
-    },
-    {
-      id: 3,
-      url: '/finance',
-      q: 'map',
-      description: 'see map3 loremmmmmmmmmmmmmmmmmmmm',
-    },
-  ]
 
   const handleSelectModule=(info)=>{
     localStorage.setItem("module",info.key);
+    window.dispatchEvent(new Event("storage"));
   }
 
   return (
@@ -308,7 +165,7 @@ export default function Navbar() {
         // items={navbarItems}
         >
           {menu.map((item,index)=>(
-                        <Menu.Item key={item.id} >
+                        <Menu.Item key={item.id}  >
             <NavLink to={item.link}>
                          {item.designation_fr}
                         </NavLink>
@@ -318,26 +175,14 @@ export default function Navbar() {
       </Space>
         <Space direction="horizontal">
           <Space wrap onClick={()=>{}}>
-            {/*   <Avatar size={{ xs: 24, sm: 24 }} icon={<SearchOutlined />} /> */}
+          
             <SearchOutlined
               className="text-md border-2 rounded-full p-1 cursor-pointer
               border-gray-400  hover:border-blue-700   transition ease-in duration-200"
             />
           </Space>
-          {/*   <Space wrap>
-            <Dropdown overlay={chatMenu} placement="bottomLeft">
-         
-              <Badge size="default" count={2}>
-                <MessageOutlined
-                  className="text-md border-2 rounded-full p-1 cursor-pointer
-                  border-gray-400  hover:border-blue-700   transition ease-in duration-200"
-                />
-              </Badge>
-            </Dropdown>
-          </Space> */}
           <Space wrap>
             <Dropdown overlay={notificationsMenu} placement="bottomLeft">
-              {/*  <Avatar size={{ xs: 24, sm: 24 }} icon={<BellOutlined />} /> */}
               <Badge size="default" count={5}>
                 <BellOutlined
                   className="text-md border-2 rounded-full p-1 cursor-pointer
@@ -348,7 +193,6 @@ export default function Navbar() {
           </Space>
           <Space wrap>
             <Dropdown overlay={profilMenu} placement="bottomLeft">
-              {/*  <Avatar size={{ xs: 24, sm: 24 }} icon={<UserOutlined />} /> */}
               <UserOutlined
                 className="text-md border-2 rounded-full p-1 cursor-pointer
                 border-gray-400  hover:border-blue-700    transition ease-in duration-200"

@@ -85,12 +85,16 @@ function TimesheetDetails({ detail }) {
               }
         }
       />
-      <Row style={{marginLeft:"25px"}}>
+      <Row gutter={10}>
         <Col span={12}>
+          <Card>
           <ChartsTest sheets={detail.detail}/>
+          </Card>
         </Col>
         <Col span={12}>
+        <Card style={{height:"100%"}}>
           <Stat sheets={detail.detail}/>
+        </Card>
         </Col>
       </Row>
       </Space>

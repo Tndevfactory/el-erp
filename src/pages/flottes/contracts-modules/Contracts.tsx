@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../../../style/modules/Caution.less";
 import {
   Button,
   Space,
@@ -39,6 +38,7 @@ function Contracts() {
   let [search, setSearch] = useState("");
   const [caution, setCaution] = useState({});
   const [refresh, forceRefresh] = useState(0);
+  const [modify, setModify]= useState(false)
   
 
   const columns: ProColumns<IContract>[] = [
@@ -147,6 +147,7 @@ function Contracts() {
         <Space size="small">
           <a
             onClick={() => {
+              setModify(false)
               setVisibleDetails(true);
             }}
           >
@@ -155,6 +156,7 @@ function Contracts() {
           <Divider type="vertical" />
           <a
             onClick={() => {
+              setModify(true)
               setVisibleDetails(true);
             }}
           >
@@ -197,13 +199,15 @@ function Contracts() {
     setUpdate: setUpdate,
     prolongation: prolongation,
     setProlongation: setProlongation,
+    modify: modify, 
+    setModify: setModify
   };
   useEffect(() => {
     setData(contracts);
   }, [refresh]);
 
   return (
-    <div className="Caution">
+    <div className="Contracts">
       <Breadcrumb separator=">" className="mt-5">
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
         <Breadcrumb.Item href="">Gestion des contrats LLD</Breadcrumb.Item>
