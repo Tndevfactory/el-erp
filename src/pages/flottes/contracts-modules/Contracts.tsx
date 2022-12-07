@@ -7,7 +7,7 @@ import {
   Card,
   Col,
   Row,
-  Typography,
+  Typography, 
   Divider,
   Popconfirm
 } from "antd";
@@ -143,7 +143,7 @@ function Contracts() {
       title: 'Action',
       valueType: 'option',
       key: 'option',
-      render: (caution) => (
+      render: () => (
         <Space size="small">
           <a
             onClick={() => {

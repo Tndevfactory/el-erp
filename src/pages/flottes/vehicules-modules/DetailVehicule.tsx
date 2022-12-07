@@ -39,8 +39,8 @@ const props: UploadProps = {
   },
 };
 
-export const FormVehicule=(vehicule,modify,handleSubmit?,form?,setModify?)=>(
-  <Form layout="vertical" hideRequiredMark onFinish={handleSubmit} form={form} fields={[
+export const VehiculeForm=(modify:boolean,vehicule?,handleSubmit?,form?,setModify?)=>(
+  <Form layout="vertical" hideRequiredMark onFinish={handleSubmit} form={form} fields={vehicule&&[
     {
       name: ['immatriculation'],
       value: vehicule.immatriculation,
@@ -413,7 +413,7 @@ function DetailVehicule({ visible, setVisible, vehicule, modify, setModify, forc
         paddingBottom: 80,
       }}
     >
-      {FormVehicule(vehicule,modify,handleSubmit,form,setModify)}
+      {VehiculeForm(modify,vehicule,handleSubmit,form,setModify)}
       {!modify&&
       <div style={{ width:"100%", textAlign: "right" }}>  
       <Button  className="btnAnnuler" onClick={()=>{setModify(true)}} style={{ marginRight: "10px" }}>

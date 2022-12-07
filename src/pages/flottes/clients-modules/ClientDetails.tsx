@@ -4,11 +4,11 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { addDuration, updateCaution } from "@/features/caution/cautionSlice";
 
-export const FormClient = (client,modify,refreshDrawer?,setModify?) => (
+export const ClientForm = (modify:boolean,client?,refreshDrawer?,setModify?) => (
   <Form
     layout="vertical"
     hideRequiredMark
-    fields={[
+    fields={client&&[
       {
         name: ["code_client"],
         value: client.code_client,
@@ -149,7 +149,7 @@ function ClientDetails({
       }}
     >
       <>
-        {FormClient(client,modify,refreshDrawer,setModify)}
+        {ClientForm(modify,client,refreshDrawer,setModify)}
         {!modify && (
           <div style={{ width: "100%", textAlign: "right" }}>
             <Button

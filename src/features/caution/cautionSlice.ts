@@ -158,6 +158,7 @@ interface IProlongation {
   Etat: string;
 }
 export interface ICaution {
+  key?:string;
   id: number;
   Nom_Projet: string;
   Demandeur: string;

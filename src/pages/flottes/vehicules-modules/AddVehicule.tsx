@@ -504,7 +504,7 @@ function AddVehicule({ visible, setVisible, forceRefresh }) {
               rules={[
                 {
                   required: true,
-                  message: 'Please choose the type',
+                  message: 'Veuillez entrer les fichiers de véhicule',
                 },
               ]}
             >

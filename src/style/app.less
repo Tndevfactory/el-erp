@@ -120,9 +120,27 @@ border-radius: 8px;
   cursor:text !important;
 } 
 
+
 //icon in button 
 svg { vertical-align: baseline !important; }
 
-// .ant-form-item-required:after {
-//   display: none !important;
-// }
+
+//scrollbar  hidden in drawer
+.ant-drawer-body::-webkit-scrollbar {
+  width: 8px;
+}
+/* Track */
+.ant-drawer-body::-webkit-scrollbar-track {
+  // background: transparent; 
+  visibility: hidden;
+}
+/* Handle */
+.ant-drawer-body::-webkit-scrollbar-thumb {
+  // background: #B3B6B7; 
+  // border-radius:5px;
+  visibility: hidden;
+}
+/* Handle on hover */
+.ant-drawer-body::-webkit-scrollbar-thumb:hover {
+  background: #888; 
+}

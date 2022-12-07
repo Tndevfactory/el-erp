@@ -3,8 +3,6 @@ import "../../../style/modules/Caution.less";
 import {
   Button,
   Space,
-  Table,
-  Input,
   Tag,
   message,
   Breadcrumb,
@@ -14,18 +12,15 @@ import {
   Typography,
   Dropdown,
   Menu,
-  Checkbox,
   Tooltip,
   Statistic
 } from "antd";
+import { ProTable, TableDropdown, ProColumns } from '@ant-design/pro-components';
 import {
-  SearchOutlined,
   DeleteOutlined,
   MoreOutlined,
   EditOutlined,
   InboxOutlined,
-  ArrowDownOutlined,
-  ArrowUpOutlined,
   CheckOutlined,
   EyeOutlined,
   EyeInvisibleOutlined,
@@ -62,19 +57,9 @@ function Cautions() {
   const [prolongation, setProlongation] = useState(false);
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
-  const [sortByDateE, setSortByDateE] = useState(0);
-  const [sortByDateD, setSortByDateD] = useState(0);
-  const [sortByMontant, setSortByMontant] = useState(0);
-  let [search, setSearch] = useState("");
-  let [searchBy, setSearchBy] = useState("");
-  const [filter, setFilter] = useState<string[]>([]);
 
   const [caution, setCaution] = useState({});
   const [refresh, forceRefresh] = useState(0);
-  const confirm = (e): void => {
-    console.log(e);
-    message.success("Click on Yes");
-  };
 
   const menu = (caution) => (
     <Menu
@@ -168,92 +153,23 @@ function Cautions() {
       ]}
     />
   );
-  const columns: ColumnsType<ICaution> = [
+  const columns: ProColumns<ICaution>[] = [
     {
       title: "Nom du Projet ",
       dataIndex: "Nom_Projet",
-      key: 0,
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              setSearch(e.target.value);
-              let x = cautions;
-              setData(
-                x.filter((data) =>
-                  data.Nom_Projet.toUpperCase().search(
-                    e.target.value.toUpperCase()
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-              if (search !== "") setSearchBy("Nom du projet");
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = cautions;
-              setData(
-                x.filter((data) =>
-                  data.Nom_Projet.toUpperCase().search(search.toUpperCase()) ===
-                  -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
+      key: "Nom_Projet",
     },
     {
       title: "Demandeur",
       dataIndex: "Demandeur",
-      key: 1,
+      key: "Demandeur",
       responsive: ["xxl"],
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              setSearch(e.target.value);
-              let x = cautions;
-              setData(
-                x.filter((data) =>
-                  data.Demandeur.toUpperCase().search(
-                    e.target.value.toUpperCase()
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-              if (search !== "") setSearchBy("Demandeur");
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = cautions;
-              setData(
-                x.filter((data) =>
-                  data.Demandeur.toUpperCase().search(search.toUpperCase()) ===
-                  -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
     },
     {
       title: "type de caution ",
       dataIndex: "type_caution",
       key: 2,
+      search: false,
       render: (type_caution) => (
         <Tag
           color={
@@ -294,87 +210,32 @@ function Cautions() {
       key: 3,
       dataIndex: "DateD",
       responsive: ["xxl"],
-      onHeaderCell: (column) => {
-        return {
-          onClick: () => {
-            if (sortByDateD === 2) setSortByDateD(0);
-            else {
-              setSortByDateD(sortByDateD + 1);
-              setSortByMontant(0);
-              setSortByDateE(0);
-            }
-          },
-        };
-      },
+      search: false,
       sorter: (a, b) =>
         moment(a.DateD, "DDMMYYYY").valueOf() -
         moment(b.DateD, "DDMMYYYY").valueOf(),
     },
     {
       title: "Client",
-      key: 4,
+      key: "Client",
       dataIndex: "Client",
       width: "15%",
-      filterDropdown: (
-        <div style={{ display: "flex" }}>
-          <Input
-            onChange={(e) => {
-              setSearch(e.target.value);
-              let x = cautions;
-              setData(
-                x.filter((data) =>
-                  data.Client.toUpperCase().search(
-                    e.target.value.toUpperCase()
-                  ) === -1
-                    ? false
-                    : true
-                )
-              );
-              if (search !== "") setSearchBy("Client");
-            }}
-          ></Input>
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => {
-              let x = cautions;
-              setData(
-                x.filter((data) =>
-                  data.Client.toUpperCase().search(search.toUpperCase()) === -1
-                    ? false
-                    : true
-                )
-              );
-            }}
-          />
-        </div>
-      ),
     },
     {
       title: "Montant",
       key: 5,
+      search: false,
       dataIndex: "Montant",
-      render:((montant) =><Statistic value={montant} precision={3} style={{}}/>),
+      render:((_,caution) =><Statistic value={caution.Montant} precision={3} style={{}}/>),
       responsive: ["xl"],
       // width:"7%",
-      onHeaderCell: (column) => {
-        return {
-          onClick: () => {
-            if (sortByMontant === 2) setSortByMontant(0);
-            else {
-              setSortByMontant(sortByMontant + 1);
-              setSortByDateD(0);
-              setSortByDateE(0);
-            }
-          },
-        };
-      },
       sorter: (a, b) => a.Montant - b.Montant,
     },
     {
       title: "Durée",
       key: 6,
-      render: (caution) => (
+      search: false,
+      render: (_,caution) => (
         <Space size="small">
           {caution.Durée}
           {caution?.Prolongations?.length !== 0 && (
@@ -401,9 +262,10 @@ function Cautions() {
       title: "Ligne",
       key: 7,
       dataIndex: "ligne",
+      search: false,
       responsive: ["xxl"],
-      render: (ligne: string) => (
-        <Tag color={ligne === "EPS" ? "geekblue" : "volcano"}>{ligne}</Tag>
+      render:(_,caution) => (
+        <Tag color={caution.ligne === "EPS" ? "geekblue" : "volcano"}>{caution.ligne}</Tag>
       ),
       filters: [
         {
@@ -420,20 +282,9 @@ function Cautions() {
     {
       title: "Date d'échéance ",
       key: 8,
+      search: false,
       dataIndex: "DateE",
       responsive: ["md"],
-      onHeaderCell: (column) => {
-        return {
-          onClick: () => {
-            if (sortByDateE === 2) setSortByDateE(0);
-            else {
-              setSortByDateE(sortByDateE + 1);
-              setSortByMontant(0);
-              setSortByDateD(0);
-            }
-          },
-        };
-      },
       sorter: (a, b) => {
         return (
           moment(a.DateE, "DDMMYYYY").valueOf() -
@@ -446,19 +297,20 @@ function Cautions() {
       key: 9,
       dataIndex: "Etat_main_levée",
       // width:"7%",
-      render: (Etat_main_levée: string) => (
+      search: false,
+      render: (_,caution) => (
         <Tag
           color={
-            Etat_main_levée === "Fermée"
+            caution.Etat_main_levée === "Fermée"
               ? "blue"
-              : Etat_main_levée === "En attente"
+              : caution.Etat_main_levée === "En attente"
               ? "gold"
-              : Etat_main_levée === "En cours"
+              : caution.Etat_main_levée === "En cours"
               ? "green"
               : "red"
           }
         >
-          {Etat_main_levée}
+          {caution.Etat_main_levée}
         </Tag>
       ),
       filters: [
@@ -479,8 +331,9 @@ function Cautions() {
     },
     {
       title: "Action",
+      valueType: 'option',
       key: "10",
-      render: (caution) => (
+      render: (_,caution) => (
         <Space size="small">
           <a
             onClick={() => {
@@ -501,9 +354,6 @@ function Cautions() {
   ];
   const [openSelectMenu, setOpenSelectMenu] = useState(false);
   const [data, setData] = useState([]);
-  const handleOpenChange = (flag: boolean) => {
-    setOpenSelectMenu(flag);
-  };
   const handleCloseCaution = (id) => {
     dispatch(closeCaution({ id: id }));
     forceRefresh(Math.random());
@@ -537,81 +387,12 @@ function Cautions() {
         <Col xs={24}>
           <Card
             title={
-              <Space size={100}>
                 <Title level={4}>Gestion des cautions</Title>
-                <Space size={50}>
-                  {search !== "" && (
-                    <div>
-                      <span style={{ color: "#909497" }}>Filtrer par : </span>
-                      {searchBy === "Demandeur" ? (
-                        <Checkbox value="A" checked>
-                          Demandeur
-                        </Checkbox>
-                      ) : searchBy === "Client" ? (
-                        <Checkbox value="B" checked>
-                          Client
-                        </Checkbox>
-                      ) : (
-                        <Checkbox value="C" checked>
-                          Nom du projet
-                        </Checkbox>
-                      )}
-                    </div>
-                  )}
-
-                  {(sortByDateE !== 0 ||
-                    sortByDateD !== 0 ||
-                    sortByMontant !== 0) && (
-                    <div>
-                      <span style={{ color: "#909497" }}>Trier par : </span>
-                      {sortByDateE !== 0 && (
-                        <Checkbox value="A" checked={true}>
-                          Date d'échéance{" "}
-                          {sortByDateE === 1 ? (
-                            <ArrowUpOutlined />
-                          ) : (
-                            <ArrowDownOutlined />
-                          )}
-                        </Checkbox>
-                      )}
-                      {sortByDateD !== 0 && (
-                        <Checkbox value="B" checked={true}>
-                          Date de début{" "}
-                          {sortByDateD === 1 ? (
-                            <ArrowUpOutlined />
-                          ) : (
-                            <ArrowDownOutlined />
-                          )}
-                        </Checkbox>
-                      )}
-                      {sortByMontant !== 0 && (
-                        <Checkbox value="C" checked={true}>
-                          Montant{" "}
-                          {sortByMontant === 1 ? (
-                            <ArrowUpOutlined />
-                          ) : (
-                            <ArrowDownOutlined />
-                          )}
-                        </Checkbox>
-                      )}
-                    </div>
-                  )}
-                </Space>
-              </Space>
             }
             bordered={false}
-            extra={
-              <Button
-                type="primary"
-                onClick={() => {
-                  setVisibleForm(true);
-                }}
-              >
-                Demander une caution
-              </Button>
-            }
           >
-            <Table
+            <ProTable<ICaution>
+                    headerTitle="Liste de cautions"
               rowClassName={(record, index) =>
                 record.Etat_main_levée === "En attente"
                   ? "table-row-en-attente"
@@ -621,8 +402,29 @@ function Cautions() {
                   ? "table-row-warning"
                   : "nothing"
               }
+              search={{
+                labelWidth: "auto",
+              }}
+              cardBordered
+              columnsState={{
+                persistenceKey: 'pro-table-singe-demos',
+                persistenceType: 'localStorage',
+                onChange(value) {
+                  console.log('value: ', value);
+                },
+              }}
               columns={columns}
-              dataSource={data}
+              request={async (params) => {
+                console.log(`request params:`, params);
+                var dataFilter=cautions
+                if(params.Nom_Projet) dataFilter=dataFilter.filter((item)=>item.Nom_Projet.toString().toUpperCase().search(params.Nom_Projet.toString().toUpperCase())===-1?false:true);
+                if(params.Demandeur) dataFilter=dataFilter.filter((item)=>item.Demandeur.toString().toUpperCase().search(params.Demandeur.toString().toUpperCase())===-1?false:true);
+                if(params.Client) dataFilter=dataFilter.filter((item)=>item.Client.toString().toUpperCase().search(params.Client.toString().toUpperCase())===-1?false:true);
+                return {
+                  data: dataFilter,
+                  success: true,
+                };
+              }}
               pagination={{
                 size: "small",
                 pageSize: 7,
@@ -632,7 +434,7 @@ function Cautions() {
                   <div
                     className="flex justify-center"
                   >
-                    <div style={{ width: "60%" }}>
+                    <div style={{ width: "60%", margin:"15px" }}>
                       <ListeProlongation prolongation={record.Prolongations} />
                     </div>
                   </div>
@@ -641,6 +443,16 @@ function Cautions() {
                 showExpandColumn: false,
                 expandedRowKeys: expandedRowKeys,
               }}
+              toolBarRender={() => [
+                <Button
+                type="primary"
+                onClick={() => {
+                  setVisibleForm(true);
+                }}
+              >
+                Demander une caution
+              </Button>
+              ]}
             />
           </Card>
         </Col>

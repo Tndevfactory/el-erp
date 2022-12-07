@@ -29,7 +29,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   IClient
 } from "@/features/flotte/client/flotteClientSlice";
-import type { ColumnsType } from "antd/es/table";
 const { Paragraph, Title } = Typography;
 
 function Clients() {
@@ -38,7 +37,6 @@ function Clients() {
 
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
-  let [search, setSearch] = useState("");
   const [client, setClient] = useState({});
   const [refresh, forceRefresh] = useState(0);
   const [modify, setModify] = useState(false)
@@ -83,7 +81,6 @@ function Clients() {
           onClick={() => {
             setClient(client)
             setModify(true)
-
             setVisibleDetails(true);
           }}
         >
@@ -104,34 +101,9 @@ function Clients() {
                 </Popconfirm>
         </a>
       </Space>
-        // <a
-        //   key="editable"
-        //   onClick={() => {
-        //     setClient(client)
-        //     setVisibleDetails(true)
-        //   }}
-        // >
-        //   Détail
-        // </a>,
-        // <TableDropdown
-        //   key="actionGroup"
-        //   onSelect={() => action?.reload()}
-        //   menus={[
-        //     { key: 'copy', name: 'copy' },
-        //     { key: 'delete', name: 'delete' },
-        //   ]}
-        // />,
       ],
     },
   ];
-  const [openSelectMenu, setOpenSelectMenu] = useState(false);
-  const [data, setData] = useState([]);
-  const handleOpenChange = (flag: boolean) => {
-    setOpenSelectMenu(flag);
-  };
-  const handleCloseCaution = (id) => {
-    forceRefresh(Math.random());
-  };
   const obj = {
     visible: visibleForm,
     setVisible: setVisibleForm,
@@ -146,7 +118,6 @@ function Clients() {
     forceRefresh: forceRefresh,
   };
   useEffect(() => {
-    setData(clients);
   }, [refresh]);
 
   return (

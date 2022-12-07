@@ -178,7 +178,7 @@ export default function Navbar() {
           
             <SearchOutlined
               className="text-md border-2 rounded-full p-1 cursor-pointer
-              border-gray-400  hover:border-blue-700   transition ease-in duration-200"
+              border-gray-400  hover:border-blue-500   transition ease-in duration-200"
             />
           </Space>
           <Space wrap>
@@ -186,7 +186,7 @@ export default function Navbar() {
               <Badge size="default" count={5}>
                 <BellOutlined
                   className="text-md border-2 rounded-full p-1 cursor-pointer
-                  border-gray-400  hover:border-blue-700   transition ease-in duration-200"
+                  border-gray-400  hover:border-blue-500   transition ease-in duration-200"
                 />
               </Badge>
             </Dropdown>
@@ -195,7 +195,7 @@ export default function Navbar() {
             <Dropdown overlay={profilMenu} placement="bottomLeft">
               <UserOutlined
                 className="text-md border-2 rounded-full p-1 cursor-pointer
-                border-gray-400  hover:border-blue-700    transition ease-in duration-200"
+                border-gray-400  hover:border-blue-500    transition ease-in duration-200"
               />
             </Dropdown>
           </Space>

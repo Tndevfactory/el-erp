@@ -167,6 +167,7 @@ function Vehicules() {
     pagination={{
       pageSize: 4,
       onChange: (page) => console.log(page),
+      
     }}
     headerTitle="Liste de véhicules"
     request={async (params) => {
