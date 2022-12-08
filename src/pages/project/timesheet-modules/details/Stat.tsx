@@ -75,6 +75,7 @@ const Stat = ({ sheets }) => {
         position: "absolute",
         top: "55%",
         transform: "translateY(-50%)",
+        width:"100%"
       }}
     >
       {data.length && <Pie {...config} />}

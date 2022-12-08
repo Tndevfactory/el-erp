@@ -19,6 +19,7 @@ import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
 import { ClientForm } from '../clients-modules/ClientDetails'
 import { VehiculeForm } from '../vehicules-modules/DetailVehicule'
+import Factures from '../Factures-modules/Factures';
 
 const { Option } = Select
 
@@ -41,7 +42,7 @@ const props: UploadProps = {
 }
 //Contract form
 export const ContractForm=(modify,setModify?)=>(
-  <Form layout="vertical" hideRequiredMark disabled={!modify}>
+  <Form layout="vertical" hideRequiredMark disabled={!modify} fields={[]}>
   <Row gutter={16}>
     <Col span={12}>
       <Form.Item
@@ -286,8 +287,7 @@ function CautionDetails({
         title = "Plus de détail"
         collapsible
         bordered
-        defaultCollapsed
-        
+        // defaultCollapsed
       >
         <Tabs
             defaultActiveKey="1"
@@ -296,17 +296,17 @@ function CautionDetails({
               {
                 label: 'Client',
                 key: '1',
-                children: ClientForm(false),
+                children: <Card>{ClientForm(false)}</Card>,
               },
               {
                 label: 'Vehicule',
                 key: '2',
-                children: VehiculeForm(false),
+                children: <Card>{VehiculeForm(false)}</Card>,
               },
               {
                 label: 'Factures',
                 key: '3',
-                children: ClientForm(false),
+                children: <Factures/>,
               },
             ]}
           />

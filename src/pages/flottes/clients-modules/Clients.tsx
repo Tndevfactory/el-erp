@@ -23,7 +23,7 @@ import {
 import { ProTable, TableDropdown, ProColumns } from '@ant-design/pro-components';
 
 import moment from "moment";
-import CreateClient from "./CreateClient";
+import CreateClient from "./CreateClient"; 
 import ClientDetails from "./ClientDetails";
 import { useDispatch, useSelector } from "react-redux";
 import {

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-const sheet = [
+const sheets = [
   {
     key: 0,
     entreprise: "TAC-TIC",
@@ -11,7 +11,7 @@ const sheet = [
         tache: "Authentification",
         typeTache: "développement",
         nbrHeures: 8,
-        date: "29/10",
+        date:"29/10/2022"
       },
       {
         id: 1,
@@ -19,7 +19,7 @@ const sheet = [
         tache: "Gestion de fichiers",
         typeTache: "Conception",
         nbrHeures: 8,
-        date: "31/10",
+        date:"31/10/2022"
       },
       {
         id: 2,
@@ -27,7 +27,7 @@ const sheet = [
         tache: "Gestion de cautions",
         typeTache: "Conception",
         nbrHeures: 3,
-        date: "01/11",
+        date:"01/11/2022"
       },
       {
         id: 2,
@@ -35,7 +35,7 @@ const sheet = [
         tache: "Gestion des espace",
         typeTache: "Conception",
         nbrHeures: 5,
-        date: "01/11",
+        date:"01/11/2022"
       },
     ],
   },
@@ -50,7 +50,7 @@ const sheet = [
         typeTache: "développement",
         tache: "Authentification",
         nbrHeures: 8,
-        date: "01/11",
+        date:"01/11/2022"
       },
       {
         id: 1,
@@ -58,7 +58,7 @@ const sheet = [
         tache: "Gestion de sites",
         typeTache: "développement",
         nbrHeures: 6,
-        date: "30/10",
+        date:"30/10/2022"
       },
       {
         id: 5,
@@ -66,7 +66,7 @@ const sheet = [
         tache: "gestion de projet",
         typeTache: "développement",
         nbrHeures: 4,
-        date: "2/11",
+        date:"02/11/2022"
       },
 
       {
@@ -75,7 +75,7 @@ const sheet = [
         tache: "réunion",
         typeTache: "réunion",
         nbrHeures: 2,
-        date: "29/10",
+        date:"29/10/2022"
       },
       {
         id: 3,
@@ -83,7 +83,7 @@ const sheet = [
         tache: "TimeSheet",
         typeTache: "développement",
         nbrHeures: 6,
-        date: "29/10",
+        date:"29/10/2022"
       },
       {
         id: 4,
@@ -91,7 +91,23 @@ const sheet = [
         tache: "Maps",
         typeTache: "développement",
         nbrHeures: 6,
-        date: "2/11",
+        date:"02/11/2022"
+      },
+      // {
+      //   id: 8,
+      //   projet: "EW",
+      //   tache: "Maps",
+      //   typeTache: "développement",
+      //   nbrHeures: 6,
+      //   date:"30/11/2022"
+      // },
+      {
+        id: 10,
+        projet: "CIOK",
+        tache: "Maps",
+        typeTache: "développement",
+        nbrHeures: 4,
+        date:"30/12/2022"
       },
       {
         id: 2,
@@ -99,7 +115,7 @@ const sheet = [
         tache: "Gestion de cautions",
         typeTache: "développement",
         nbrHeures: 2,
-        date: "30/10",
+        date:"30/10/2022"
       },
     ],
   },
@@ -114,7 +130,7 @@ const sheet = [
         tache: "Authentification",
         typeTache: "test",
         nbrHeures: 8,
-        date: "30/10",
+        date:"30/10/2022"
       },
     ],
   },
@@ -129,33 +145,30 @@ const sheet = [
         tache: "Cautions",
         typeTache: "other",
         nbrHeures: 8,
-        date: "01/11",
+        date:"01/11/2022"
       },
     ],
   },
 ];
 
-interface IDetail {
-  id: number;
-  projet: string;
-  tache: string;
-  typeTache: string;
-  nbrHeures: number;
-  date: string;
-}
+
 export interface ISheet {
-  sheet: {
     key: number;
     employe: string;
     entreprise: string;
-    detail: IDetail[];
-  }[];
+    detail: {
+      id: number;
+      projet: string;
+      tache: string;
+      typeTache: string;
+      nbrHeures: number;
+      date: string;
+    }[];
 }
 
 const initialState = {
-  sheet: sheet,
-} as ISheet;
-
+  sheets: sheets,
+} 
 const timesheetSlice = createSlice({
     name: "timesheet",
     initialState,

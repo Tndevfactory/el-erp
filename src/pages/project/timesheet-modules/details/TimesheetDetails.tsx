@@ -70,7 +70,6 @@ function TimesheetDetails({ detail }) {
         </Button>
       }
     >
-        <Space direction="vertical" size="large" style={{ display: 'flex' }}>
       <Table
         // bordered
         columns={columns}
@@ -84,11 +83,12 @@ function TimesheetDetails({ detail }) {
                 pageSize: 6,
               }
         }
+        style={{marginBottom:"10px"}}
       />
       <Row gutter={10}>
         <Col span={12}>
           <Card>
-          <ChartsTest sheets={detail.detail}/>
+           <ChartsTest sheets={detail.detail}/> 
           </Card>
         </Col>
         <Col span={12}>
@@ -97,7 +97,6 @@ function TimesheetDetails({ detail }) {
         </Card>
         </Col>
       </Row>
-      </Space>
     </Card>
   )
 }

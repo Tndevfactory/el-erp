@@ -6,10 +6,9 @@ import moment from "moment";
 const ChartsTest = ({sheets}) => {
   const [data, setData] = useState([
   ]);
-
+console.log(sheets)
   useEffect(() => {
-  
-    setData(sheets.sort((a, b) => moment(a.date,"DD/MM/YYYY").valueOf() - moment(b.date,"DD/MM/YYYY").valueOf()))
+    setData(sheets.slice().sort((a, b) => moment(a.date,"DD/MM/YYYY").valueOf() - moment(b.date,"DD/MM/YYYY").valueOf()))
   }, []);
 
   const config = {

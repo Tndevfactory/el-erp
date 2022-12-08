@@ -247,7 +247,7 @@ function Contracts() {
         if(params.code_client) dataFilter=dataFilter.filter((item)=>item.code_client.toString().toUpperCase().search(params.code_client.toString().toUpperCase())===-1?false:true);
         if(params.code_dossier) dataFilter=dataFilter.filter((item)=>item.code_dossier.toString().toUpperCase().search(params.code_dossier.toString().toUpperCase())===-1?false:true);
         // if(params.nature_echeance) dataFilter=dataFilter.filter((item)=>item.nature_echeance.toString().toUpperCase().search(params.nature_echeance.toString().toUpperCase())===-1?false:true);
-        return {
+        return { 
           data: dataFilter,
           success: true,
         };

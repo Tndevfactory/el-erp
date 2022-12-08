@@ -13,9 +13,16 @@ import {
   Dropdown,
   Menu,
   Tooltip,
-  Statistic
+  Statistic,
+  Select,
+  DatePicker,
+  Input
 } from "antd";
-import { ProTable, TableDropdown, ProColumns } from '@ant-design/pro-components';
+import {
+  ProTable,
+  TableDropdown,
+  ProColumns,
+} from "@ant-design/pro-components";
 import {
   DeleteOutlined,
   MoreOutlined,
@@ -39,15 +46,18 @@ import {
 } from "@/features/caution/cautionSlice";
 import ListeProlongation from "./ListeProlongation";
 import type { ColumnsType } from "antd/es/table";
+import type { DatePickerProps } from "antd";
 const { Paragraph, Title } = Typography;
-
+const { Option } = Select;
+const { RangePicker } = DatePicker;
+const dateFormat = "DD/MM/YYYY";
 function Cautions() {
   const dispatch = useDispatch();
   var { cautions } = useSelector((store: any) => store.caution);
   cautions = cautions.map((item, index) =>
     Object.assign({}, item, {
       DateE: moment(
-        moment(item.DateD, "DDMMYYYY").valueOf() + 86400000 * item.Durée
+        moment(item.DateD, dateFormat).valueOf() + 86400000 * item.Durée
       ).format("DD/MM/YYYY"),
       key: index.toString(),
     })
@@ -57,7 +67,9 @@ function Cautions() {
   const [prolongation, setProlongation] = useState(false);
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
-
+  type PickerType = "date" | "week" | "month" | "quarter" | "year";
+  const [typeDate, setTypeDate] = useState<PickerType>("week");
+  const [date, setDate] = useState<string[]>(null);
   const [caution, setCaution] = useState({});
   const [refresh, forceRefresh] = useState(0);
 
@@ -153,6 +165,11 @@ function Cautions() {
       ]}
     />
   );
+
+  const customWeekStartEndFormat: DatePickerProps["format"] = (value) =>
+  `${moment().startOf("week").format(dateFormat)} ~ ${moment()
+    .endOf("week")
+    .format(dateFormat)}`;
   const columns: ProColumns<ICaution>[] = [
     {
       title: "Nom du Projet ",
@@ -212,8 +229,8 @@ function Cautions() {
       responsive: ["xxl"],
       search: false,
       sorter: (a, b) =>
-        moment(a.DateD, "DDMMYYYY").valueOf() -
-        moment(b.DateD, "DDMMYYYY").valueOf(),
+        moment(a.DateD, dateFormat).valueOf() -
+        moment(b.DateD, dateFormat).valueOf(),
     },
     {
       title: "Client",
@@ -226,7 +243,9 @@ function Cautions() {
       key: 5,
       search: false,
       dataIndex: "Montant",
-      render:((_,caution) =><Statistic value={caution.Montant} precision={3} style={{}}/>),
+      render: (_, caution) => (
+        <Statistic value={caution.Montant} precision={3} style={{}} />
+      ),
       responsive: ["xl"],
       // width:"7%",
       sorter: (a, b) => a.Montant - b.Montant,
@@ -235,13 +254,13 @@ function Cautions() {
       title: "Durée",
       key: 6,
       search: false,
-      render: (_,caution) => (
+      render: (_, caution) => (
         <Space size="small">
           {caution.Durée}
           {caution?.Prolongations?.length !== 0 && (
             <Tooltip title="Voir liste prolongations">
               <MdMoreTime
-                style={{cursor:'pointer'}}
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   if (expandedRowKeys.indexOf(caution.key) === -1) {
                     setExpandedRowKeys([...expandedRowKeys, caution.key]);
@@ -264,8 +283,10 @@ function Cautions() {
       dataIndex: "ligne",
       search: false,
       responsive: ["xxl"],
-      render:(_,caution) => (
-        <Tag color={caution.ligne === "EPS" ? "geekblue" : "volcano"}>{caution.ligne}</Tag>
+      render: (_, caution) => (
+        <Tag color={caution.ligne === "EPS" ? "geekblue" : "volcano"}>
+          {caution.ligne}
+        </Tag>
       ),
       filters: [
         {
@@ -282,13 +303,37 @@ function Cautions() {
     {
       title: "Date d'échéance ",
       key: 8,
-      search: false,
       dataIndex: "DateE",
       responsive: ["md"],
       sorter: (a, b) => {
         return (
-          moment(a.DateE, "DDMMYYYY").valueOf() -
-          moment(b.DateE, "DDMMYYYY").valueOf()
+          moment(a.DateE, dateFormat).valueOf() -
+          moment(b.DateE, dateFormat).valueOf()
+        );
+      },
+      renderFormItem: (item, { type, defaultRender, ...rest }, form) => {
+        return (
+          <Space direction="horizontal">
+            <Select value={typeDate} onChange={setTypeDate}>
+              <Option value="date">Date</Option>
+              <Option value="week">Week</Option>
+              <Option value="month">Month</Option>
+              {/* <Option value="quarter">Quarter</Option>
+              <Option value="year">Year</Option> */}
+            </Select>
+            {typeDate === "date" ? (
+              <RangePicker onChange={(e, dateString)=>{setDate(dateString)}} format={dateFormat}/>
+            ) : 
+            typeDate === "week" ? (
+              <DatePicker
+                picker={typeDate}
+                format={customWeekStartEndFormat}
+                onChange={(e, dateString)=>{console.log(e)}}
+              />
+            ) : (
+              <DatePicker picker={typeDate} format={dateFormat} onChange={(e,dateString)=>{console.log(dateString)}} />
+            )}
+          </Space>
         );
       },
     },
@@ -298,7 +343,7 @@ function Cautions() {
       dataIndex: "Etat_main_levée",
       // width:"7%",
       search: false,
-      render: (_,caution) => (
+      render: (_, caution) => (
         <Tag
           color={
             caution.Etat_main_levée === "Fermée"
@@ -331,9 +376,9 @@ function Cautions() {
     },
     {
       title: "Action",
-      valueType: 'option',
+      valueType: "option",
       key: "10",
-      render: (_,caution) => (
+      render: (_, caution) => (
         <Space size="small">
           <a
             onClick={() => {
@@ -386,18 +431,16 @@ function Cautions() {
       <Row className="mt-5" gutter={[12, 24]}>
         <Col xs={24}>
           <Card
-            title={
-                <Title level={4}>Gestion des cautions</Title>
-            }
+            title={<Title level={4}>Gestion des cautions</Title>}
             bordered={false}
           >
             <ProTable<ICaution>
-                    headerTitle="Liste de cautions"
+              headerTitle="Liste de cautions"
               rowClassName={(record, index) =>
                 record.Etat_main_levée === "En attente"
                   ? "table-row-en-attente"
                   : record.Etat_main_levée === "En cours" &&
-                    moment(record.DateE, "DDMMYYYY").diff(moment(), "days") <=
+                    moment(record.DateE, dateFormat).diff(moment(), "days") <=
                       10
                   ? "table-row-warning"
                   : "nothing"
@@ -407,19 +450,48 @@ function Cautions() {
               }}
               cardBordered
               columnsState={{
-                persistenceKey: 'pro-table-singe-demos',
-                persistenceType: 'localStorage',
+                persistenceKey: "pro-table-singe-demos",
+                persistenceType: "localStorage",
                 onChange(value) {
-                  console.log('value: ', value);
+                  console.log("value: ", value);
                 },
               }}
               columns={columns}
+              onReset={()=>{
+                setDate(null)
+              }}
               request={async (params) => {
                 console.log(`request params:`, params);
-                var dataFilter=cautions
-                if(params.Nom_Projet) dataFilter=dataFilter.filter((item)=>item.Nom_Projet.toString().toUpperCase().search(params.Nom_Projet.toString().toUpperCase())===-1?false:true);
-                if(params.Demandeur) dataFilter=dataFilter.filter((item)=>item.Demandeur.toString().toUpperCase().search(params.Demandeur.toString().toUpperCase())===-1?false:true);
-                if(params.Client) dataFilter=dataFilter.filter((item)=>item.Client.toString().toUpperCase().search(params.Client.toString().toUpperCase())===-1?false:true);
+                var dataFilter = cautions;
+                if (params.Nom_Projet)
+                  dataFilter = dataFilter.filter((item) =>
+                    item.Nom_Projet.toString()
+                      .toUpperCase()
+                      .search(params.Nom_Projet.toString().toUpperCase()) === -1
+                      ? false
+                      : true
+                  );
+                if (params.Demandeur)
+                  dataFilter = dataFilter.filter((item) =>
+                    item.Demandeur.toString()
+                      .toUpperCase()
+                      .search(params.Demandeur.toString().toUpperCase()) === -1
+                      ? false
+                      : true
+                  );
+                if (params.Client)
+                  dataFilter = dataFilter.filter((item) =>
+                    item.Client.toString()
+                      .toUpperCase()
+                      .search(params.Client.toString().toUpperCase()) === -1
+                      ? false
+                      : true
+                  );
+                  if (date!==null)
+                  dataFilter = dataFilter.filter((item) =>
+                    moment(item.DateE, dateFormat).valueOf()<= moment(date[1], dateFormat).valueOf()
+                    && moment(item.DateE, dateFormat).valueOf()>= moment(date[0], dateFormat).valueOf()
+                  );
                 return {
                   data: dataFilter,
                   success: true,
@@ -431,10 +503,8 @@ function Cautions() {
               }}
               expandable={{
                 expandedRowRender: (record) => (
-                  <div
-                    className="flex justify-center"
-                  >
-                    <div style={{ width: "60%", margin:"15px" }}>
+                  <div className="flex justify-center">
+                    <div style={{ width: "60%", margin: "15px" }}>
                       <ListeProlongation prolongation={record.Prolongations} />
                     </div>
                   </div>
@@ -445,13 +515,13 @@ function Cautions() {
               }}
               toolBarRender={() => [
                 <Button
-                type="primary"
-                onClick={() => {
-                  setVisibleForm(true);
-                }}
-              >
-                Demander une caution
-              </Button>
+                  type="primary"
+                  onClick={() => {
+                    setVisibleForm(true);
+                  }}
+                >
+                  Demander une caution
+                </Button>,
               ]}
             />
           </Card>

@@ -6,6 +6,8 @@ import { BsCalendar4Week } from "react-icons/bs";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { MdOutlineContentPaste } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
+import { BsFileText } from "react-icons/bs";
+
 
 const icons = {
   cautionsIcon: <BsListUl />,
@@ -15,7 +17,8 @@ const icons = {
   gestionContrats: <MdOutlineContentPaste />,
   gestionClients: <RiUserSettingsLine />,
   gestionVehicules: <AiOutlineCar />,
-  gestionLivraison:<TbTruckDelivery/>
+  gestionLivraison:<TbTruckDelivery/>,
+  gestionFactures:<BsFileText/>
 };
 
 const MenuIcon = ({ icon }) => {

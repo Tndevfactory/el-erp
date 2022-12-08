@@ -52,19 +52,6 @@ const menu = [
             "deleted_at": null,
           }
         ]
-      },{
-        "id": 22,
-        "icon":"hey",
-        "designation_fr": "hey",
-        "designation_ar": null,
-        "ordre": null,
-        "menu_parant": 1,
-        "active": 1,
-        "link": null,
-        "created_at": null,
-        "updated_at": null,
-        "deleted_at": null,
-        "child_recursive": []
       }
     ]
   },
@@ -191,8 +178,22 @@ const menu = [
         "updated_at": null,
         "deleted_at": null,
         "child_recursive": []
-      },{
+      },
+      {
         "id": 16,
+        "icon":"gestionFactures",
+        "designation_fr": "Gestion des factures",
+        "designation_ar": null,
+        "ordre": null,
+        "menu_parant": 4,
+        "active": 1,
+        "link": "/flottes/gestion-des-clients",
+        "created_at": null,
+        "updated_at": null,
+        "deleted_at": null,
+        "child_recursive": []
+      },{
+        "id": 17,
         "icon":"gestionLivraison",
         "designation_fr": "Gestion des Livraison",
         "designation_ar": null,
