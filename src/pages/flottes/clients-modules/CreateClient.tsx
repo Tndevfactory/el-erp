@@ -8,11 +8,6 @@ import {
   Row,
   Col,
   Select,
-  DatePicker,
-  InputNumber,
-  Upload,
-  UploadProps,
-  Radio
 } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -20,7 +15,11 @@ import { useDispatch } from "react-redux";
 import { addClient, IClient } from "@/features/flotte/client/flotteClientSlice";
 const { Option } = Select;
 
-function CreateClient({ visible, setVisible, forceRefresh }) {
+const CreateClient: React.FC<{
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  forceRefresh: React.Dispatch<React.SetStateAction<number>>;
+}> = ({ visible, setVisible, forceRefresh }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
@@ -38,7 +37,7 @@ function CreateClient({ visible, setVisible, forceRefresh }) {
     );
     forceRefresh(Math.random());
     setVisible(false);
-    console.log(values)
+    console.log(values);
   };
   return (
     <Drawer
@@ -51,7 +50,12 @@ function CreateClient({ visible, setVisible, forceRefresh }) {
         paddingBottom: 80,
       }}
     >
-      <Form layout="vertical" hideRequiredMark onFinish={handleSubmit} form={form}>
+      <Form
+        layout="vertical"
+        hideRequiredMark
+        onFinish={handleSubmit}
+        form={form}
+      >
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item
@@ -64,10 +68,10 @@ function CreateClient({ visible, setVisible, forceRefresh }) {
                 },
               ]}
             >
-              <Input placeholder="Veuillez entrer le code client"/>
+              <Input placeholder="Veuillez entrer le code client" />
             </Form.Item>
           </Col>
-          </Row>
+        </Row>
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item
@@ -80,7 +84,7 @@ function CreateClient({ visible, setVisible, forceRefresh }) {
                 },
               ]}
             >
-              <Input placeholder="Veuillez entrer le type de caution"/>
+              <Input placeholder="Veuillez entrer le type de caution" />
             </Form.Item>
           </Col>
         </Row>
@@ -96,7 +100,7 @@ function CreateClient({ visible, setVisible, forceRefresh }) {
                 },
               ]}
             >
-              <Input placeholder="Veuillez entrer le numéro"/>
+              <Input placeholder="Veuillez entrer le numéro" />
             </Form.Item>
           </Col>
         </Row>
@@ -112,13 +116,17 @@ function CreateClient({ visible, setVisible, forceRefresh }) {
                 },
               ]}
             >
-              <Input placeholder="Veuillez entrer l'adresse"/>
+              <Input placeholder="Veuillez entrer l'adresse" />
             </Form.Item>
           </Col>
         </Row>
-        
+
         <Form.Item style={{ textAlign: "right" }}>
-          <Button className="btnAnnuler" htmlType="reset" style={{ marginRight: "10px" }}>
+          <Button
+            className="btnAnnuler"
+            htmlType="reset"
+            style={{ marginRight: "10px" }}
+          >
             Annuler
           </Button>
           <Button type="primary" htmlType="submit">
@@ -128,6 +136,6 @@ function CreateClient({ visible, setVisible, forceRefresh }) {
       </Form>
     </Drawer>
   );
-}
+};
 
 export default CreateClient;

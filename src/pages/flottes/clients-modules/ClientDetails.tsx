@@ -3,33 +3,41 @@ import { Button, Drawer, Input, Form, Row, Col, message } from "antd";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { addDuration, updateCaution } from "@/features/caution/cautionSlice";
+import { IClient } from "@/features/flotte/client/flotteClientSlice";
 
-export const ClientForm = (modify:boolean,client?,refreshDrawer?,setModify?) => (
+export const ClientForm = (
+  modify: boolean,
+  client?: IClient,
+  refreshDrawer?: React.Dispatch<React.SetStateAction<number>>,
+  setModify?: React.Dispatch<React.SetStateAction<boolean>>
+) => (
   <Form
     layout="vertical"
     hideRequiredMark
-    fields={client&&[
-      {
-        name: ["code_client"],
-        value: client.code_client,
-      },
-      {
-        name: ["designation"],
-        value: client.designation,
-      },
-      {
-        name: ["code_dossier"],
-        value: client.code_dossier,
-      },
-      {
-        name: ["telephone"],
-        value: client.telephone,
-      },
-      {
-        name: ["adresse"],
-        value: "Ariana Essoughra, Cebalat Ben Ammar",
-      },
-    ]}
+    fields={
+      client && [
+        {
+          name: ["code_client"],
+          value: client.code_client,
+        },
+        {
+          name: ["designation"],
+          value: client.designation,
+        },
+        {
+          name: ["code_dossier"],
+          value: client.code_dossier,
+        },
+        {
+          name: ["telephone"],
+          value: client.telephone,
+        },
+        {
+          name: ["adresse"],
+          value: "Ariana Essoughra, Cebalat Ben Ammar",
+        },
+      ]
+    }
     disabled={!modify}
   >
     <Row gutter={16}>
@@ -37,12 +45,14 @@ export const ClientForm = (modify:boolean,client?,refreshDrawer?,setModify?) => 
         <Form.Item
           name="code_client"
           label="Code client"
-          rules={modify&&[
-            {
-              required: true,
-              message: "Veuillez entrer le code client",
-            },
-          ]}
+          rules={
+            modify && [
+              {
+                required: true,
+                message: "Veuillez entrer le code client",
+              },
+            ]
+          }
         >
           <Input placeholder="Veuillez entrer le code client" />
         </Form.Item>
@@ -53,12 +63,14 @@ export const ClientForm = (modify:boolean,client?,refreshDrawer?,setModify?) => 
         <Form.Item
           name="designation"
           label="Désignation "
-          rules={modify&&[
-            {
-              required: true,
-              message: "Veuillez entrer le type de caution",
-            },
-          ]}
+          rules={
+            modify && [
+              {
+                required: true,
+                message: "Veuillez entrer le type de caution",
+              },
+            ]
+          }
         >
           <Input placeholder="Veuillez entrer le type de caution" />
         </Form.Item>
@@ -69,12 +81,14 @@ export const ClientForm = (modify:boolean,client?,refreshDrawer?,setModify?) => 
         <Form.Item
           name="telephone"
           label="Téléphone "
-          rules={modify&&[
-            {
-              required: true,
-              message: "Veuillez entrer le numéro",
-            },
-          ]}
+          rules={
+            modify && [
+              {
+                required: true,
+                message: "Veuillez entrer le numéro",
+              },
+            ]
+          }
         >
           <Input placeholder="Veuillez entrer le numéro" />
         </Form.Item>
@@ -85,12 +99,14 @@ export const ClientForm = (modify:boolean,client?,refreshDrawer?,setModify?) => 
         <Form.Item
           name="adresse"
           label="Adresse"
-          rules={modify&&[
-            {
-              required: true,
-              message: "Veuillez entrer l'adresse",
-            },
-          ]}
+          rules={
+            modify && [
+              {
+                required: true,
+                message: "Veuillez entrer l'adresse",
+              },
+            ]
+          }
         >
           <Input placeholder="Veuillez entrer l'adresse" />
         </Form.Item>
@@ -116,14 +132,14 @@ export const ClientForm = (modify:boolean,client?,refreshDrawer?,setModify?) => 
     )}
   </Form>
 );
-function ClientDetails({
-  visible,
-  setVisible,
-  client,
-  modify,
-  setModify,
-  forceRefresh,
-}) {
+const ClientDetails: React.FC<{
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  client: IClient;
+  modify: boolean;
+  setModify: React.Dispatch<React.SetStateAction<boolean>>;
+  forceRefresh: React.Dispatch<React.SetStateAction<number>>;
+}> = ({ visible, setVisible, client, modify, setModify, forceRefresh }) => {
   var { caution } = useSelector((store: any) => store.caution);
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
@@ -132,7 +148,6 @@ function ClientDetails({
     setVisible(true);
   };
 
-  
   useEffect(() => {}, [visible, refresh]);
   return (
     <Drawer
@@ -149,7 +164,7 @@ function ClientDetails({
       }}
     >
       <>
-        {ClientForm(modify,client,refreshDrawer,setModify)}
+        {ClientForm(modify, client, refreshDrawer, setModify)}
         {!modify && (
           <div style={{ width: "100%", textAlign: "right" }}>
             <Button
@@ -166,6 +181,6 @@ function ClientDetails({
       </>
     </Drawer>
   );
-}
+};
 
 export default ClientDetails;

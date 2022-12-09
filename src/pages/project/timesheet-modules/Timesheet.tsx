@@ -25,7 +25,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 type PickerType = "date" | "week" | "month" | "quarter" | "year";
 const dateFormat = "DD/MM/YYYY";
-function Timesheet() {
+const Timesheet:React.FC=()=> {
   var { sheets } = useSelector((store: any) => store.timesheet);
   // console.log(sheets)
   const [search, setSearch] = useState("");

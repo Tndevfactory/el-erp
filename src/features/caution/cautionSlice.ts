@@ -152,7 +152,7 @@ const dataSource = [
       "Reste la validation du directeur de l'IRT + PAM (PV DE VALIDATION). Garantie 10 mois, réception déf 30 jrs après la garantie.",
   },
 ];
-interface IProlongation {
+export interface IProlongation {
   Référence: string;
   Durée: number;
   Etat: string;

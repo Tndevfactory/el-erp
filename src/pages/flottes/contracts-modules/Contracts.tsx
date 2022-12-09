@@ -25,21 +25,15 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   IContract
 } from "@/features/flotte/contract/flotteContractSlice";
-import type { ColumnsType } from "antd/es/table";
-const { Paragraph, Title } = Typography;
+const { Title } = Typography;
 
 function Contracts() {
   const dispatch = useDispatch();
   var { contracts } = useSelector((store: any) => store.flotteContract);
-  const [update, setUpdate] = useState(false);
-  const [prolongation, setProlongation] = useState(false);
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
-  let [search, setSearch] = useState("");
-  const [caution, setCaution] = useState({});
   const [refresh, forceRefresh] = useState(0);
   const [modify, setModify]= useState(false)
-  
 
   const columns: ProColumns<IContract>[] = [
     {
@@ -193,12 +187,7 @@ function Contracts() {
   const detailsObj = {
     visible: visibleDetails,
     setVisible: setVisibleDetails,
-    caution: caution,
     forceRefresh: forceRefresh,
-    update: update,
-    setUpdate: setUpdate,
-    prolongation: prolongation,
-    setProlongation: setProlongation,
     modify: modify, 
     setModify: setModify
   };

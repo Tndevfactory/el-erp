@@ -16,7 +16,7 @@ import {
   Statistic,
   Select,
   DatePicker,
-  Input
+  Input,
 } from "antd";
 import {
   ProTable,
@@ -51,7 +51,7 @@ const { Paragraph, Title } = Typography;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const dateFormat = "DD/MM/YYYY";
-function Cautions() {
+const Cautions: React.FC = ()=>{
   const dispatch = useDispatch();
   var { cautions } = useSelector((store: any) => store.caution);
   cautions = cautions.map((item, index) =>
@@ -167,9 +167,9 @@ function Cautions() {
   );
 
   const customWeekStartEndFormat: DatePickerProps["format"] = (value) =>
-  `${moment().startOf("week").format(dateFormat)} ~ ${moment()
-    .endOf("week")
-    .format(dateFormat)}`;
+    `${moment().startOf("week").format(dateFormat)} ~ ${moment()
+      .endOf("week")
+      .format(dateFormat)}`;
   const columns: ProColumns<ICaution>[] = [
     {
       title: "Nom du Projet ",
@@ -315,23 +315,35 @@ function Cautions() {
         return (
           <Space direction="horizontal">
             <Select value={typeDate} onChange={setTypeDate}>
-              <Option value="date">Date</Option>
-              <Option value="week">Week</Option>
-              <Option value="month">Month</Option>
+              <Option value="date">Intervalle</Option>
+              <Option value="week">Semaine</Option>
+              <Option value="month">Mois</Option>
               {/* <Option value="quarter">Quarter</Option>
               <Option value="year">Year</Option> */}
             </Select>
             {typeDate === "date" ? (
-              <RangePicker onChange={(e, dateString)=>{setDate(dateString)}} format={dateFormat}/>
-            ) : 
-            typeDate === "week" ? (
+              <RangePicker
+                onChange={(e, dateString) => {
+                  setDate(dateString);
+                }}
+                format={dateFormat}
+              />
+            ) : typeDate === "week" ? (
               <DatePicker
                 picker={typeDate}
                 format={customWeekStartEndFormat}
-                onChange={(e, dateString)=>{console.log(e)}}
+                onChange={(e, dateString) => {
+                  console.log(e);
+                }}
               />
             ) : (
-              <DatePicker picker={typeDate} format={dateFormat} onChange={(e,dateString)=>{console.log(dateString)}} />
+              <DatePicker
+                picker={typeDate}
+                format={dateFormat}
+                onChange={(e, dateString) => {
+                  console.log(dateString);
+                }}
+              />
             )}
           </Space>
         );
@@ -457,8 +469,8 @@ function Cautions() {
                 },
               }}
               columns={columns}
-              onReset={()=>{
-                setDate(null)
+              onReset={() => {
+                setDate(null);
               }}
               request={async (params) => {
                 console.log(`request params:`, params);
@@ -487,10 +499,13 @@ function Cautions() {
                       ? false
                       : true
                   );
-                  if (date!==null)
-                  dataFilter = dataFilter.filter((item) =>
-                    moment(item.DateE, dateFormat).valueOf()<= moment(date[1], dateFormat).valueOf()
-                    && moment(item.DateE, dateFormat).valueOf()>= moment(date[0], dateFormat).valueOf()
+                if (date !== null)
+                  dataFilter = dataFilter.filter(
+                    (item) =>
+                      moment(item.DateE, dateFormat).valueOf() <=
+                        moment(date[1], dateFormat).valueOf() &&
+                      moment(item.DateE, dateFormat).valueOf() >=
+                        moment(date[0], dateFormat).valueOf()
                   );
                 return {
                   data: dataFilter,

@@ -25,6 +25,7 @@ import {
   Badge,
   Grid,
   Typography,
+  Affix
 } from 'antd'
 import type { SelectProps } from 'antd/es/select'
 import { useDispatch, useSelector } from 'react-redux'
@@ -142,7 +143,7 @@ export default function Navbar() {
   }
 
   return (
-    <>
+    <Affix offsetTop={0}>
       <Header
         className="header-desktop site-layout-background border-b-2  border-gray-200 
         sticky top-0 z-50 s bg-white text-gray-500"
@@ -223,6 +224,6 @@ export default function Navbar() {
       </Header>
 
       <Hsider />
-    </>
+    </Affix>
   )
 }

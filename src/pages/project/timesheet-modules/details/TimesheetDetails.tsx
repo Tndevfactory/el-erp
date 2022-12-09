@@ -3,8 +3,9 @@ import { Button, Table, Card, Typography, Tag, Row, Col, Space } from 'antd'
 import * as XLSX from 'xlsx/xlsx.mjs'
 import Stat from './Stat'
 import ChartsTest from '@/pages/project/timesheet-modules/details/ChartsTest'
+import { ISheet } from '@/features/timesheet/timesheetSlice'
 const { Title } = Typography
-function TimesheetDetails({ detail }) {
+const TimesheetDetails:React.FC<{ detail:ISheet }>=({ detail }) =>{
   const [data, setData] = useState(detail.detail)
   const columns = [
     {

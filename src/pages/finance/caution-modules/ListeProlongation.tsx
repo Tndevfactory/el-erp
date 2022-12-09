@@ -2,8 +2,9 @@ import React from "react";
 import { Divider, Table, Space, Tooltip, Tag } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import moment from "moment";
-
-const columns = [
+import { IProlongation } from "@/features/caution/cautionSlice";
+import type { ColumnsType } from 'antd/es/table';
+const columns : ColumnsType<IProlongation>= [
   {
     title: "Référence",
     key: 0,
@@ -52,7 +53,7 @@ const columns = [
       ),
   },
 ];
-function ListeProlongation({ prolongation }) {
+const ListeProlongation:React.FC<{prolongation:IProlongation[]}>=({ prolongation })=> {
   return (
     <div className="ProlongationListe">
       <Table

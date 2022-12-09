@@ -31,13 +31,13 @@ import {
 } from "@/features/flotte/client/flotteClientSlice";
 const { Paragraph, Title } = Typography;
 
-function Clients() {
+const Clients:React.FC=()=> {
   const dispatch = useDispatch();
   var { clients } = useSelector((store: any) => store.flotteClient);
 
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
-  const [client, setClient] = useState({});
+  const [client, setClient] = useState<IClient>();
   const [refresh, forceRefresh] = useState(0);
   const [modify, setModify] = useState(false)
 

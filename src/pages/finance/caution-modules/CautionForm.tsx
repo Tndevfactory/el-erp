@@ -12,7 +12,7 @@ import {
   InputNumber,
   Upload,
   UploadProps,
-  Radio
+  Radio,
 } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -38,10 +38,14 @@ const props: UploadProps = {
     console.log("Dropped files", e.dataTransfer.files);
   },
 };
-function CautionForm({ visible, setVisible, forceRefresh }) {
+const CautionForm: React.FC<{
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  forceRefresh: React.Dispatch<React.SetStateAction<number>>;
+}> = ({ visible, setVisible, forceRefresh }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const [eps,setEps]= useState(0)
+  const [eps, setEps] = useState(0);
   const showDrawer = () => {
     setVisible(true);
   };
@@ -59,7 +63,7 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
         DateD: moment(values.dateTime._d).format("DD/MM/YYYY"),
         Client: values.client,
         Montant: values.montant,
-        ligne:values.ligne,
+        ligne: values.ligne,
         Frais_mois: 20,
         Durée: values.Durée,
         Etat_main_levée: "En attente",
@@ -68,7 +72,7 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
     );
     forceRefresh(Math.random());
     setVisible(false);
-    console.log(values)
+    console.log(values);
   };
   return (
     <Drawer
@@ -81,7 +85,12 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
         paddingBottom: 80,
       }}
     >
-      <Form layout="vertical" hideRequiredMark onFinish={handleSubmit} form={form}>
+      <Form
+        layout="vertical"
+        hideRequiredMark
+        onFinish={handleSubmit}
+        form={form}
+      >
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
@@ -192,25 +201,22 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
             >
               <InputNumber
                 style={{ width: "100%" }}
-                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={value => value!.replace(/\$\s?|(,*)/g, '')}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
                 placeholder="Veuillez entrer le montant"
-                onBlur={(e)=>{
-                  if(parseFloat(e.target.value.replace(',',''))>=1000){
-                    form.setFieldsValue(
-                      {
-                        ligne:"EPS",
-                      }
-                    )
-                  }else{
-                    form.setFieldsValue(
-                      {
-                        ligne:"Compte courant",
-                      }
-                    )
+                onBlur={(e) => {
+                  if (parseFloat(e.target.value.replace(",", "")) >= 1000) {
+                    form.setFieldsValue({
+                      ligne: "EPS",
+                    });
+                  } else {
+                    form.setFieldsValue({
+                      ligne: "Compte courant",
+                    });
                   }
-
-                }}  
+                }}
               />
             </Form.Item>
           </Col>
@@ -285,10 +291,10 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
                 },
               ]}
             >
-       <Radio.Group defaultValue={eps}>
-            <Radio value={'EPS'}> Ligne eps </Radio>
-            <Radio value={'Compte courant'}> Compte courant </Radio>
-          </Radio.Group>
+              <Radio.Group defaultValue={eps}>
+                <Radio value={"EPS"}> Ligne eps </Radio>
+                <Radio value={"Compte courant"}> Compte courant </Radio>
+              </Radio.Group>
             </Form.Item>
           </Col>
         </Row>
@@ -320,7 +326,11 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
           </Col>
         </Row>
         <Form.Item style={{ textAlign: "right" }}>
-          <Button className="btnAnnuler" htmlType="reset" style={{ marginRight: "10px" }}>
+          <Button
+            className="btnAnnuler"
+            htmlType="reset"
+            style={{ marginRight: "10px" }}
+          >
             Annuler
           </Button>
           <Button className="btnModofier" htmlType="submit">
@@ -330,6 +340,6 @@ function CautionForm({ visible, setVisible, forceRefresh }) {
       </Form>
     </Drawer>
   );
-}
+};
 
 export default CautionForm;

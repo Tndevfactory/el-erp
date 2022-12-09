@@ -178,20 +178,6 @@ const menu = [
         "updated_at": null,
         "deleted_at": null,
         "child_recursive": []
-      },
-      {
-        "id": 16,
-        "icon":"gestionFactures",
-        "designation_fr": "Gestion des factures",
-        "designation_ar": null,
-        "ordre": null,
-        "menu_parant": 4,
-        "active": 1,
-        "link": "/flottes/gestion-des-clients",
-        "created_at": null,
-        "updated_at": null,
-        "deleted_at": null,
-        "child_recursive": []
       },{
         "id": 17,
         "icon":"gestionLivraison",

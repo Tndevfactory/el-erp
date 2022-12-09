@@ -3,8 +3,6 @@ import "../../../style/modules/Caution.less";
 import {
   Button,
   Space,
-  Table,
-  Input,
   Breadcrumb,
   Card,
   Col,
@@ -16,7 +14,6 @@ import {
   Badge,
 } from "antd";
 import {
-  SearchOutlined,
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
@@ -25,21 +22,18 @@ import {
 import { ProTable, TableDropdown, ProColumns } from '@ant-design/pro-components';
 import { useDispatch, useSelector } from "react-redux";
 import { IVehicule } from "@/features/flotte/vehicule/flotteVehiculeSlice";
-import type { ColumnsType } from "antd/es/table";
 import AddVehicule from "./AddVehicule";
 import DetailVehicule from "./DetailVehicule";
 import moment from "moment";
-const { Paragraph, Title } = Typography;
+const { Title } = Typography;
 
-function Vehicules() {
+const Vehicules: React.FC = () => {
   const dispatch = useDispatch();
   var { vehicules } = useSelector((store: any) => store.flotteVehicule);
 
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
-  const [visibleUpdate, setVisibleUpdate] = useState(false);
-  let [search, setSearch] = useState("");
-  const [vehicule, setVehicule] = useState({});
+  const [vehicule, setVehicule] = useState<IVehicule>();
   const [refresh, forceRefresh] = useState(0);
   const [modify, setModify] = useState(false)
 
@@ -145,7 +139,8 @@ function Vehicules() {
       ),
     },
   ];
-  const Table=(etat: string)=>(
+  const Table = (etat: string)=>(
+
     <ProTable<IVehicule>
     columns={columns}
     cardBordered
@@ -199,14 +194,7 @@ function Vehicules() {
     ]}
   />
   )
-  const [openSelectMenu, setOpenSelectMenu] = useState(false);
   const [data, setData] = useState([]);
-  const handleOpenChange = (flag: boolean) => {
-    setOpenSelectMenu(flag);
-  };
-  const handleCloseCaution = (id) => {
-    forceRefresh(Math.random());
-  };
   const createObj = {
     visible: visibleForm,
     setVisible: setVisibleForm,

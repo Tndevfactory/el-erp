@@ -50,12 +50,13 @@ const renderBadge = (count: number, active = false) => {
   );
 };
 
-export default () => {
+const Factures : React.FC = ()=>{
   const [activeKey, setActiveKey] = useState<React.Key | undefined>("tab1");
+  const [data,setData]= useState(dataSource)
   return (
     <ProList<any>
       rowKey="name"
-      dataSource={dataSource}
+      dataSource={data}
       metas={{
         title: {
           dataIndex: "name",
@@ -102,16 +103,16 @@ export default () => {
             {
               key: "tab1",
               label: (
-                <span>
-                  Toutes les factures{renderBadge(12, activeKey === "tab1")}
+                <span onClick={()=>{setData(dataSource)}}>
+                  Toutes les factures{renderBadge(5, activeKey === "tab1")}
                 </span>
               ),
             },
             {
               key: "tab2",
               label: (
-                <span>
-                  Les factures impayées{renderBadge(2, activeKey === "tab2")}
+                <span onClick={()=>{setData(dataSource.filter(item => item.status==='impayée'))}}>
+                  Les factures impayées{renderBadge(1, activeKey === "tab2")}
                 </span>
               ),
             },
@@ -135,3 +136,5 @@ export default () => {
     />
   );
 };
+
+export default Factures;

@@ -27,7 +27,7 @@ const data = [
   },
   
 ];
-const Projects = () => {
+const Projects : React.FC= () => {
   let navigate = useNavigate();
   const [createProject, setCreateProject] = useState(false);
   let [projects, setProjects] = useState(data);
