@@ -17,7 +17,7 @@ import {
 } from "antd";
 import { InboxOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCaution } from "../../../features/caution/cautionSlice";
 import FormItem from "antd/lib/form/FormItem";
 const { Option } = Select;
@@ -46,6 +46,7 @@ const AddVehicule: React.FC<{
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ visible, setVisible, forceRefresh }) => {
   const dispatch = useDispatch();
+  var { windowWidth } = useSelector((store: any) => store.ui);
   const [form] = Form.useForm();
   const [modeleForm] = Form.useForm();
   const [marqueForm] = Form.useForm();
@@ -170,7 +171,7 @@ const AddVehicule: React.FC<{
   return (
     <Drawer
       title="Ajouter une véhicule"
-      width={720}
+      width={windowWidth>750?720:"90%"}
       className="CautionForm"
       onClose={onClose}
       open={visible}
@@ -185,7 +186,7 @@ const AddVehicule: React.FC<{
         form={form}
       >
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="immatriculation"
               label="Immatriculation"
@@ -199,7 +200,7 @@ const AddVehicule: React.FC<{
               <Input placeholder="Immatriculation" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="numero_chassis"
               label="N° de Chassis"
@@ -213,9 +214,7 @@ const AddVehicule: React.FC<{
               <Input placeholder="N° de Chassis" />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="marque"
               label="Marque"
@@ -273,7 +272,7 @@ const AddVehicule: React.FC<{
               />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="modele"
               label="Modèle"
@@ -325,9 +324,7 @@ const AddVehicule: React.FC<{
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="puissance_fiscale"
               label="Puissance fiscale"
@@ -344,7 +341,7 @@ const AddVehicule: React.FC<{
               />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="puissance_cylindrée"
               label="Puissance cylindrée"
@@ -361,9 +358,7 @@ const AddVehicule: React.FC<{
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               label="Type du carburant"
               name="type_carburant"
@@ -411,7 +406,7 @@ const AddVehicule: React.FC<{
               />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="kilometrage_initial"
               label="kilométrage initial"
@@ -428,9 +423,7 @@ const AddVehicule: React.FC<{
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="nombre_places"
               label="Nombre de places"
@@ -447,7 +440,7 @@ const AddVehicule: React.FC<{
               />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="echeance_taxe"
               label="Echéance de taxe"
@@ -466,9 +459,7 @@ const AddVehicule: React.FC<{
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="echeance_assurance"
               label="Echéance de l'assurance"
@@ -487,7 +478,7 @@ const AddVehicule: React.FC<{
               />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="echeance_technique"
               label="Echéance de visite technique"
@@ -507,8 +498,6 @@ const AddVehicule: React.FC<{
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
           <Col span={24}>
             <Form.Item
               name="files"

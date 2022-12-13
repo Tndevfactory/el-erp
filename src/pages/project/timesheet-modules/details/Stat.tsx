@@ -43,7 +43,7 @@ const Stat = ({ sheets }) => {
       },
     ],
     statistic: {
-      title: false,
+      // title: false,
       content: {
         style: {
           whiteSpace: "pre-wrap",

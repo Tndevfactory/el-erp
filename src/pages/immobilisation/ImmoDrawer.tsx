@@ -22,7 +22,7 @@ const ImmoDrawer: React.FC = () => {
         title="Basic Drawer"
         placement="left"
         onClose={onClose}
-        visible={visible}
+        open={visible}
       >
         <p>Rh drawer...</p>
         <p>Some contents...</p>

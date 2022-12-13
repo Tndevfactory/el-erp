@@ -18,7 +18,7 @@ const CreateTask = ({setVisible, visible }) => {
       onClose={() => {
         setVisible(false);
       }}
-      visible={visible}
+      open={visible}
     >
       <Form
         // onFinish={(values) => {

@@ -168,7 +168,7 @@ const CreateProject = ({ setVisible, visible }) => {
         setTeam([]);
         setBacklog([]);
       }}
-      visible={visible}
+      open={visible}
     >
       <div>
         <div>{steps[current].content}</div>

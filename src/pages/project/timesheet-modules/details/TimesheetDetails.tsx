@@ -4,10 +4,20 @@ import * as XLSX from 'xlsx/xlsx.mjs'
 import Stat from './Stat'
 import ChartsTest from '@/pages/project/timesheet-modules/details/ChartsTest'
 import { ISheet } from '@/features/timesheet/timesheetSlice'
+import type { ColumnsType } from 'antd/es/table';
 const { Title } = Typography
+
 const TimesheetDetails:React.FC<{ detail:ISheet }>=({ detail }) =>{
   const [data, setData] = useState(detail.detail)
-  const columns = [
+  interface IDetailSheet {
+    id: number;
+    projet: string;
+    tache: string;
+    typeTache: string;
+    nbrHeures: number;
+    date: string;
+}
+  const columns:ColumnsType<IDetailSheet> = [
     {
       title: 'Projet',
       dataIndex: 'projet',
@@ -16,6 +26,7 @@ const TimesheetDetails:React.FC<{ detail:ISheet }>=({ detail }) =>{
     {
       title: 'Tâche',
       dataIndex: 'tache',
+      responsive:["sm"],
       key: 1,
     },
     {
@@ -43,6 +54,7 @@ const TimesheetDetails:React.FC<{ detail:ISheet }>=({ detail }) =>{
       dataIndex: 'nbrHeures',
       render: (data) => <>{data}h</>,
       key: 3,
+      responsive:["sm"],
     },
     {
       title: "Date",
@@ -71,7 +83,7 @@ const TimesheetDetails:React.FC<{ detail:ISheet }>=({ detail }) =>{
         </Button>
       }
     >
-      <Table
+      <Table<IDetailSheet>
         // bordered
         columns={columns}
         dataSource={data}
@@ -86,14 +98,14 @@ const TimesheetDetails:React.FC<{ detail:ISheet }>=({ detail }) =>{
         }
         style={{marginBottom:"10px"}}
       />
-      <Row gutter={10}>
-        <Col span={12}>
+      <Row gutter={[10, 10]} >
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Card>
            <ChartsTest sheets={detail.detail}/> 
           </Card>
         </Col>
-        <Col span={12}>
-        <Card style={{height:"100%"}}>
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+        <Card style={{height:325}}>
           <Stat sheets={detail.detail}/>
         </Card>
         </Col>

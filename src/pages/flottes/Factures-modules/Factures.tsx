@@ -95,7 +95,7 @@ const Factures : React.FC = ()=>{
         pageSize: 3,
         size: "small",
       }}
-      showActions="hover"
+      // showActions="hover"
       toolbar={{
         menu: {
           activeKey,

@@ -38,7 +38,7 @@ const ProjectTeam = ({ setVisible, visible }) => {
       onClose={() => {
         setVisible(false);
       }}
-      visible={visible}
+      open={visible}
     >
         <Form
           form={form}

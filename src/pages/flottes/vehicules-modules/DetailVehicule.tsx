@@ -16,7 +16,7 @@ import {
 } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCaution } from "../../../features/caution/cautionSlice";
 import { IVehicule } from "@/features/flotte/vehicule/flotteVehiculeSlice";
 const { Option } = Select;
@@ -107,7 +107,7 @@ export const VehiculeForm = (
     disabled={!modify}
   >
     <Row gutter={16}>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="immatriculation"
           label="Immatriculation"
@@ -123,7 +123,7 @@ export const VehiculeForm = (
           <Input placeholder="Immatriculation" />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="numero_chassis"
           label="N° de Chassis"
@@ -139,9 +139,7 @@ export const VehiculeForm = (
           <Input placeholder="N° de Chassis" />
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="marque"
           label="Marque"
@@ -167,7 +165,7 @@ export const VehiculeForm = (
           </Select>
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="modele"
           label="Modèle"
@@ -193,9 +191,7 @@ export const VehiculeForm = (
           </Select>
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="puissance_fiscale"
           label="Puissance fiscale"
@@ -214,7 +210,7 @@ export const VehiculeForm = (
           />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="puissance_cylindrée"
           label="Puissance cylindrée"
@@ -233,9 +229,7 @@ export const VehiculeForm = (
           />
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           label="Type du carburant"
           name="type_carburant"
@@ -261,7 +255,7 @@ export const VehiculeForm = (
           </Select>
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="kilometrage_initial"
           label="kilométrage initial"
@@ -280,9 +274,7 @@ export const VehiculeForm = (
           />
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="nombre_places"
           label="Nombre de places"
@@ -301,7 +293,7 @@ export const VehiculeForm = (
           />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="echeance_taxe"
           label="Echéance de taxe"
@@ -322,9 +314,7 @@ export const VehiculeForm = (
           />
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="echeance_assurance"
           label="Echéance de l'assurance"
@@ -345,7 +335,7 @@ export const VehiculeForm = (
           />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="echeance_visite"
           label="Echéance de visite technique"
@@ -367,8 +357,6 @@ export const VehiculeForm = (
           />
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={16}>
       <Col span={24}>
         <Form.Item
           name="files"
@@ -425,6 +413,7 @@ const DetailVehicule: React.FC<{
   setModify: React.Dispatch<React.SetStateAction<boolean>>;
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ visible, setVisible, vehicule, modify, setModify, forceRefresh }) => {
+  var { windowWidth } = useSelector((store: any) => store.ui);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [fields, setFields] = useState([]);
@@ -462,7 +451,7 @@ const DetailVehicule: React.FC<{
   return (
     <Drawer
       title={modify ? "Modifier véhicule" : "Détail de véhicule"}
-      width={720}
+      width={windowWidth>750?720:"90%"}
       className="CautionForm"
       onClose={onClose}
       open={visible}

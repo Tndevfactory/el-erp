@@ -10,7 +10,7 @@ import {
   DatePicker,
 } from "antd";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCaution } from "../../../features/caution/cautionSlice";
 const { Option } = Select;
 
@@ -19,6 +19,7 @@ const CautionForm: React.FC<{
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ visible, setVisible, forceRefresh }) => {
+  var { windowWidth } = useSelector((store: any) => store.ui);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
@@ -49,7 +50,7 @@ const CautionForm: React.FC<{
   return (
     <Drawer
       title="Nouveau contrat"
-      width={720}
+      width={windowWidth>750?720:"90%"}
       className="CautionForm"
       onClose={onClose}
       open={visible}
@@ -59,7 +60,7 @@ const CautionForm: React.FC<{
     >
       <Form layout="vertical" hideRequiredMark>
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="code_contrat"
               label="Code contrat"
@@ -73,7 +74,7 @@ const CautionForm: React.FC<{
               <Input placeholder="Code contrat" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="code_client"
               label="Code client"
@@ -87,9 +88,7 @@ const CautionForm: React.FC<{
               <Input placeholder="Code client" />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="immatriculation"
               label="Immatriculation"
@@ -103,7 +102,7 @@ const CautionForm: React.FC<{
               <Input placeholder="Immatriculation" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="numero_chassis"
               label="N° de Chassis"
@@ -117,9 +116,7 @@ const CautionForm: React.FC<{
               <Input placeholder="N° de Chassis" />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="marque"
               label="Marque"
@@ -143,7 +140,7 @@ const CautionForm: React.FC<{
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="modele"
               label="Modèle"
@@ -167,9 +164,7 @@ const CautionForm: React.FC<{
               </Select>
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               label="Date début contrat"
               name="debut_contrat"
@@ -189,7 +184,7 @@ const CautionForm: React.FC<{
               />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               label="Date fin contrat"
               name="fin_contrat"

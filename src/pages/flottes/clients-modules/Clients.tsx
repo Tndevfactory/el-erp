@@ -34,6 +34,7 @@ const { Paragraph, Title } = Typography;
 const Clients:React.FC=()=> {
   const dispatch = useDispatch();
   var { clients } = useSelector((store: any) => store.flotteClient);
+  var { windowWidth } = useSelector((store: any) => store.ui);
 
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
@@ -46,7 +47,7 @@ const Clients:React.FC=()=> {
       title: "Code client",
       dataIndex: "code_client",
       key: 0,
-      ellipsis: true,
+      responsive: ["sm"],
     },
     {
       title: "Désignation",
@@ -54,7 +55,6 @@ const Clients:React.FC=()=> {
       key: "designation",
       filters: true,
       onFilter: true,
-      ellipsis: true,
     },
     {
       title: "Numéro de téléphone",
@@ -67,7 +67,7 @@ const Clients:React.FC=()=> {
       valueType: 'option',
       key: 'option',
       render: (text, client, _, action) => [
-        <Space size="small">
+        windowWidth>620?<Space size="small">
         <a
           onClick={() => {
             setClient(client)
@@ -100,7 +100,30 @@ const Clients:React.FC=()=> {
           <DeleteOutlined/>
                 </Popconfirm>
         </a>
-      </Space>
+      </Space>:
+      <TableDropdown
+      key=" actionGroup "
+      menus={[
+        {
+          key: "0",
+          name: "Détail",
+          onClick: () => {
+            setClient(client)
+            setVisibleDetails(true);
+          },
+        },
+        {
+          key: "1",
+          name: "Modifier",
+          onClick: () => {
+            setClient(client)
+            setModify(true)
+            setVisibleDetails(true);
+          },
+        },
+        { key: "2", name: "Supprimer" },
+      ]}
+    />
       ],
     },
   ];

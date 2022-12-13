@@ -237,6 +237,7 @@ const Cautions: React.FC = ()=>{
       key: "Client",
       dataIndex: "Client",
       width: "15%",
+      responsive: ["sm"],
     },
     {
       title: "Montant",
@@ -324,6 +325,7 @@ const Cautions: React.FC = ()=>{
             {typeDate === "date" ? (
               <RangePicker
                 onChange={(e, dateString) => {
+                  console.log(dateString);
                   setDate(dateString);
                 }}
                 format={dateFormat}
@@ -333,7 +335,7 @@ const Cautions: React.FC = ()=>{
                 picker={typeDate}
                 format={customWeekStartEndFormat}
                 onChange={(e, dateString) => {
-                  console.log(e);
+                  console.log(dateString);
                 }}
               />
             ) : (
@@ -423,7 +425,7 @@ const Cautions: React.FC = ()=>{
   const detailsObj = {
     visible: visibleDetails,
     setVisible: setVisibleDetails,
-    caution: caution,
+    // caution: caution,
     forceRefresh: forceRefresh,
     update: update,
     setUpdate: setUpdate,
@@ -464,9 +466,9 @@ const Cautions: React.FC = ()=>{
               columnsState={{
                 persistenceKey: "pro-table-singe-demos",
                 persistenceType: "localStorage",
-                onChange(value) {
-                  console.log("value: ", value);
-                },
+                // onChange(value) {
+                //   console.log("value: ", value);
+                // },
               }}
               columns={columns}
               onReset={() => {
@@ -537,7 +539,7 @@ const Cautions: React.FC = ()=>{
                 >
                   Demander une caution
                 </Button>,
-              ]}
+              ]} 
             />
           </Card>
         </Col>

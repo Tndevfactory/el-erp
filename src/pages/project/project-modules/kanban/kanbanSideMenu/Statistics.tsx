@@ -30,7 +30,7 @@ const Statistics = ({ setVisible, visible }) => {
       onClose={() => {
         setVisible(false);
       }}
-      visible={visible}
+      open={visible}
       className="Statistics"
     >
           <div style={{ display: "flex", marginBottom: "50px" }}>

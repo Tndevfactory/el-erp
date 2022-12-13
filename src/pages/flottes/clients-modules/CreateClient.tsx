@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addClient, IClient } from "@/features/flotte/client/flotteClientSlice";
 const { Option } = Select;
 
@@ -21,6 +21,7 @@ const CreateClient: React.FC<{
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ visible, setVisible, forceRefresh }) => {
   const dispatch = useDispatch();
+  var { windowWidth } = useSelector((store: any) => store.ui);
   const [form] = Form.useForm();
 
   const onClose = () => {
@@ -42,7 +43,7 @@ const CreateClient: React.FC<{
   return (
     <Drawer
       title="Ajout d'un client"
-      width={500}
+      width={windowWidth>520?500:"90%"}
       className="CautionForm"
       onClose={onClose}
       open={visible}

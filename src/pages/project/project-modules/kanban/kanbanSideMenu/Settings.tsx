@@ -23,7 +23,7 @@ const Settings = ({
         setVisible(false);
         // forceUpdate(Math.random());
       }}
-      visible={visible}
+      open={visible}
     >
       <Form
         initialValues={{

@@ -58,7 +58,7 @@ const CautionDetails: React.FC<{
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
   update: boolean;
   setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-  prolongation: IProlongation[];
+  prolongation: boolean;
   setProlongation: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({
   visible,
@@ -70,6 +70,7 @@ const CautionDetails: React.FC<{
   setProlongation,
 }) => {
   var { caution } = useSelector((store: any) => store.caution);
+  var { windowWidth } = useSelector((store: any) => store.ui);
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
   const showDrawer = () => {
@@ -209,9 +210,9 @@ const CautionDetails: React.FC<{
     <Drawer
       title={update ? "Modifer la caution" : "Détails de caution"}
       className="CautionDetails"
-      width={720}
+      width={windowWidth>750?720:"90%"}
       onClose={onClose}
-      visible={visible}
+      open={visible}
       bodyStyle={{
         paddingBottom: 80,
       }}
@@ -224,12 +225,12 @@ const CautionDetails: React.FC<{
         onFinish={handleUpdate}
       >
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item name="nomProjet" label="Nom du Projet ">
               <Input disabled={!update} />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item name="demandeur" label="Demandeur">
               <Select disabled={!update}>
                 <Option value="Abdelmonam KOUKA">Abdelmonam KOUKA</Option>
@@ -238,9 +239,7 @@ const CautionDetails: React.FC<{
               </Select>
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item name="type" label="type de caution ">
               <Select disabled={!update}>
                 <Option value="Provisoire-CSP">Provisoire-CSP</Option>
@@ -250,7 +249,7 @@ const CautionDetails: React.FC<{
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item name="client" label="Client">
               <Select disabled={!update}>
                 <Option value="Ministère de la Jeunesse et des Sports">
@@ -272,14 +271,12 @@ const CautionDetails: React.FC<{
               </Select>
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item name="montant" label="Montant">
               <Input disabled={!update} suffix="dt" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item name="dateD" label="Date début">
               <DatePicker
                 format={"DD/MM/YYYY"}
@@ -289,14 +286,12 @@ const CautionDetails: React.FC<{
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item name="durée" label={<>Durée</>}>
               <Input disabled={!update} suffix="jours" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item name="dateE" label="Date d'échéance">
               <DatePicker
                 format={"DD/MM/YYYY"}
@@ -306,9 +301,7 @@ const CautionDetails: React.FC<{
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item name="ligne" label="Ligne">
               <Select disabled={!update}>
                 <Option value={"EPS"}>EPS</Option>
@@ -316,7 +309,7 @@ const CautionDetails: React.FC<{
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item name="Etat_main_levée" label="Etat de main levée">
               <Select disabled={!update}>
                 <Option value={true} style={{ color: "#2ECC71" }}>
@@ -328,8 +321,6 @@ const CautionDetails: React.FC<{
               </Select>
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
           <Col span={24}>
             <Form.Item name="observation" label="Observation">
               <Input.TextArea autoSize disabled={!update} />
@@ -343,12 +334,12 @@ const CautionDetails: React.FC<{
             </Title>
             <Form layout="vertical" hideRequiredMark onFinish={() => {}}>
               <Row gutter={16}>
-                <Col span={12}>
+                <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                   <Form.Item name="refProlg" label="Référence demande">
                     <Input placeholder="Veuillez entrer la référence de prolongation" />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                   <Form.Item
                     name="Durée prolongation"
                     label="Durée par jour"

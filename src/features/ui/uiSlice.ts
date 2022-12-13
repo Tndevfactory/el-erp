@@ -152,7 +152,7 @@ const menu = [
         "child_recursive": []
       },
       {
-        "id": 14,
+        "id": 15,
         "icon":"gestionVehicules",
         "designation_fr": "Gestion des vehicules",
         "designation_ar": null,
@@ -166,7 +166,7 @@ const menu = [
         "child_recursive": []
       },
       {
-        "id": 15,
+        "id": 16,
         "icon":"gestionClients",
         "designation_fr": "Gestion des clients",
         "designation_ar": null,
@@ -217,6 +217,7 @@ interface UiState {
   isCollapsed: boolean;
   isVisibleDrawer: boolean;
   lang: "ar" | "fr" | "en";
+  windowWidth:number;
 }
 const initialState = {
   menu: menu,
@@ -224,6 +225,7 @@ const initialState = {
   isCollapsed: false,
   isVisibleDrawer: false,
   lang: "ar",
+  windowWidth:window.innerWidth
 } as UiState;
 
 const uiSlice = createSlice({
@@ -247,7 +249,10 @@ const uiSlice = createSlice({
     },
     selectModule:(state, action)=>{
       state.selectedModule=parseInt(action.payload.moduleId)
-    }
+    },
+    changeWidth: (state, action) => {
+      state.windowWidth = action.payload.width;
+    },
   },
 });
 
@@ -257,7 +262,8 @@ export const {
   toggleCollapseLayout,
   showDrawer,
   closeDrawer,
-  selectModule
+  selectModule,
+  changeWidth
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

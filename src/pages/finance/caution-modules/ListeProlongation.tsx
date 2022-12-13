@@ -9,11 +9,13 @@ const columns : ColumnsType<IProlongation>= [
     title: "Référence",
     key: 0,
     dataIndex: "Référence",
+    responsive:["sm"]
   },
   {
     title: "Durée",
     key: 1,
     dataIndex: "Durée",
+    responsive:["sm"]
   },
   {
     title: "Nouvelle date d'échéance",

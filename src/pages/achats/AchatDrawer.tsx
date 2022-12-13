@@ -16,7 +16,7 @@ const AchatDrawer: React.FC = () => {
         title="Basic Drawer"
         placement="left"
         onClose={() => dispatch(closeDrawer())}
-        visible={isVisibleDrawer}
+        open={isVisibleDrawer}
       >
         <p>Achat drawer...</p>
         <p>Some contents...</p>

@@ -20,6 +20,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ClientForm } from "../clients-modules/ClientDetails";
 import { VehiculeForm } from "../vehicules-modules/DetailVehicule";
 import Factures from "../Factures-modules/Factures";
+import ConditionsContract from "./ContractDetails/ConditionsContract";
+import KilometrageContarct from "./ContractDetails/KilometrageContarct";
 
 const { Option } = Select;
 
@@ -44,7 +46,7 @@ const props: UploadProps = {
 export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.SetStateAction<boolean>>) => (
   <Form layout="vertical" hideRequiredMark disabled={!modify} fields={[]}>
     <Row gutter={16}>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="code_contrat"
           label="Code contrat"
@@ -60,7 +62,7 @@ export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.Set
           <Input placeholder="Code contrat" />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="code_client"
           label="Code client"
@@ -76,9 +78,7 @@ export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.Set
           <Input placeholder="Code client" />
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="immatriculation"
           label="Immatriculation"
@@ -94,7 +94,7 @@ export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.Set
           <Input placeholder="Immatriculation" />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="numero_chassis"
           label="N° de Chassis"
@@ -110,9 +110,7 @@ export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.Set
           <Input placeholder="N° de Chassis" />
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="marque"
           label="Marque"
@@ -138,7 +136,7 @@ export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.Set
           </Select>
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           name="modele"
           label="Modèle"
@@ -164,9 +162,7 @@ export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.Set
           </Select>
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           label="Date début contrat"
           name="debut_contrat"
@@ -188,7 +184,7 @@ export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.Set
           />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Form.Item
           label="Date fin contrat"
           name="fin_contrat"
@@ -243,9 +239,13 @@ const CautionDetails: React.FC<{
   setModify: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ visible, setVisible, forceRefresh, modify, setModify }) => {
   var { caution } = useSelector((store: any) => store.caution);
+  var { windowWidth } = useSelector((store: any) => store.ui);
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
-
+  const styleCard: React.CSSProperties = {
+    padding: '10px',
+    marginBottom: '15px',
+  }
   const onClose = () => {
     setVisible(false);
   };
@@ -255,7 +255,7 @@ const CautionDetails: React.FC<{
   return (
     <Drawer
       title={"Détails de contrat"}
-      width={750}
+      width={windowWidth>750?720:"90%"}
       onClose={onClose}
       open={visible}
       bodyStyle={{
@@ -295,17 +295,32 @@ const CautionDetails: React.FC<{
               {
                 label: "Client",
                 key: "1",
-                children: <Card>{ClientForm(false)}</Card>,
+                children: <Card style={styleCard}>{ClientForm(false)}</Card>,
               },
               {
-                label: "Vehicule",
+                label: "Véhicule",
                 key: "2",
-                children: <Card>{VehiculeForm(false)}</Card>,
+                children: <Card style={styleCard}>{VehiculeForm(false)}</Card>,
               },
               {
                 label: "Factures",
                 key: "3",
                 children: <Factures />,
+              },
+              {
+                label: "Conditions",
+                key: "4",
+                children: <ConditionsContract/>,
+              },
+              {
+                label: "Kilométrages",
+                key: "5",
+                children: <Card style={styleCard}><KilometrageContarct/></Card>,
+              },
+              {
+                label: "Autres",
+                key: "6",
+                children: <Card style={styleCard}></Card>,
               },
             ]}
           />

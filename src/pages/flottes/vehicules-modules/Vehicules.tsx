@@ -30,6 +30,7 @@ const { Title } = Typography;
 const Vehicules: React.FC = () => {
   const dispatch = useDispatch();
   var { vehicules } = useSelector((store: any) => store.flotteVehicule);
+  var { windowWidth } = useSelector((store: any) => store.ui);
 
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
@@ -60,6 +61,7 @@ const Vehicules: React.FC = () => {
       key: "puissance_fiscale",
       // search:false,
       valueType: 'digit',
+      responsive: ["md"],
     },
     {
       title: "Puissance cylindrée",
@@ -68,6 +70,7 @@ const Vehicules: React.FC = () => {
       key: "puissance_cylindrée",
       // search:false,
       valueType: 'digit',
+      responsive: ["md"],
     },
     {
       title: "Echéance de taxe",
@@ -105,7 +108,7 @@ const Vehicules: React.FC = () => {
       valueType: 'option',
       key: 'option',
       render: (text,vehicule) => (
-        <Space size="small">
+        windowWidth>620?<Space size="small">
           <a
             onClick={() => {
               setVehicule(vehicule);
@@ -135,8 +138,30 @@ const Vehicules: React.FC = () => {
               <DeleteOutlined />
             </Popconfirm>
           </a>
-        </Space>
-      ),
+        </Space>: 
+          <TableDropdown
+            key=" actionGroup "
+            menus={[
+              {
+                key: "0",
+                name: "Détail",
+                onClick: () => {
+                  setVehicule(vehicule);
+                  setVisibleDetails(true);
+                },
+              },
+              {
+                key: "1",
+                name: "Modifier",
+                onClick: () => {
+                  setVehicule(vehicule);
+                  setModify(true)
+                  setVisibleDetails(true);
+                },
+              },
+              { key: "2", name: "Supprimer" },
+            ]}
+          />)
     },
   ];
   const Table = (etat: string)=>(

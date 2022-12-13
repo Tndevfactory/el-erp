@@ -15,7 +15,7 @@ const AccountDrawer: React.FC = () => {
         title="Basic Drawer"
         placement="left"
         onClose={() => dispatch(closeDrawer())}
-        visible={isVisibleDrawer}
+        open={isVisibleDrawer}
       >
         <p>account drawer...</p>
         <p>Some contents...</p>

@@ -16,7 +16,7 @@ import {
 } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { addCaution } from "../../../features/caution/cautionSlice";
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -44,6 +44,7 @@ const CautionForm: React.FC<{
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ visible, setVisible, forceRefresh }) => {
   const dispatch = useDispatch();
+  var { windowWidth } = useSelector((store: any) => store.ui);
   const [form] = Form.useForm();
   const [eps, setEps] = useState(0);
   const showDrawer = () => {
@@ -77,10 +78,10 @@ const CautionForm: React.FC<{
   return (
     <Drawer
       title="Demander une nouvelle caution"
-      width={720}
+      width={windowWidth>750?720:"90%"}
       className="CautionForm"
       onClose={onClose}
-      visible={visible}
+      open={visible}
       bodyStyle={{
         paddingBottom: 80,
       }}
@@ -92,7 +93,7 @@ const CautionForm: React.FC<{
         form={form}
       >
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="client"
               label="Client"
@@ -135,7 +136,7 @@ const CautionForm: React.FC<{
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="type"
               label="type de caution "
@@ -162,9 +163,7 @@ const CautionForm: React.FC<{
               </Select>
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="name"
               label="Nom du Projet "
@@ -188,7 +187,7 @@ const CautionForm: React.FC<{
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="montant"
               label="Montant en dinars"
@@ -220,9 +219,7 @@ const CautionForm: React.FC<{
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="dateTime"
               label="Date début"
@@ -241,7 +238,7 @@ const CautionForm: React.FC<{
               />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="Durée"
               label="Durée par jour"
@@ -258,9 +255,7 @@ const CautionForm: React.FC<{
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="aFaireAvant"
               label="A faire avant"
@@ -279,7 +274,7 @@ const CautionForm: React.FC<{
               />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="ligne"
               label="Ligne"
@@ -297,8 +292,6 @@ const CautionForm: React.FC<{
               </Radio.Group>
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
           <Col span={24}>
             <Form.Item
               name="files"

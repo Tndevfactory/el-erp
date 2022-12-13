@@ -77,7 +77,6 @@ const Timesheet:React.FC=()=> {
       //   },
       // ],
       // onFilter: (value, record) => record.entreprise === value,
-
       valueType : 'select' , 
       valueEnum : {   
         0:"TAC-TIC",
@@ -196,7 +195,7 @@ const Timesheet:React.FC=()=> {
               expandable={{
                 expandedRowRender: (record) => (
                   <div className="flex justify-center">
-                    <div style={{ width: "80%" }}>
+                    <div style={{ width: "95%" }}>
                       <TimesheetDetails detail={record} />
                     </div>
                   </div>

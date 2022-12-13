@@ -26,7 +26,7 @@ const ChatGroup = ({ setVisible, visible }) => {
       onClose={() => {
         setVisible(false);
       }}
-      visible={visible}
+      open={visible}
     >
       <div>
             <Empty

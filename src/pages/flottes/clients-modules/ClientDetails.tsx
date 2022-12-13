@@ -141,6 +141,7 @@ const ClientDetails: React.FC<{
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ visible, setVisible, client, modify, setModify, forceRefresh }) => {
   var { caution } = useSelector((store: any) => store.caution);
+  var { windowWidth } = useSelector((store: any) => store.ui);
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
   const [refresh, refreshDrawer] = useState(0);
@@ -153,7 +154,7 @@ const ClientDetails: React.FC<{
     <Drawer
       title={modify ? "Modifier client" : "Détail de client"}
       className="CautionDetails"
-      width={500}
+      width={windowWidth>520?500:"90%"}
       onClose={() => {
         setModify(false);
         setVisible(false);

@@ -54,7 +54,7 @@ const Projects : React.FC= () => {
           <Breadcrumb.Item href="">Projets</Breadcrumb.Item>
         </Breadcrumb>
         <div
-          style={{ position: "absolute", right: "100px", paddingTop: "20px" }}
+          style={{ position: "absolute", right: "5%", paddingTop: "20px" }}
         >
           <Select
           style={{borderBottomColor:"#CACFD2", borderBottomWidth:"0.5px", minWidth:"150px"}}
@@ -88,7 +88,7 @@ const Projects : React.FC= () => {
         </div>
       </div>
       <Row gutter={24}>
-        <Col xs={12} md={8} lg={8} xl={6} xxl={4}>
+        <Col xs={24} sm={12} md={12} lg={8} xl={6} xxl={4}>
           <Card
             hoverable={true}
             bordered={true}
@@ -101,7 +101,7 @@ const Projects : React.FC= () => {
           </Card>
         </Col>
         {projects.map((project, index) => (
-          <Col xs={12} md={8} lg={8} xl={6} xxl={4} key={index}>
+          <Col xs={24} sm={12} md={12} lg={8} xl={6} xxl={4} key={index}>
             <Badge.Ribbon text={project.etat} color={color(project.etat)}>
               <NavLink to="/projects/kanban">
                 <Card
