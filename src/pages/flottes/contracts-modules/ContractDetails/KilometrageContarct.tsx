@@ -1,7 +1,7 @@
 import {Form, Row, Col, Switch, Card, InputNumber} from 'antd'
 import React from 'react'
 
-const KilometrageContarct = () => {
+const KilometrageContarct:React.FC = () => {
     const styleInputNumber: React.CSSProperties = {
         width: '100%',
       }

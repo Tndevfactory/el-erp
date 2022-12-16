@@ -3,12 +3,12 @@ const menu = [
   {
     "id": 1,
     "designation_fr": "GRH",
+    "icon":"grhIcon",
     "designation_ar": null,
     "ordre": 1,
-    "icon":null,
     "menu_parant": null,
     "active": 1,
-    "link": "/home",
+    "link": "/ressources-humaines",
     "created_at": null,
     "updated_at": null,
     "deleted_at": null,
@@ -52,6 +52,45 @@ const menu = [
             "deleted_at": null,
           }
         ]
+      },
+      {
+        "id": 32,
+        "icon":"formationsIcon",
+        "designation_fr": "Gestion de formations",
+        "designation_ar": null,
+        "ordre": null,
+        "menu_parant": 1,
+        "active": 1,
+        "link": null,
+        "created_at": null,
+        "updated_at": null,
+        "deleted_at": null,
+        "child_recursive": [
+          {
+            "id": 44,
+            "designation_fr": "Domaines",
+            "designation_ar": null,
+            "ordre": null,
+            "menu_parant": 2,
+            "active": 1,
+            "link": null,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+          },
+          {
+            "id": 45,
+            "designation_fr": "Sessions",
+            "designation_ar": null,
+            "ordre": null,
+            "menu_parant": 2,
+            "active": 1,
+            "link": "ressources-humaines/formation/session",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+          }
+        ]
       }
     ]
   },
@@ -59,6 +98,7 @@ const menu = [
     "id": 2,
     "designation_fr": "Projet",
     "designation_ar": null,
+    "icon":"projetIcon",
     "ordre": 1,
     "menu_parant": null,
     "active": 1,
@@ -101,6 +141,7 @@ const menu = [
     "id": 3,
     "designation_fr": "Finance",
     "designation_ar": null,
+    "icon":"financeIcon",
     "ordre": 1,
     "menu_parant": null,
     "active": 1,
@@ -127,7 +168,8 @@ const menu = [
   },
   {
     "id": 4,
-    "designation_fr": "Gestion des flottes",
+    "designation_fr": "Flottes",
+    "icon":"flottesIcon",
     "designation_ar": null,
     "ordre": 1,
     "menu_parant": null,

@@ -30,7 +30,7 @@ function TaskTimesheet({ detail }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const columns = [
-    {
+    { 
       title: 'Employe',
       render: (sheet) => (
         <Tooltip title={sheet.employe}>
@@ -135,53 +135,11 @@ function TaskTimesheet({ detail }) {
           </Button>,
         ]}
       >
-        <div style={{width:"100%", textAlign:"center"}}>
         <Form name="horizontal_login" layout="vertical" onFinish={() => {}}>
-          {/* <Row gutter={16}>
-            <Col span={8}>
-
-          </Col>
-            <Col span={4}>
-          <Form.Item
-            name="Durée"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-          >
-            <InputNumber placeholder="Durée" />
-          </Form.Item>
-          </Col>
-            <Col span={6}>
-          <Form.Item
-            name="Categrie"
-            rules={[
-              {
-                required: true,
-                message: 'Please enter user name',
-              },
-            ]}
-          >
-            <Select defaultValue="Développement">
-              <Option key={0} value="Développement">
-                Développement
-              </Option>
-              <Option key={1} value="Conception">
-                Conception
-              </Option>
-              <Option key={2} value="Test">
-                Test
-              </Option>
-              <Option key={3} value="Réunion">
-                Réunion
-              </Option>
-            </Select>
-          </Form.Item>
-          </Col>
-            <Col span={6}>
-          </Col>
-          </Row> */}
           <Row gutter={16}>
           <Col span={6}>
             <Form.Item
-              name="client"
+              name="date"
               rules={[
                 {
                   required: true,
@@ -197,7 +155,7 @@ function TaskTimesheet({ detail }) {
           </Col>
           <Col span={6}>
             <Form.Item
-              name="type"
+              name="durée"
               rules={[
                 {
                   required: true,
@@ -205,12 +163,12 @@ function TaskTimesheet({ detail }) {
                 },
               ]}
             >
-              <InputNumber placeholder="Durée" />
+              <InputNumber placeholder="Durée" style={{width:"100%"}}/>
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item
-              name="client"
+              name="type"
               rules={[
                 {
                   required: true,
@@ -236,7 +194,7 @@ function TaskTimesheet({ detail }) {
           </Col>
           <Col span={6}>
             <Form.Item
-              name="type"
+              name="information"
               rules={[
                 {
                   required: true,
@@ -249,7 +207,6 @@ function TaskTimesheet({ detail }) {
           </Col>
         </Row>
         </Form>
-        </div>
       </Modal>
     </div>
   )

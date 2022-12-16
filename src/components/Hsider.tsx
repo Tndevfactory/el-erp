@@ -77,7 +77,7 @@ export default function Hsider() {
             <Menu.Item key={index}  icon={<div><MenuIcon icon={item.icon}/></div>} onClick={()=>setCurrent(index.toString())}><NavLink to={item.link}>{item.designation_fr}</NavLink></Menu.Item>
           ) : (
             <Menu.SubMenu key={index}  title={item.designation_fr} icon={<div><MenuIcon icon={item.icon} /></div>} >
-              {item.child_recursive.map((item,y) =><Menu.Item key={index+"-"+y}  onClick={()=>setCurrent(index.toString()+"-"+y.toString())}>{item.designation_fr}</Menu.Item>)}
+              {item.child_recursive.map((item,y) =><Menu.Item key={index+"-"+y}  onClick={()=>{setCurrent(index.toString()+"-"+y.toString());console.log(item.link)}}><NavLink to={item.link}>{item.designation_fr}</NavLink></Menu.Item>)}
             </Menu.SubMenu>
           )
         )}

@@ -11,27 +11,29 @@ import {
   Row,
   Typography,
   Divider,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import {
   SearchOutlined,
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
-  PlusOutlined
+  PlusOutlined,
 } from "@ant-design/icons";
-import { ProTable, TableDropdown, ProColumns } from '@ant-design/pro-components';
+import {
+  ProTable,
+  TableDropdown,
+  ProColumns,
+} from "@ant-design/pro-components";
 
 import moment from "moment";
-import CreateClient from "./CreateClient"; 
+import CreateClient from "./CreateClient";
 import ClientDetails from "./ClientDetails";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  IClient
-} from "@/features/flotte/client/flotteClientSlice";
+import { IClient } from "@/features/flotte/client/flotteClientSlice";
 const { Paragraph, Title } = Typography;
 
-const Clients:React.FC=()=> {
+const Clients: React.FC = () => {
   const dispatch = useDispatch();
   var { clients } = useSelector((store: any) => store.flotteClient);
   var { windowWidth } = useSelector((store: any) => store.ui);
@@ -40,7 +42,7 @@ const Clients:React.FC=()=> {
   const [visibleDetails, setVisibleDetails] = useState(false);
   const [client, setClient] = useState<IClient>();
   const [refresh, forceRefresh] = useState(0);
-  const [modify, setModify] = useState(false)
+  const [modify, setModify] = useState(false);
 
   const columns: ProColumns<IClient>[] = [
     {
@@ -59,71 +61,71 @@ const Clients:React.FC=()=> {
     {
       title: "Numéro de téléphone",
       dataIndex: "telephone",
-      render:(code)=>(<a>+216{code}</a>),
+      render: (code) => <a>+216{code}</a>,
       key: "telephone",
     },
     {
-      title: 'Action',
-      valueType: 'option',
-      key: 'option',
+      title: "Action",
+      valueType: "option",
+      key: "option",
       render: (text, client, _, action) => [
-        windowWidth>620?<Space size="small">
-        <a
-          onClick={() => {
-            setClient(client)
-            setVisibleDetails(true);
-          }}
-        >
-          <EyeOutlined/>
-        </a>
-        <Divider type="vertical" />
-        <a
-          onClick={() => {
-            setClient(client)
-            setModify(true)
-            setVisibleDetails(true);
-          }}
-        >
-         <EditOutlined/>
-        </a>
-        <Divider type="vertical" />
-        <a>
-
-          <Popconfirm
-                  title="voulez-vous vraiment supprimer ce client ?"
-                  onConfirm={() => {
-          
-                  }}
-                  okText="Oui"
-                  cancelText="Non"
-                >
-          <DeleteOutlined/>
-                </Popconfirm>
-        </a>
-      </Space>:
-      <TableDropdown
-      key=" actionGroup "
-      menus={[
-        {
-          key: "0",
-          name: "Détail",
-          onClick: () => {
-            setClient(client)
-            setVisibleDetails(true);
-          },
-        },
-        {
-          key: "1",
-          name: "Modifier",
-          onClick: () => {
-            setClient(client)
-            setModify(true)
-            setVisibleDetails(true);
-          },
-        },
-        { key: "2", name: "Supprimer" },
-      ]}
-    />
+        windowWidth > 620 ? (
+          <Space size="small">
+            <a
+              onClick={() => {
+                setClient(client);
+                setVisibleDetails(true);
+              }}
+            >
+              <EyeOutlined />
+            </a>
+            <Divider type="vertical" />
+            <a
+              onClick={() => {
+                setClient(client);
+                setModify(true);
+                setVisibleDetails(true);
+              }}
+            >
+              <EditOutlined />
+            </a>
+            <Divider type="vertical" />
+            <a>
+              <Popconfirm
+                title="voulez-vous vraiment supprimer ce client ?"
+                onConfirm={() => {}}
+                okText="Oui"
+                cancelText="Non"
+              >
+                <DeleteOutlined />
+              </Popconfirm>
+            </a>
+          </Space>
+        ) : (
+          <TableDropdown
+            key=" actionGroup "
+            menus={[
+              {
+                key: "0",
+                name: "Détail",
+                onClick: () => {
+                  setClient(client);
+                  setVisibleDetails(true);
+                },
+              },
+              {
+                key: "1",
+                name: "Modifier",
+                onClick: () => {
+                  setClient(client);
+                  setModify(true);
+                  setVisibleDetails(true);
+                },
+              },
+              { key: "2", name: "Supprimer" },
+            ]}
+          />
+        ),
       ],
     },
   ];
@@ -136,18 +138,18 @@ const Clients:React.FC=()=> {
     visible: visibleDetails,
     setVisible: setVisibleDetails,
     client: client,
-    modify:modify, 
-    setModify:setModify,
+    modify: modify,
+    setModify: setModify,
     forceRefresh: forceRefresh,
   };
-  useEffect(() => {
-  }, [refresh]);
+  useEffect(() => {}, [refresh]);
 
   return (
-    <div className="Cautions">
+    <div>
       <Breadcrumb separator=">" className="mt-5">
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
-        <Breadcrumb.Item href="">Gestion des clients</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Flottes</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Clients</Breadcrumb.Item>
       </Breadcrumb>
       <Row className="mt-5" gutter={[12, 24]}>
         <Col xs={24}>
@@ -155,52 +157,78 @@ const Clients:React.FC=()=> {
             title={<Title level={4}>Gestion des clients</Title>}
             bordered={false}
           >
-    <ProTable<IClient>
-      columns={columns}
-      cardBordered
-      columnsState={{
-        persistenceKey: 'pro-table-singe-demos',
-        persistenceType: 'localStorage',
-        onChange(value) {
-          console.log('value: ', value);
-        },
-      }}
-      search={{
-        labelWidth: "auto",
-      }}
-      options={{
-        setting: {
-          listsHeight: 400,
-        },
-      }}
-      pagination={{
-        pageSize: 4,
-        onChange: (page) => console.log(page),
-      }}
-      headerTitle="Liste de clients"
-      request={async (params) => {
-        console.log(`request params:`, params);
-        var dataFilter=clients
-        if(params.code_client) dataFilter=dataFilter.filter((item)=>item.code_client.toString().toUpperCase().search(params.code_client.toString().toUpperCase())===-1?false:true);
-        if(params.telephone) dataFilter=dataFilter.filter((item)=>item.telephone.toString().toUpperCase().search(params.telephone.toString().toUpperCase())===-1?false:true);
-        if(params.designation) dataFilter=dataFilter.filter((item)=>item.designation.toString().toUpperCase().search(params.designation.toString().toUpperCase())===-1?false:true);
-        return {
-          data: dataFilter,
-          success: true,
-        };
-      }}
-      toolBarRender={() => [
-        <Button
-        type="primary"
-        icon={<PlusOutlined/>}
-        onClick={() => {
-          setVisibleForm(true);
-        }}
-      >
-        Ajouter un client
-      </Button>
-      ]}
-    />
+            <ProTable<IClient>
+              columns={columns}
+              cardBordered
+              columnsState={{
+                persistenceKey: "pro-table-singe-demos",
+                persistenceType: "localStorage",
+                onChange(value) {
+                  console.log("value: ", value);
+                },
+              }}
+              search={{
+                labelWidth: "auto",
+              }}
+              options={{
+                setting: {
+                  listsHeight: 400,
+                },
+              }}
+              pagination={{
+                pageSize: 4,
+                onChange: (page) => console.log(page),
+              }}
+              headerTitle="Liste de clients"
+              request={async (params) => {
+                console.log(`request params:`, params);
+                var dataFilter = clients;
+                if (params.code_client)
+                  dataFilter = dataFilter.filter((item) =>
+                    item.code_client
+                      .toString()
+                      .toUpperCase()
+                      .search(params.code_client.toString().toUpperCase()) ===
+                    -1
+                      ? false
+                      : true
+                  );
+                if (params.telephone)
+                  dataFilter = dataFilter.filter((item) =>
+                    item.telephone
+                      .toString()
+                      .toUpperCase()
+                      .search(params.telephone.toString().toUpperCase()) === -1
+                      ? false
+                      : true
+                  );
+                if (params.designation)
+                  dataFilter = dataFilter.filter((item) =>
+                    item.designation
+                      .toString()
+                      .toUpperCase()
+                      .search(params.designation.toString().toUpperCase()) ===
+                    -1
+                      ? false
+                      : true
+                  );
+                return {
+                  data: dataFilter,
+                  success: true,
+                };
+              }}
+              toolBarRender={() => [
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    setVisibleForm(true);
+                  }}
+                >
+                  Ajouter un client
+                </Button>,
+              ]}
+            />
           </Card>
         </Col>
       </Row>
@@ -208,6 +236,6 @@ const Clients:React.FC=()=> {
       <ClientDetails {...detailsObj}></ClientDetails>
     </div>
   );
-}
+};
 
 export default Clients;

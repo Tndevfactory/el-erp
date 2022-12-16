@@ -13,7 +13,7 @@ import {
 } from 'antd'
 const { Title } = Typography
 
-const Assurances = () => {
+const Assurances:React.FC = () => {
   const [form] = Form.useForm()
   const [refresh, forceRefresh] = useState(0)
   const styleTitle: React.CSSProperties = {

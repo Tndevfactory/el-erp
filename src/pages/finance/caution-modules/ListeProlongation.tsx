@@ -2,7 +2,7 @@ import React from "react";
 import { Divider, Table, Space, Tooltip, Tag } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { IProlongation } from "@/features/caution/cautionSlice";
+import { IProlongation } from "@/features/finance/caution/cautionSlice";
 import type { ColumnsType } from 'antd/es/table';
 const columns : ColumnsType<IProlongation>= [
   {

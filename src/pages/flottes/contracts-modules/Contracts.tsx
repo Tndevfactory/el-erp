@@ -211,7 +211,8 @@ function Contracts() {
     <div className="Contracts">
       <Breadcrumb separator=">" className="mt-5">
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
-        <Breadcrumb.Item href="">Gestion des contrats LLD</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Flottes</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Contrats LLD</Breadcrumb.Item>
       </Breadcrumb>
       <Row className="mt-5" gutter={[12, 24]}>
         <Col xs={24}>

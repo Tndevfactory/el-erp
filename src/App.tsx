@@ -48,7 +48,9 @@ import Timesheet from "./pages/project/timesheet-modules/Timesheet";
 import FlottesContract from "./pages/flottes/contracts-modules/Contracts";
 import FlottesClients from "./pages/flottes/clients-modules/Clients";
 import Vehicules from "./pages/flottes/vehicules-modules/Vehicules";
-
+//GRH
+import Sessions from "./pages/ressourceshumaines/formations-modules/sessions/Sessions";
+import { Session } from "inspector";
 // check localstorage here
 //console.log(`${process.env.REACT_APP_BASE_PUBLIC_URL}/`);
 
@@ -99,6 +101,10 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
                   <Route path={`*`} element={<Projects />} />
                   <Route path={`kanban`} element={<Kanban />} />
                   <Route path={`timesheet`} element={<Timesheet />} />
+              </Route>
+              <Route path={`ressources-humaines/*`} element={<Index />}>
+                  <Route path={`*`} element={<Sessions/>} />
+                  <Route path={`formation/session`} element={<Sessions />} />
               </Route>
               </Route>
             <Route path={`unauthorized`} element={<Unauthorized />} />

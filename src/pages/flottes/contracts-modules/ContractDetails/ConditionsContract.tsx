@@ -15,7 +15,7 @@ import Assurances from './Assurances'
 import Entretien from './Entretien'
 import ReplacementVehicle from './ReplacementVehicle'
 const { Title } = Typography
-const ConditionsContract = () => {
+const ConditionsContract:React.FC = () => {
   const styleTitle: React.CSSProperties = {
     marginLeft: '10px',
   }

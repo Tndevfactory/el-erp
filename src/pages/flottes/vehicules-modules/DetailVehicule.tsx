@@ -17,7 +17,7 @@ import {
 import { InboxOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { addCaution } from "../../../features/caution/cautionSlice";
+import { addCaution } from "../../../features/finance/caution/cautionSlice";
 import { IVehicule } from "@/features/flotte/vehicule/flotteVehiculeSlice";
 const { Option } = Select;
 const { Dragger } = Upload;

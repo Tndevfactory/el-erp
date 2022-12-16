@@ -18,7 +18,7 @@ import {
 import { InboxOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { addCaution } from "../../../features/caution/cautionSlice";
+import { addCaution } from "../../../features/finance/caution/cautionSlice";
 import FormItem from "antd/lib/form/FormItem";
 const { Option } = Select;
 const { Dragger } = Upload;

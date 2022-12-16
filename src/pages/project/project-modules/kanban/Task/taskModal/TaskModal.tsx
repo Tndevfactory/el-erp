@@ -36,14 +36,16 @@ import type { UploadProps } from "antd";
 import ChatGroup from "../../kanbanSideMenu/ChatGroup";
 import TaskTimesheet from "./TaskTimesheet";
 import TaskComments from "./TaskComments";
+import dayjs from 'dayjs';
 const { RangePicker } = DatePicker;
 const { Title, Paragraph } = Typography;
 const { Dragger } = Upload;
+const dateFormat = 'DD-MM-YYYY';
 const timesheet= [
   {
     id: 2,
     employe:"Wael Machlouch",
-    photo:"https://joeschmoe.io/api/v1/1",
+    photo:"https://xsgames.co/randomusers/avatar.php?g=male",
     projet: "ERP",
     tache: "Gestion de cautions",
     titre: "Affichage de cautions",
@@ -55,7 +57,7 @@ const timesheet= [
   {
     id: 3,
     employe:"Wael Machlouch",
-    photo:"https://joeschmoe.io/api/v1/1",
+    photo:"https://xsgames.co/randomusers/avatar.php?g=female",
     projet: "ERP",
     tache: "Gestion de cautions",
     titre: "Creation de cautions",
@@ -67,7 +69,7 @@ const timesheet= [
   {
     id: 5,
     employe:"Bassem Soua",
-    photo:"https://joeschmoe.io/api/v1/2",
+    photo:"https://xsgames.co/randomusers/avatar.php?g=male",
     projet: "ERP",
     tache: "Gestion de cautions",
     titre: "Réunion",
@@ -162,7 +164,7 @@ const TaskModal = ({ isTaskModalOpen, setIsTaskModalOpen, task }) => {
       footer={null}
       title={
         <Space size="large">
-          <div>
+          <Title level={5}>
             {task.title}
             <Tooltip title="Edit task Title">
               <EditOutlined
@@ -174,20 +176,17 @@ const TaskModal = ({ isTaskModalOpen, setIsTaskModalOpen, task }) => {
                 onClick={() => {}}
               ></EditOutlined>
             </Tooltip>
-          </div>
-          {/* <RangePicker
+          </Title>
+          <RangePicker
             style={{
               borderRadius: "15px",
               width: "250px",
             }}
-            defaultValue={[
-              moment(task.dateD, "DD-MM-YYYY"),
-              moment(task.dateF, "DD-MM-YYYY"),
-            ]}
-            format={"DD-MM-YYYY"}
+            defaultValue={[dayjs(task.dateD, dateFormat), dayjs(task.dateF, dateFormat)]}
+            format={dateFormat}
             allowClear={false}
             onChange={(value, dateString) => {}}
-          /> */}
+          />
           <Tooltip title="Archive task">
             <Popconfirm
               title="Are you sure to archive this task?"
@@ -206,7 +205,7 @@ const TaskModal = ({ isTaskModalOpen, setIsTaskModalOpen, task }) => {
         </Space>
       }
     >
-      <Row gutter={24}>
+      <Row gutter={[24,16]}>
         <Col xs={24} md={13} lg={13} xl={13} xxl={13}>
           <Space size="large" direction="vertical">
             <div>
@@ -259,10 +258,9 @@ const TaskModal = ({ isTaskModalOpen, setIsTaskModalOpen, task }) => {
               <Title level={5}>Membres</Title>
               <Space size={0}>
                 <Avatar.Group maxCount={5}>
-                  <Avatar src="https://joeschmoe.io/api/v1/2" />
-                  <Avatar src="https://joeschmoe.io/api/v1/1" />
-                  <Avatar src="https://joeschmoe.io/api/v1/7" />
-                  <Avatar src="https://joeschmoe.io/api/v1/3" />
+                <Avatar src="https://xsgames.co/randomusers/avatar.php?g=male" />
+            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=female" />
+            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=male" />
                 </Avatar.Group>
                 <Dropdown
                   overlay={menu}

@@ -13,6 +13,7 @@ import {
   SearchOutlined,
   BellOutlined,
   AudioOutlined,
+  ExportOutlined 
 } from "@ant-design/icons";
 import {
   Layout,
@@ -47,10 +48,12 @@ const profilMenu = (
     items={[
       {
         key: "1",
+        icon:<UserOutlined/>,
         label: <Link to="#"> Chawki Barhoumi</Link>,
       },
       {
         key: "2",
+        icon:<ExportOutlined/>,
         label: <Link to="#">Déconnexion</Link>,
         onClick: () => alert("test logout"),
       },
@@ -195,7 +198,7 @@ export default function Navbar() {
         <Header
           className="header-mobile site-layout-background site-layout-background border-b-2  border-gray-200 
         sticky top-0 z-50 s bg-white text-gray-500"
-          style={{ height: "40px" }}
+          style={{ height: "48px" }}
         >
           <Space size="small" className="trigger_menu mobile-menu">
             <MenuOutlined
@@ -209,7 +212,7 @@ export default function Navbar() {
           <Space direction="vertical">
             <Space wrap>
               <Dropdown overlay={profilMenu} placement="bottomLeft">
-                <Avatar size={{ xs: 24, sm: 32 }} icon={<UserOutlined />} />
+                <Avatar className="border-gray-200" size={32} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
               </Dropdown>
             </Space>
           </Space>

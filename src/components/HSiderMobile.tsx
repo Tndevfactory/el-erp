@@ -36,7 +36,7 @@ const HSiderMobile: React.FC<{
           <Menu.SubMenu
             key={index}
             title={item.designation_fr}
-            icon={<MenuIcon icon={item.icon} />}
+            icon={<div><MenuIcon icon={item.icon} /></div>}
           >
             {item.child_recursive.map((item, y) => (
               <Menu.Item

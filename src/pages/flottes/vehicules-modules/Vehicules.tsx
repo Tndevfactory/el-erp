@@ -242,7 +242,8 @@ const Vehicules: React.FC = () => {
     <div className="Cautions">
       <Breadcrumb separator=">" className="mt-5">
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
-        <Breadcrumb.Item href="">Gestion des véhicules</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Flottes</Breadcrumb.Item>
+        <Breadcrumb.Item href="">véhicules</Breadcrumb.Item>
       </Breadcrumb>
       <Row className="mt-5" gutter={[12, 24]}>
         <Col xs={24}>

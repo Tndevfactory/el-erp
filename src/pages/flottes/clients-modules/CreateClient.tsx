@@ -72,8 +72,6 @@ const CreateClient: React.FC<{
               <Input placeholder="Veuillez entrer le code client" />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
           <Col span={24}>
             <Form.Item
               name="designation"
@@ -88,8 +86,6 @@ const CreateClient: React.FC<{
               <Input placeholder="Veuillez entrer le type de caution" />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
           <Col span={24}>
             <Form.Item
               name="name"
@@ -104,8 +100,6 @@ const CreateClient: React.FC<{
               <Input placeholder="Veuillez entrer le numéro" />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
           <Col span={24}>
             <Form.Item
               name="adresse"
@@ -120,8 +114,8 @@ const CreateClient: React.FC<{
               <Input placeholder="Veuillez entrer l'adresse" />
             </Form.Item>
           </Col>
-        </Row>
 
+          <Col span={24}>
         <Form.Item style={{ textAlign: "right" }}>
           <Button
             className="btnAnnuler"
@@ -134,6 +128,8 @@ const CreateClient: React.FC<{
             Envoyer
           </Button>
         </Form.Item>
+        </Col>
+        </Row>
       </Form>
     </Drawer>
   );

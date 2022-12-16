@@ -27,8 +27,8 @@ import {
   updateCaution,
   CautionApprove,
   IProlongation,
-} from "@/features/caution/cautionSlice";
-import { getOneCaution, closeCaution } from "@/features/caution/cautionSlice";
+} from "@/features/finance/caution/cautionSlice";
+import { getOneCaution, closeCaution } from "@/features/finance/caution/cautionSlice";
 import ListeProlongation from "./ListeProlongation";
 
 const { Dragger } = Upload;

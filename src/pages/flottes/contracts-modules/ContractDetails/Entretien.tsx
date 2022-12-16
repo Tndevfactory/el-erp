@@ -12,7 +12,7 @@ import {
     DatePicker
   } from 'antd'
   const { Title } = Typography
-const Entretien = () => {  
+const Entretien:React.FC = () => {  
   const [form] = Form.useForm();
   const styleTitle: React.CSSProperties = {
     marginLeft: '10px',

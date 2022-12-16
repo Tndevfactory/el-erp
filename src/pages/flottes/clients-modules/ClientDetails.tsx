@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Button, Drawer, Input, Form, Row, Col, message } from "antd";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { addDuration, updateCaution } from "@/features/caution/cautionSlice";
+import { addDuration, updateCaution } from "@/features/finance/caution/cautionSlice";
 import { IClient } from "@/features/flotte/client/flotteClientSlice";
 
 export const ClientForm = (

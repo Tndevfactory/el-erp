@@ -43,10 +43,11 @@ import {
   CautionApprove,
   ICaution,
   closeCaution,
-} from "@/features/caution/cautionSlice";
+} from "@/features/finance/caution/cautionSlice";
 import ListeProlongation from "./ListeProlongation";
 import type { ColumnsType } from "antd/es/table";
 import type { DatePickerProps } from "antd";
+import dayjs from "dayjs";
 const { Paragraph, Title } = Typography;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -165,11 +166,10 @@ const Cautions: React.FC = ()=>{
       ]}
     />
   );
-
   const customWeekStartEndFormat: DatePickerProps["format"] = (value) =>
-    `${moment().startOf("week").format(dateFormat)} ~ ${moment()
-      .endOf("week")
-      .format(dateFormat)}`;
+  `${dayjs(value).startOf("week").format(dateFormat)} ~ ${dayjs(value)
+    .endOf("week")
+    .format(dateFormat)}`;
   const columns: ProColumns<ICaution>[] = [
     {
       title: "Nom du Projet ",
@@ -324,6 +324,7 @@ const Cautions: React.FC = ()=>{
             </Select>
             {typeDate === "date" ? (
               <RangePicker
+                style={{minWidth:"145px"}}
                 onChange={(e, dateString) => {
                   console.log(dateString);
                   setDate(dateString);
@@ -332,18 +333,22 @@ const Cautions: React.FC = ()=>{
               />
             ) : typeDate === "week" ? (
               <DatePicker
+                style={{minWidth:"145px"}}
                 picker={typeDate}
                 format={customWeekStartEndFormat}
                 onChange={(e, dateString) => {
                   console.log(dateString);
+                  setDate([dateString.substring(0, 10),dateString.substring(13, 23)])
                 }}
               />
             ) : (
               <DatePicker
                 picker={typeDate}
-                format={dateFormat}
+                format={"MM/YYYY"}
                 onChange={(e, dateString) => {
                   console.log(dateString);
+                  setDate([dateString])
+
                 }}
               />
             )}
@@ -476,6 +481,7 @@ const Cautions: React.FC = ()=>{
               }}
               request={async (params) => {
                 console.log(`request params:`, params);
+                console.log(date);
                 var dataFilter = cautions;
                 if (params.Nom_Projet)
                   dataFilter = dataFilter.filter((item) =>
@@ -501,8 +507,14 @@ const Cautions: React.FC = ()=>{
                       ? false
                       : true
                   );
+                 
                 if (date !== null)
-                  dataFilter = dataFilter.filter(
+                    typeDate==="month"?
+                    dataFilter = dataFilter.filter(
+                      (item) =>
+                      item.DateE.search(date[0])!==-1
+                    )
+                    :dataFilter = dataFilter.filter(
                     (item) =>
                       moment(item.DateE, dateFormat).valueOf() <=
                         moment(date[1], dateFormat).valueOf() &&

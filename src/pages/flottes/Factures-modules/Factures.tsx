@@ -2,6 +2,7 @@ import { ProList } from "@ant-design/pro-components";
 import { Badge, Button, Space, DatePicker } from "antd";
 import React, { useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
 const { RangePicker } = DatePicker;
 const dataSource = [
   {
@@ -52,6 +53,7 @@ const renderBadge = (count: number, active = false) => {
 
 const Factures : React.FC = ()=>{
   const [activeKey, setActiveKey] = useState<React.Key | undefined>("tab1");
+  var { windowWidth } = useSelector((store: any) => store.ui);
   const [data,setData]= useState(dataSource)
   return (
     <ProList<any>
@@ -66,7 +68,8 @@ const Factures : React.FC = ()=>{
         },
         content: {
           render: (_, facture) => (
-            <Space size={70}>
+            windowWidth>620&&
+            <Space size="large">
               <div style={{width:"80px"}}>
                 <div style={{ color: "#00000073" }}>Status</div>
                 <Badge  color={facture.status === "impayée"?"red":"#52c41a"} text={facture.status} />

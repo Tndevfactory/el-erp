@@ -13,7 +13,7 @@ import {
   } from 'antd'
   import moment from "moment";
   const { Title } = Typography
-const ReplacementVehicle = () => {
+const ReplacementVehicle:React.FC = () => {
     const styleTitle: React.CSSProperties = {
         marginLeft: '10px',
       }

@@ -7,6 +7,9 @@ import { RiUserSettingsLine } from "react-icons/ri";
 import { MdOutlineContentPaste } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
 import { BsFileText } from "react-icons/bs";
+import { FiUsers } from "react-icons/fi";
+import { DollarCircleOutlined } from "@ant-design/icons";
+import { SlGraduation } from "react-icons/sl";
 
 
 const icons = {
@@ -18,7 +21,13 @@ const icons = {
   gestionClients: <RiUserSettingsLine />,
   gestionVehicules: <AiOutlineCar />,
   gestionLivraison:<TbTruckDelivery/>,
-  gestionFactures:<BsFileText/>
+  gestionFactures:<BsFileText/>,
+  grhIcon:<FiUsers/>,
+  financeIcon:<DollarCircleOutlined />,
+  flottesIcon: <AiOutlineCar />,
+  formationsIcon: <SlGraduation/>,
+
+
 };
 
 const MenuIcon = ({ icon }) => {

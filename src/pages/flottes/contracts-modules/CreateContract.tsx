@@ -11,7 +11,7 @@ import {
 } from "antd";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { addCaution } from "../../../features/caution/cautionSlice";
+import { addCaution } from "../../../features/finance/caution/cautionSlice";
 const { Option } = Select;
 
 const CautionForm: React.FC<{

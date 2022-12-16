@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { Avatar, Typography, Tooltip, Row, Col, Input, Button, Space } from "antd";
+import { Avatar, Typography, Tooltip, Row, Col, Input, Button, Space, Empty } from "antd";
+import { Comment } from '@ant-design/compatible';
 import {
     SendOutlined,
   } from "@ant-design/icons";
@@ -19,11 +20,11 @@ const TaskComments = () => {
       <Space direction="vertical" style={{width:'100%'}}>
       <Title level={5}>Commentaires</Title>
       {/* <br/><br/><br/><Empty description={"Aucun Message"}/> */}
-      {/* <div className="TaskCommentsScrollZone" id="TaskCommentsScrollZone">
+      <div className="TaskCommentsScrollZone" id="TaskCommentsScrollZone">
         <Comment
           // actions={actions}
           author={<a>Wael Machlouch</a>}
-          avatar={<Avatar src="https://joeschmoe.io/api/v1/1" alt="Han Solo" />}
+          avatar={<Avatar src="https://xsgames.co/randomusers/avatar.php?g=female" alt="Han Solo" />}
           content={
             <p>
               We supply a series of design principles,
@@ -38,7 +39,7 @@ const TaskComments = () => {
         <Comment
           // actions={actions}
           author={<a>Bassem Soua</a>}
-          avatar={<Avatar src="https://joeschmoe.io/api/v1/2" alt="Han Solo" />}
+          avatar={<Avatar src="https://xsgames.co/randomusers/avatar.php?g=male" alt="Han Solo" />}
           content={
             <p>
               To help people.
@@ -53,7 +54,7 @@ const TaskComments = () => {
                 <Comment
           // actions={actions}
           author={<a>Wael Machlouch</a>}
-          avatar={<Avatar src="https://joeschmoe.io/api/v1/1" alt="Han Solo" />}
+          avatar={<Avatar src="https://xsgames.co/randomusers/avatar.php?g=female" alt="Han Solo" />}
           content={
             <p>
               We supply a series of design principles,
@@ -69,7 +70,7 @@ const TaskComments = () => {
         <Comment
           // actions={actions}
           author={<a>Bassem Soua</a>}
-          avatar={<Avatar src="https://joeschmoe.io/api/v1/2" alt="Han Solo" />}
+          avatar={<Avatar src="https://xsgames.co/randomusers/avatar.php?g=male" alt="Han Solo" />}
           content={
             <p>
               To help people.
@@ -81,14 +82,14 @@ const TaskComments = () => {
             </Tooltip>
           }
         />
-      </div> */}
+      </div>
       <Row
         gutter={24}
         style={{ position: "absolute", bottom: "0px", width: "100%" }}
         id="TaskCommentsInput"
       >
         <Col span={3}>
-          <Avatar src="https://joeschmoe.io/api/v1/2" />
+          <Avatar src="https://xsgames.co/randomusers/avatar.php?g=male" />
         </Col>
         <Col span={18} style={{ paddingRight: "0px" }}>
           <Input placeholder="Message..." style={{ borderRadius: "15px" }} />

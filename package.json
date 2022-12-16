@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ant-design/charts": "^1.4.2",
+    "@ant-design/compatible": "^5.1.1",
     "@ant-design/flowchart": "^1.2.1",
     "@ant-design/graphs": "^1.2.7",
     "@ant-design/icons": "^4.7.0",

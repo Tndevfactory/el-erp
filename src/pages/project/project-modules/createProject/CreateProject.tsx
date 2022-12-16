@@ -160,7 +160,7 @@ const CreateProject = ({ setVisible, visible }) => {
       className="CreateProject"
       title={"Créer un nouveau projet"}
       placement="right"
-      size={"large"}
+      width={700}
       onClose={() => {
         setVisible(false);
         setCurrent(0);

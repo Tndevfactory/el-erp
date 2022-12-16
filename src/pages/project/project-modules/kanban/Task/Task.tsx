@@ -52,7 +52,7 @@ const Task = ({ task }) => {
         ? "#FEF5E7"
         : "#EAFAF1",
     marginBottom: 10,
-    borderRadius: 5,
+    borderRadius: 8,
     opacity: isDragging ? 0.3 : 1,
     // borderWidth:"0px"
   };
@@ -98,9 +98,9 @@ const Task = ({ task }) => {
             }}
             maxCount={2}
           >
-            <Avatar src="https://joeschmoe.io/api/v1/2" />
-            <Avatar src="https://joeschmoe.io/api/v1/1" />
-            <Avatar src="https://joeschmoe.io/api/v1/6" />
+            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=male" />
+            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=female" />
+            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=male" />
             {/* {members.map((member) => (
               <Avatar key={member.id} src={member.photo} />
             ))} */}
