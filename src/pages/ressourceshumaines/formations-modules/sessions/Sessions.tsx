@@ -29,6 +29,8 @@ import {
   } from "@ant-design/icons";
   import { useDispatch, useSelector } from "react-redux";
 import CreateSession from './CreateSession';
+import { ISession } from '@/features/RessourcesHumaines/formation/sessionSlice';
+import DetailSession from './DetailSession';
   const { Paragraph, Title } = Typography;
 const Sessions : React.FC = () => {
     const dispatch = useDispatch();
@@ -38,8 +40,9 @@ const Sessions : React.FC = () => {
     const [visibleDetails, setVisibleDetails] = useState(false);
     const [refresh, forceRefresh] = useState(0);
     const [modify, setModify] = useState(false);
+    const [session, setSession] = useState<ISession>();
     console.log(sessions)
-    const columns : ProColumns<any>[]= [
+    const columns : ProColumns<ISession>[]= [
       {
         title: "Désignation",
         dataIndex: "designation",
@@ -56,12 +59,14 @@ const Sessions : React.FC = () => {
         title: "Sujet",
         dataIndex: "sujet",
         key: "sujet",
+        search:false,
         responsive:["xl"]
       },
       {
         title: "Participation",
         dataIndex: "participation",
         key: "participation",
+        search:false,
         render:(_, session) => (
           <Tag color={session.participation==="Présentielle"?"blue":session.participation==="A distance"?"":"green"}>
             {session.participation}
@@ -72,6 +77,7 @@ const Sessions : React.FC = () => {
         title: "Participants",
         dataIndex: "participants",
         key: "participants",
+        search:false,
         render:(_, session) => (
           <Avatar.Group
           maxCount={windowWidth > 620 ?3:2}
@@ -102,11 +108,12 @@ const Sessions : React.FC = () => {
         title: "Action",
         valueType: "option",
         key: "option",
-        render: (text, client, _, action) => [
+        render: (text, session, _, action) => [
           windowWidth > 620 ? (
             <Space size="small">
               <a
                 onClick={() => {
+                  setSession(session);
                   setVisibleDetails(true);
                 }}
               >
@@ -115,6 +122,7 @@ const Sessions : React.FC = () => {
               <Divider type="vertical" />
               <a
                 onClick={() => {
+                  setSession(session);
                   setModify(true);
                   setVisibleDetails(true);
                 }}
@@ -124,7 +132,7 @@ const Sessions : React.FC = () => {
               <Divider type="vertical" />
               <a>
                 <Popconfirm
-                  title="voulez-vous vraiment supprimer ce client ?"
+                  title="voulez-vous vraiment supprimer cette session ?"
                   onConfirm={() => {}}
                   okText="Oui"
                   cancelText="Non"
@@ -141,6 +149,7 @@ const Sessions : React.FC = () => {
                   key: "0",
                   name: "Détail",
                   onClick: () => {
+                    setSession(session);
                     setVisibleDetails(true);
                   },
                 },
@@ -148,6 +157,7 @@ const Sessions : React.FC = () => {
                   key: "1",
                   name: "Modifier",
                   onClick: () => {
+                    setSession(session);
                     setModify(true);
                     setVisibleDetails(true);
                   },
@@ -164,6 +174,14 @@ const Sessions : React.FC = () => {
         setVisible: setVisibleForm,
         forceRefresh: forceRefresh,
       };
+      const detailsObj = {
+        visible: visibleDetails,
+        setVisible: setVisibleDetails,
+        session: session,
+        modify: modify,
+        setModify: setModify,
+        forceRefresh: forceRefresh,
+      };
   return (
     <div> 
               <Breadcrumb separator=">" className="mt-5">
@@ -176,7 +194,7 @@ const Sessions : React.FC = () => {
             title={<Title level={4}>Gestion de sessions</Title>}
             bordered={false}
           >
-            <ProTable<any>
+            <ProTable<ISession>
               columns={columns}
               cardBordered
               columnsState={{
@@ -221,6 +239,7 @@ const Sessions : React.FC = () => {
             />
           </Card>
     <CreateSession {...obj}/>
+    <DetailSession {...detailsObj}/>
     </div>
   )
 }

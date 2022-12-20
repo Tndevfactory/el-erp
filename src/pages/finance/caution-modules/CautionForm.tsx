@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Space,
@@ -16,8 +16,15 @@ import {
 } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { useDispatch,useSelector } from "react-redux";
-import { addCaution } from "../../../features/finance/caution/cautionSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addCaution,
+  createCaution,
+  getCautionNatures,
+  ICautionNature,
+} from "../../../features/finance/caution/cautionSlice";
+import { getProjects, IProject } from "@/features/project/projectSlice";
+import { getClients, IClient } from "@/features/client/clientSlice";
 const { Option } = Select;
 const { Dragger } = Upload;
 
@@ -46,39 +53,79 @@ const CautionForm: React.FC<{
   const dispatch = useDispatch();
   var { windowWidth } = useSelector((store: any) => store.ui);
   const [form] = Form.useForm();
-  const [eps, setEps] = useState(0);
-  const showDrawer = () => {
-    setVisible(true);
-  };
+  const [projects, setProjects] = useState<IProject[]>();
+  const [cautionNatures, setCautionNatures] = useState<ICautionNature[]>();
+  const [clients, setClients] = useState<IClient[]>();
 
   const onClose = () => {
     setVisible(false);
   };
   const handleSubmit = (values) => {
     dispatch(
-      addCaution({
-        id: Math.random(),
-        Nom_Projet: values.name,
-        Demandeur: values.Demandeur,
-        type_caution: values.type,
-        DateD: moment(values.dateTime._d).format("DD/MM/YYYY"),
+      createCaution({
+        projet_id: values.projet,
+        // Demandeur: values.Demandeur,
+        caution_nature_id: values.caution_nature,
+        // DateD: moment(values.dateTime._d).format("DD/MM/YYYY"),
         Client: values.client,
-        Montant: values.montant,
-        ligne: values.ligne,
+        montant: values.montant,
+        eps: values.eps,
         Frais_mois: 20,
-        Durée: values.Durée,
-        Etat_main_levée: "En attente",
-        Observation: values.Observation,
+        period_valid: values.duree,
+        // Etat_main_levée: "En attente",
+        // Observation: values.Observation,
       })
-    );
-    forceRefresh(Math.random());
-    setVisible(false);
-    console.log(values);
+    ).unwrap()
+    .then((originalPromiseResult) => {
+      forceRefresh(Math.random());
+      setVisible(false);
+    })
+    .catch((rejectedValueOrSerializedError) => {
+      // handle error here
+    });
+
   };
+
+  //select search and sort
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  const filterSort = (optionA, optionB) =>
+    (optionA?.label ?? "")
+      .toLowerCase()
+      .localeCompare((optionB?.label ?? "").toLowerCase());
+
+  useEffect(() => {
+    if (visible) {
+      dispatch(getProjects())
+        .unwrap()
+        .then((originalPromiseResult) => {
+          setProjects(originalPromiseResult.data);
+        })
+        .catch((rejectedValueOrSerializedError) => {
+          console.log(rejectedValueOrSerializedError);
+        });
+      dispatch(getClients())
+        .unwrap()
+        .then((originalPromiseResult) => {
+          setClients(originalPromiseResult.data);
+        })
+        .catch((rejectedValueOrSerializedError) => {
+          console.log(rejectedValueOrSerializedError);
+        });
+      dispatch(getCautionNatures())
+        .unwrap()
+        .then((originalPromiseResult) => {
+          setCautionNatures(originalPromiseResult.data);
+        })
+        .catch((rejectedValueOrSerializedError) => {
+          console.log(rejectedValueOrSerializedError);
+        });
+    }
+  }, [visible]);
   return (
     <Drawer
       title="Demander une nouvelle caution"
-      width={windowWidth>750?720:"90%"}
+      width={windowWidth > 750 ? 720 : "90%"}
       className="CautionForm"
       onClose={onClose}
       open={visible}
@@ -104,41 +151,23 @@ const CautionForm: React.FC<{
                 },
               ]}
             >
-              <Select placeholder="Veuillez entrer le client">
-                <Option key={0} value="Ministère de la Jeunesse et des Sports">
-                  Ministère de la Jeunesse et des Sports
+              <Select
+                placeholder="Veuillez entrer le client"
+                showSearch
+                filterOption={filterOption}
+                filterSort={filterSort}
+              >
+                {clients?.map(item =>                 
+                <Option key={item.id} value={item.id} label={item.designation}>
+                  {item.designation}
                 </Option>
-                <Option
-                  key={1}
-                  value="Ministère de commerce et du Développement des Exportations"
-                >
-                  Ministère de commerce et du Développement des Exportations
-                </Option>
-                <Option
-                  key={2}
-                  value="Société Régionale de Transport du Gouvernorat de Nabeul (SRTGN)"
-                >
-                  Société Régionale de Transport du Gouvernorat de Nabeul
-                  (SRTGN)
-                </Option>
-                <Option
-                  key={3}
-                  value="Institut National de la Météorologie-INM"
-                >
-                  Institut National de la Météorologie-INM
-                </Option>
-                <Option
-                  key={4}
-                  value="L'Instance Tunisienne de l'Investissement"
-                >
-                  L'Instance Tunisienne de l'Investissement
-                </Option>
+                )}
               </Select>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
-              name="type"
+              name="caution_nature"
               label="type de caution "
               rules={[
                 {
@@ -147,25 +176,23 @@ const CautionForm: React.FC<{
                 },
               ]}
             >
-              <Select placeholder="Veuillez entrer le type de caution">
-                <Option key={0} value="Provisoire-CSP">
-                  Provisoire-CSP
+              <Select
+                placeholder="Veuillez entrer le type de caution"
+                showSearch
+                filterOption={filterOption}
+                filterSort={filterSort}
+              >
+                {cautionNatures?.map(item =>                 
+                <Option key={item.id} value={item.id} label={item.designation}>
+                  {item.designation}
                 </Option>
-                <Option key={1} value="Définitive-CSP">
-                  Définitive-CSP
-                </Option>
-                <Option key={2} value="Retenue de Garantie">
-                  Retenue de Garantie
-                </Option>
-                <Option key={3} value="Avance">
-                  Avance
-                </Option>
+                )}
               </Select>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
-              name="name"
+              name="projet"
               label="Nom du Projet "
               rules={[
                 {
@@ -174,16 +201,17 @@ const CautionForm: React.FC<{
                 },
               ]}
             >
-              <Select placeholder="Veuillez entrer le titre du projet">
-                <Option key={0} value="Projet 1">
-                  Projet 1
+              <Select
+                placeholder="Veuillez entrer le titre du projet"
+                showSearch
+                filterOption={filterOption}
+                filterSort={filterSort}
+              >
+                {projects?.map(item =>                 
+                <Option key={item.id} value={item.id} label={item.designation}>
+                  {item.designation}
                 </Option>
-                <Option key={1} value="Projet 2">
-                  Projet 2
-                </Option>
-                <Option key={2} value="Projet 3">
-                  Projet 3
-                </Option>
+                )}
               </Select>
             </Form.Item>
           </Col>
@@ -208,11 +236,11 @@ const CautionForm: React.FC<{
                 onBlur={(e) => {
                   if (parseFloat(e.target.value.replace(",", "")) >= 1000) {
                     form.setFieldsValue({
-                      ligne: "EPS",
+                      eps: 1,
                     });
                   } else {
                     form.setFieldsValue({
-                      ligne: "Compte courant",
+                      eps: 0,
                     });
                   }
                 }}
@@ -221,7 +249,7 @@ const CautionForm: React.FC<{
           </Col>
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
-              name="dateTime"
+              name="date_debut"
               label="Date début"
               rules={[
                 {
@@ -240,7 +268,7 @@ const CautionForm: React.FC<{
           </Col>
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
-              name="Durée"
+              name="duree"
               label="Durée par jour"
               rules={[
                 {
@@ -257,7 +285,7 @@ const CautionForm: React.FC<{
           </Col>
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
-              name="aFaireAvant"
+              name="a_faire_avant"
               label="A faire avant"
               rules={[
                 {
@@ -276,7 +304,7 @@ const CautionForm: React.FC<{
           </Col>
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
-              name="ligne"
+              name="eps"
               label="Ligne"
               // tooltip={{ title: 'Tooltip with customize icon', icon: <InboxOutlined /> }}
               rules={[
@@ -286,9 +314,9 @@ const CautionForm: React.FC<{
                 },
               ]}
             >
-              <Radio.Group defaultValue={eps}>
-                <Radio value={"EPS"}> Ligne eps </Radio>
-                <Radio value={"Compte courant"}> Compte courant </Radio>
+              <Radio.Group >
+                <Radio value={1}> Ligne eps </Radio>
+                <Radio value={0}> Compte courant </Radio>
               </Radio.Group>
             </Form.Item>
           </Col>

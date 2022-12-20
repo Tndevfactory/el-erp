@@ -51,7 +51,7 @@ export default function Hsider() {
       collapsible
       collapsed={isCollapsed}
     >
-      <div className="border-0 mx-3 pt-5 bg-white p-2 flex">
+      <div className="border-0 mx-3 bg-white p-2 flex">
         <Image width={30} src={elasticLogo} />
         {!isCollapsed ? (
           <Text

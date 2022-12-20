@@ -8,13 +8,13 @@ const columns : ColumnsType<IProlongation>= [
   {
     title: "Référence",
     key: 0,
-    dataIndex: "Référence",
+    dataIndex: "reference",
     responsive:["sm"]
   },
   {
     title: "Durée",
     key: 1,
-    dataIndex: "Durée",
+    dataIndex: "duree",
     responsive:["sm"]
   },
   {
@@ -25,7 +25,7 @@ const columns : ColumnsType<IProlongation>= [
   {
     title: "Etat",
     key: 3,
-    dataIndex: "Etat",
+    dataIndex: "etat",
     render: (Etat: string) => (
         <Tag
           color={
@@ -60,7 +60,7 @@ const ListeProlongation:React.FC<{prolongation:IProlongation[]}>=({ prolongation
     <div className="ProlongationListe">
       <Table
         rowClassName={(record, index) =>
-          record.Etat === "En attente" ? "table-row-en-attente" : "nothing"
+          record.etat === "En attente" ? "table-row-en-attente" : "nothing"
         }
         columns={columns}
         dataSource={prolongation}

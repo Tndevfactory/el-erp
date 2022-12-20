@@ -27,6 +27,7 @@ import {
   updateCaution,
   CautionApprove,
   IProlongation,
+  ICaution,
 } from "@/features/finance/caution/cautionSlice";
 import { getOneCaution, closeCaution } from "@/features/finance/caution/cautionSlice";
 import ListeProlongation from "./ListeProlongation";
@@ -55,6 +56,7 @@ const props: UploadProps = {
 const CautionDetails: React.FC<{
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  caution:ICaution;
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
   update: boolean;
   setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -63,13 +65,13 @@ const CautionDetails: React.FC<{
 }> = ({
   visible,
   setVisible,
+  caution,
   forceRefresh,
   update,
   setUpdate,
   prolongation,
   setProlongation,
 }) => {
-  var { caution } = useSelector((store: any) => store.caution);
   var { windowWidth } = useSelector((store: any) => store.ui);
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
@@ -98,64 +100,66 @@ const CautionDetails: React.FC<{
       setFields([
         {
           name: ["nomProjet"],
-          value: caution.Nom_Projet,
+          value: caution.projet.designation,
         },
-        {
-          name: ["demandeur"],
-          value: caution.Demandeur,
-        },
+        // {
+        //   name: ["demandeur"],
+        //   value: caution.demandeur,
+        // },
         {
           name: ["type"],
-          value: caution.type_caution,
+          value: caution.caution_nature.designation,
         },
         {
           name: ["client"],
-          value: caution.Client,
+          value: caution.projet.tier_id,
         },
         {
           name: ["montant"],
-          value: caution.Montant,
+          value: caution.montant,
         },
         {
           name: ["dateD"],
-          value: moment(caution.DateD, "DD/MM/YYYY"),
+          value: moment(caution.created_at.substring(0,10), "YYYY-MM-DD"),
         },
         {
           name: ["durée"],
-          value: update
-            ? caution.Durée
-            : caution.DuréeAdditionnelle && caution.Durée
-            ? `${caution.Durée} (${caution.DuréeAdditionnelle} jours additionnels)`
-            : caution.Durée,
+          value:
+          //  update
+          //   ? caution.period_valid
+          //   : caution.DuréeAdditionnelle && caution.Durée
+          //   ? `${caution.period_valid} (${caution.DuréeAdditionnelle} jours additionnels)`
+          //   : 
+            caution.period_valid,
         },
         {
           name: ["ligne"],
-          value: caution.ligne,
+          value: caution.eps===1?"EPS":"Compte courant",
         },
-        {
-          name: ["Etat_main_levée"],
-          value: caution.Etat_main_levée,
-        },
+        // {
+        //   name: ["Etat_main_levée"],
+        //   value: caution.Etat_main_levée,
+        // },
         {
           name: ["dateE"],
           value: moment(
             moment(
-              moment(caution.DateD, "DDMMYYYY").valueOf() +
-                86400000 * caution.Durée
+              moment(caution.created_at.substring(0,10), "YYYY-MM-DD").valueOf() +
+                86400000 * caution.period_valid
             ).format("DD/MM/YYYY"),
             "DD/MM/YYYY"
           ),
         },
-        {
-          name: ["Date_réception_PV_définitif"],
-          value:
-            caution.Date_réception_PV_définitif &&
-            moment(caution.Date_réception_PV_définitif, "DD/MM/YYYY"),
-        },
-        {
-          name: ["observation"],
-          value: caution.Observation && caution.Observation,
-        },
+        // {
+        //   name: ["Date_réception_PV_définitif"],
+        //   value:
+        //     caution.Date_réception_PV_définitif &&
+        //     moment(caution.Date_réception_PV_définitif, "DD/MM/YYYY"),
+        // },
+        // {
+        //   name: ["observation"],
+        //   value: caution.Observation && caution.Observation,
+        // },
       ]);
     }
     setTimeout(() => {
@@ -411,7 +415,7 @@ const CautionDetails: React.FC<{
                   <Button className="btnModofier">Confirmer</Button>
                 </Space>
               )}
-              {visible && caution.Etat_main_levée === "En attente" && (
+              {/* {visible && caution.Etat_main_levée === "En attente" && (
                 <Space>
                   <Button
                     className="btnFermer"
@@ -467,15 +471,15 @@ const CautionDetails: React.FC<{
                       Fermer
                     </Button>
                   </Space>
-                )}
+                )} */}
             </>
           )}
         </Form.Item>
       </Form>
-      {caution?.Prolongations?.length !== 0 && (
+      {caution?.prolongation?.length !== 0 && (
         <>
           <Divider>Liste de prolongation</Divider>
-          <ListeProlongation prolongation={caution.Prolongations} />
+          {/* <ListeProlongation prolongation={caution.prolongation} /> */}
         </>
       )}
     </Drawer>

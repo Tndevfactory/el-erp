@@ -274,7 +274,6 @@ const CautionDetails: React.FC<{
                   onClick={() => {
                     setModify(true);
                   }}
-                  style={{ marginRight: "10px" }}
                 >
                   Modifier
                 </Button>

@@ -8,6 +8,8 @@ const sessions = [
     date_fin: "26/12/2022",
     participation: "A distance",
     sujet: "laravel v9 pour debutant",
+    horaire_debut:"09:00:00",
+    horaire_fin:"16:00:00",
     participants: [
       {
         id: "01",
@@ -37,6 +39,8 @@ const sessions = [
     date_fin: "26/12/2022",
     participation: "Présentielle",
     sujet: "React v18 pour debutant",
+    horaire_debut:"10:00:00",
+    horaire_fin:"15:00:00",
     participants: [
       {
         id: "01",
@@ -71,7 +75,23 @@ const sessions = [
     ],
   },
 ];
-
+export interface ISession {
+  id: string;
+  designation: string;
+  domaine: string;
+  date_debut: string;
+  date_fin: string;
+  participation: string;
+  sujet: string;
+  horaire_debut:string;
+  horaire_fin:string;
+  participants:{
+      id: string;
+      label: string;
+      email: string;
+      img: string;
+    }[]
+}
 const initialState = {
     sessions: sessions,
   };

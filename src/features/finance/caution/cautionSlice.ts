@@ -1,4 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { IProject } from "@/features/project/projectSlice";
+const api = axios.create({
+  baseURL: "http://127.0.0.1:8000/api/",
+});
 const dataSource = [
   {
     id: 0,
@@ -97,8 +102,8 @@ const dataSource = [
     Date_réception_PV_définitif: null,
     Observation:
       "Reste la validation du directeur de l'IRT + PAM (PV DE VALIDATION). Garantie 10 mois, réception déf 30 jrs après la garantie.",
-      Prolongations: [],
-    },
+    Prolongations: [],
+  },
   {
     id: 5,
     Nom_Projet: "C N°5 PAQ-DGSE 022-UT",
@@ -153,38 +158,83 @@ const dataSource = [
   },
 ];
 export interface IProlongation {
-  Référence: string;
-  Durée: number;
-  Etat: string;
+  reference: string;
+  duree: string;
+  etat?: string;
+}
+export interface ICautionNature {
+  id: number;
+  designation: string;
+  deleted_at?: any;
+  created_at?: Date;
+  updated_at?: Date;
 }
 export interface ICaution {
-  key?:string;
-  id: number;
-  Nom_Projet: string;
-  Demandeur: string;
-  type_caution: string;
-  DateD: string;
+  key?: string;
   DateE?: string;
-  Client: string;
-  Montant: number;
-  ligne: string;
-  Durée?: number;
-  DuréeAdditionnelle?: number;
-  Frais_mois: number;
-  Etat_main_levée: string;
-  Date_réception_PV_définitif?: string;
-  Observation?: string;
-  Prolongations?: IProlongation[];
+  id: number;
+  projet_id: number;
+  caution_nature_id: number;
+  designation?: string;
+  montant: number;
+  eps: number;
+  date_max_retour: string;
+  period_valid: number;
+  date_validation_chef?: string;
+  date_validation_dep?: string;
+  date_env_bnq?: string;
+  date_retour_bnq?: string;
+  date_close?: string;
+  pourcentage?: string;
+  deleted_at?: string;
+  created_at?: string;
+  updated_at?: string;
+  projet: IProject;
+  caution_nature: ICautionNature;
+  prolongation?: IProlongation[];
 }
-interface ICautions {
-  cautions: ICaution[];
-  caution: ICaution;
-}
+
+export const getCautions: any = createAsyncThunk(
+  "cautions",
+  async (espace_id, thunkAPI) => {
+    try {
+      let url = `/cautions`;
+      const resp = await api.get(url);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("something went wrong");
+    }
+  }
+);
+export const getCautionNatures: any = createAsyncThunk(
+  "cautions",
+  async (espace_id, thunkAPI) => {
+    try {
+      let url = `/cautionnatures`;
+      const resp = await api.get(url);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("something went wrong");
+    }
+  }
+);
+export const createCaution: any = createAsyncThunk(
+  "cautions",
+  async (data, thunkAPI) => {
+    try {
+      let url = `/cautions`;
+      const resp = await api.post(url, data);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("something went wrong");
+    }
+  }
+);
 
 const initialState = {
   cautions: dataSource,
-  caution:{}
-} ;
+  caution: {},
+};
 
 const cautionSlice = createSlice({
   name: "caution",

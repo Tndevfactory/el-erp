@@ -17,7 +17,6 @@ import {
 import { InboxOutlined, UserOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { addClient, IClient } from "@/features/flotte/client/flotteClientSlice";
 const { Option } = Select;
 const { Text } = Typography;
 const { RangePicker} = DatePicker;
@@ -47,7 +46,6 @@ const CreateSession: React.FC<{
   const dispatch = useDispatch();
   var { windowWidth } = useSelector((store: any) => store.ui);
   const [form] = Form.useForm();
-  const [serach, setSearch] = useState("");
 
   const onClose = () => {
     setVisible(false);
@@ -103,7 +101,7 @@ const CreateSession: React.FC<{
                 },
               ]}
             >
-              <RangePicker onChange={() => {}} style={{ width: "100%" }} />
+              <RangePicker format={"DD/MM/YYYY"} onChange={() => {}} style={{ width: "100%" }} />
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
@@ -117,7 +115,7 @@ const CreateSession: React.FC<{
                 },
               ]}
             >
-              <TimePicker.RangePicker onChange={() => {}} style={{ width: "100%" }} showSecond={false} />
+              <TimePicker.RangePicker onChange={(e,dateString) => {console.log(dateString)}} style={{ width: "100%" }} format={'HH:mm'} showSecond={false} />
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>

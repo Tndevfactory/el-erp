@@ -140,7 +140,6 @@ const ClientDetails: React.FC<{
   setModify: React.Dispatch<React.SetStateAction<boolean>>;
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ visible, setVisible, client, modify, setModify, forceRefresh }) => {
-  var { caution } = useSelector((store: any) => store.caution);
   var { windowWidth } = useSelector((store: any) => store.ui);
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
@@ -173,7 +172,6 @@ const ClientDetails: React.FC<{
               onClick={() => {
                 setModify(true);
               }}
-              style={{ marginRight: "10px" }}
             >
               Modifier
             </Button>

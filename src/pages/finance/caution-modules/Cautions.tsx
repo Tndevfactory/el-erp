@@ -43,6 +43,7 @@ import {
   CautionApprove,
   ICaution,
   closeCaution,
+  getCautions,
 } from "@/features/finance/caution/cautionSlice";
 import ListeProlongation from "./ListeProlongation";
 import type { ColumnsType } from "antd/es/table";
@@ -54,15 +55,7 @@ const { RangePicker } = DatePicker;
 const dateFormat = "DD/MM/YYYY";
 const Cautions: React.FC = ()=>{
   const dispatch = useDispatch();
-  var { cautions } = useSelector((store: any) => store.caution);
-  cautions = cautions.map((item, index) =>
-    Object.assign({}, item, {
-      DateE: moment(
-        moment(item.DateD, dateFormat).valueOf() + 86400000 * item.Durée
-      ).format("DD/MM/YYYY"),
-      key: index.toString(),
-    })
-  );
+
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
   const [update, setUpdate] = useState(false);
   const [prolongation, setProlongation] = useState(false);
@@ -71,7 +64,7 @@ const Cautions: React.FC = ()=>{
   type PickerType = "date" | "week" | "month" | "quarter" | "year";
   const [typeDate, setTypeDate] = useState<PickerType>("week");
   const [date, setDate] = useState<string[]>(null);
-  const [caution, setCaution] = useState({});
+  const [caution, setCaution] = useState<ICaution>();
   const [refresh, forceRefresh] = useState(0);
 
   const menu = (caution) => (
@@ -173,83 +166,83 @@ const Cautions: React.FC = ()=>{
   const columns: ProColumns<ICaution>[] = [
     {
       title: "Nom du Projet ",
-      dataIndex: "Nom_Projet",
       key: "Nom_Projet",
+      render: (x,caution) => <>{caution.projet.designation}</>
     },
     {
       title: "Demandeur",
       dataIndex: "Demandeur",
       key: "Demandeur",
-      responsive: ["xxl"],
+      // responsive: ["xxl"],
     },
     {
-      title: "type de caution ",
-      dataIndex: "type_caution",
+      title: "type de caution",
       key: 2,
       search: false,
-      render: (type_caution) => (
+      render: (x,caution) => (
         <Tag
           color={
-            type_caution === "Provisoire-CSP"
+            caution.id === 1
               ? "blue"
-              : type_caution === "Retenue de Garantie"
+              : caution.id === 2
               ? "gold"
-              : type_caution === "Définitive-CSP"
+              : caution.id === 3
               ? "green"
               : "red"
           }
         >
-          {type_caution}
+          {caution.caution_nature.designation}
         </Tag>
       ),
       filters: [
         {
           text: "Provisoire-CSP",
-          value: "Provisoire-CSP",
+          value: 1,
         },
         {
           text: "Retenue de Garantie",
-          value: "Retenue de Garantie",
+          value: 2,
         },
         {
           text: "Définitive-CSP",
-          value: "Définitive-CSP",
+          value: 3,
         },
         {
           text: "Avance",
-          value: "Avance",
+          value: 4,
         },
       ],
-      onFilter: (value, record) => record.type_caution === value,
+      onFilter: (value, record) => record.caution_nature_id
+       === value,
     },
     {
       title: "Date de début ",
       key: 3,
-      dataIndex: "DateD",
-      responsive: ["xxl"],
+      render:(_,caution)=><>{moment(new Date(caution.created_at)).format(dateFormat)}</>,
+      // responsive: ["xxl"],
       search: false,
       sorter: (a, b) =>
-        moment(a.DateD, dateFormat).valueOf() -
-        moment(b.DateD, dateFormat).valueOf(),
+        moment(a.created_at, "YYYY-MM-DD HH:mm:ss" ).valueOf() -
+        moment(b.created_at, "YYYY-MM-DD HH:mm:ss").valueOf(),
     },
-    {
-      title: "Client",
-      key: "Client",
-      dataIndex: "Client",
-      width: "15%",
-      responsive: ["sm"],
-    },
+    // {
+    //   title: "Client",
+    //   key: "Client",
+    //   dataIndex: "Client",
+    //   width: "15%",
+    //   responsive: ["sm"],
+    // },
     {
       title: "Montant",
       key: 5,
       search: false,
       dataIndex: "Montant",
       render: (_, caution) => (
-        <Statistic value={caution.Montant} precision={3} style={{}} />
+        <Statistic value={caution.montant} precision={3} style={{}} />
       ),
       responsive: ["xl"],
       // width:"7%",
-      sorter: (a, b) => a.Montant - b.Montant,
+      sorter: (a, b) => a.montant - b.montant,
     },
     {
       title: "Durée",
@@ -257,8 +250,8 @@ const Cautions: React.FC = ()=>{
       search: false,
       render: (_, caution) => (
         <Space size="small">
-          {caution.Durée}
-          {caution?.Prolongations?.length !== 0 && (
+          {caution.period_valid}
+          {caution?.prolongation?.length !== 0 && (
             <Tooltip title="Voir liste prolongations">
               <MdMoreTime
                 style={{ cursor: "pointer" }}
@@ -283,29 +276,30 @@ const Cautions: React.FC = ()=>{
       key: 7,
       dataIndex: "ligne",
       search: false,
-      responsive: ["xxl"],
+      // responsive: ["xxl"],
       render: (_, caution) => (
-        <Tag color={caution.ligne === "EPS" ? "geekblue" : "volcano"}>
-          {caution.ligne}
+        <Tag color={caution.eps === 1 ? "geekblue" : "volcano"}>
+          {caution.eps === 1? "EPS" : "Compte courant"}
         </Tag>
       ),
       filters: [
         {
           text: "EPS",
-          value: "EPS",
+          value: 1,
         },
         {
           text: "Compte courant",
-          value: "Compte courant",
+          value: 0,
         },
       ],
-      onFilter: (value, record) => record.ligne === value,
+      onFilter: (value, record) => record.eps === value,
     },
     {
       title: "Date d'échéance ",
       key: 8,
-      dataIndex: "DateE",
+      // dataIndex: "DateE",
       responsive: ["md"],
+      render: (x,caution) => <>{caution.DateE}</>,
       sorter: (a, b) => {
         return (
           moment(a.DateE, dateFormat).valueOf() -
@@ -356,43 +350,43 @@ const Cautions: React.FC = ()=>{
         );
       },
     },
-    {
-      title: "Etat",
-      key: 9,
-      dataIndex: "Etat_main_levée",
-      // width:"7%",
-      search: false,
-      render: (_, caution) => (
-        <Tag
-          color={
-            caution.Etat_main_levée === "Fermée"
-              ? "blue"
-              : caution.Etat_main_levée === "En attente"
-              ? "gold"
-              : caution.Etat_main_levée === "En cours"
-              ? "green"
-              : "red"
-          }
-        >
-          {caution.Etat_main_levée}
-        </Tag>
-      ),
-      filters: [
-        {
-          text: "Fermée",
-          value: "Fermée",
-        },
-        {
-          text: "En cours",
-          value: "En cours",
-        },
-        {
-          text: "En attente",
-          value: "En attente",
-        },
-      ],
-      onFilter: (value, record) => record.Etat_main_levée === value,
-    },
+    // {
+    //   title: "Etat",
+    //   key: 9,
+    //   dataIndex: "Etat_main_levée",
+    //   // width:"7%",
+    //   search: false,
+    //   render: (_, caution) => (
+    //     <Tag
+    //       color={
+    //         caution.Etat_main_levée === "Fermée"
+    //           ? "blue"
+    //           : caution.Etat_main_levée === "En attente"
+    //           ? "gold"
+    //           : caution.Etat_main_levée === "En cours"
+    //           ? "green"
+    //           : "red"
+    //       }
+    //     >
+    //       {caution.Etat_main_levée}
+    //     </Tag>
+    //   ),
+    //   filters: [
+    //     {
+    //       text: "Fermée",
+    //       value: "Fermée",
+    //     },
+    //     {
+    //       text: "En cours",
+    //       value: "En cours",
+    //     },
+    //     {
+    //       text: "En attente",
+    //       value: "En attente",
+    //     },
+    //   ],
+    //   onFilter: (value, record) => record.Etat_main_levée === value,
+    // },
     {
       title: "Action",
       valueType: "option",
@@ -401,7 +395,7 @@ const Cautions: React.FC = ()=>{
         <Space size="small">
           <a
             onClick={() => {
-              dispatch(getOneCaution({ id: caution.id }));
+              setCaution(caution)
               setVisibleDetails(true);
             }}
           >
@@ -416,8 +410,7 @@ const Cautions: React.FC = ()=>{
       ),
     },
   ];
-  const [openSelectMenu, setOpenSelectMenu] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<ICaution[]>();
   const handleCloseCaution = (id) => {
     dispatch(closeCaution({ id: id }));
     forceRefresh(Math.random());
@@ -430,15 +423,33 @@ const Cautions: React.FC = ()=>{
   const detailsObj = {
     visible: visibleDetails,
     setVisible: setVisibleDetails,
-    // caution: caution,
+    caution: caution,
     forceRefresh: forceRefresh,
     update: update,
     setUpdate: setUpdate,
     prolongation: prolongation,
     setProlongation: setProlongation,
   };
+
+  const handleGetCautions=(): Promise < ICaution[] > => 
+    dispatch(getCautions())
+    .unwrap()
+    .then((originalPromiseResult) => {
+      return originalPromiseResult.data.map((item, index) =>
+      Object.assign({}, item, {
+        DateE: moment(
+          moment(item.created_at,"YYYY-MM-DD HH:mm:ss").valueOf() + 86400000 * item.period_valid
+        ).format("DD/MM/YYYY"),
+        key: index.toString(),
+      })
+    );
+    })
+    .catch((rejectedValueOrSerializedError) => {
+      console.log(rejectedValueOrSerializedError);
+      return []
+    });
+  
   useEffect(() => {
-    setData(cautions);
   }, [refresh]);
 
   return (
@@ -455,15 +466,15 @@ const Cautions: React.FC = ()=>{
           >
             <ProTable<ICaution>
               headerTitle="Liste de cautions"
-              rowClassName={(record, index) =>
-                record.Etat_main_levée === "En attente"
-                  ? "table-row-en-attente"
-                  : record.Etat_main_levée === "En cours" &&
-                    moment(record.DateE, dateFormat).diff(moment(), "days") <=
-                      10
-                  ? "table-row-warning"
-                  : "nothing"
-              }
+              // rowClassName={(record, index) =>
+              //   record.Etat_main_levée === "En attente"
+              //     ? "table-row-en-attente"
+              //     : record.Etat_main_levée === "En cours" &&
+              //       moment(record.DateE, dateFormat).diff(moment(), "days") <=
+              //         10
+              //     ? "table-row-warning"
+              //     : "nothing"
+              // }
               search={{
                 labelWidth: "auto",
               }}
@@ -477,37 +488,35 @@ const Cautions: React.FC = ()=>{
               }}
               columns={columns}
               onReset={() => {
-                setDate(null);
+                setData(null);
               }}
               request={async (params) => {
                 console.log(`request params:`, params);
-                console.log(date);
-                var dataFilter = cautions;
+                var dataFilter =await handleGetCautions( ); 
                 if (params.Nom_Projet)
                   dataFilter = dataFilter.filter((item) =>
-                    item.Nom_Projet.toString()
+                    item.projet.designation.toString()
                       .toUpperCase()
                       .search(params.Nom_Projet.toString().toUpperCase()) === -1
                       ? false
                       : true
                   );
-                if (params.Demandeur)
-                  dataFilter = dataFilter.filter((item) =>
-                    item.Demandeur.toString()
-                      .toUpperCase()
-                      .search(params.Demandeur.toString().toUpperCase()) === -1
-                      ? false
-                      : true
-                  );
-                if (params.Client)
-                  dataFilter = dataFilter.filter((item) =>
-                    item.Client.toString()
-                      .toUpperCase()
-                      .search(params.Client.toString().toUpperCase()) === -1
-                      ? false
-                      : true
-                  );
-                 
+                // if (params.Demandeur)
+                //   dataFilter = dataFilter.filter((item) =>
+                //     item.Demandeur.toString()
+                //       .toUpperCase()
+                //       .search(params.Demandeur.toString().toUpperCase()) === -1
+                //       ? false
+                //       : true
+                //   );
+                // if (params.Client)
+                //   dataFilter = dataFilter.filter((item) =>
+                //     item.Client.toString()
+                //       .toUpperCase()
+                //       .search(params.Client.toString().toUpperCase()) === -1
+                //       ? false
+                //       : true
+                //   );
                 if (date !== null)
                     typeDate==="month"?
                     dataFilter = dataFilter.filter(
@@ -534,11 +543,11 @@ const Cautions: React.FC = ()=>{
                 expandedRowRender: (record) => (
                   <div className="flex justify-center">
                     <div style={{ width: "60%", margin: "15px" }}>
-                      <ListeProlongation prolongation={record.Prolongations} />
+                      <ListeProlongation prolongation={record.prolongation} />
                     </div>
                   </div>
                 ),
-                rowExpandable: (record) => record?.Prolongations?.length !== 0,
+                rowExpandable: (record) => record?.prolongation?.length !== 0,
                 showExpandColumn: false,
                 expandedRowKeys: expandedRowKeys,
               }}

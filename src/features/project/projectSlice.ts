@@ -1,4 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+const api = axios.create({
+  baseURL: "http://127.0.0.1:8000/api/",
+});
 const data = {
   cards: [
     {
@@ -85,11 +89,34 @@ interface IColumn {
   cards: ITask[];
 }
 
-interface IProject {
-  project: {
-    columns: IColumn[];
-  };
+export interface IProject {
+  id: number;
+  tier_id: number;
+  departement_id: number;
+  designation: string;
+  reference: string;
+  projet_id?: any;
+  date_ordre_service?: string;
+  duree_exec?: number;
+  lien_partage?: string;
+  signature_contrat?: string;
+  deleted_at?: any;
+  created_at?: Date;
+  updated_at?: Date;
 }
+
+export const getProjects: any = createAsyncThunk(
+  "project",
+  async (espace_id, thunkAPI) => {
+    try {
+      let url = `/projets`;
+      const resp = await api.get(url);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("something went wrong");
+    }
+  }
+);
 
 const initialState = {
     tasks:data.cards
