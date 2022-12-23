@@ -230,6 +230,31 @@ export const createCaution: any = createAsyncThunk(
     }
   }
 );
+export const updateCaution: any = createAsyncThunk(
+  "cautions",
+  async (data:{id: number; projet_id: number; caution_nature_id:number; montant:number; eps:number; period_valid:number}, thunkAPI) => {
+    try {
+      let url = `/cautions/${data.id}`;
+      const resp = await api.put(url, data);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("something went wrong");
+    }
+  }
+);
+
+export const deleteCaution: any = createAsyncThunk(
+  "cautions",
+  async (id, thunkAPI) => {
+    try {
+      let url = `/cautions/${id}`;
+      const resp = await api.delete(url);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("something went wrong");
+    }
+  }
+);
 
 const initialState = {
   cautions: dataSource,
@@ -240,71 +265,10 @@ const cautionSlice = createSlice({
   name: "caution",
   initialState,
   reducers: {
-    getOneCaution: (state, action) => {
-      state.caution = state.cautions.filter(
-        (caution) => caution.id === action.payload.id
-      )[0];
-    },
-    deleteCaution: (state, action) => {
-      state.cautions = state.cautions.filter(
-        (caution) => caution.id !== action.payload.id
-      );
-      console.log(state.cautions);
-    },
-    addCaution: (state, action) => {
-      state.cautions.unshift(action.payload);
-    },
-    updateCaution: (state, action) => {
-      state.cautions.map((caution) => {
-        if (caution.id === action.payload.id) {
-          caution.Nom_Projet = action.payload.caution.Nom_Projet;
-          caution.Demandeur = action.payload.caution.Demandeur;
-          caution.type_caution = action.payload.caution.type_caution;
-          caution.Client = action.payload.caution.Client;
-          caution.Montant = action.payload.caution.Montant;
-          caution.DateD = action.payload.caution.DateD;
-          caution.Durée = action.payload.caution.Durée;
-          caution.ligne = action.payload.caution.ligne;
-          caution.Observation = action.payload.caution.Observation;
-          caution.Etat_main_levée = action.payload.caution.Etat_main_levée;
-          caution.Date_réception_PV_définitif =
-            action.payload.caution.Date_réception_PV_définitif;
-        }
-      });
-    },
-    CautionApprove: (state, action) => {
-      state.cautions.map((caution) => {
-        if (caution.id === action.payload.id) {
-          caution.Etat_main_levée = "En cours";
-        }
-      });
-    },
-    closeCaution: (state, action) => {
-      state.cautions.map((caution) => {
-        if (caution.id === action.payload.id) {
-          caution.Etat_main_levée = "Fermée";
-        }
-      });
-    },
-    addDuration: (state, action) => {
-      state.cautions.map((caution) => {
-        if (caution.id === action.payload.id) {
-          caution.DuréeAdditionnelle += action.payload.DuréeAdditionnelle;
-          caution.Durée += action.payload.DuréeAdditionnelle;
-        }
-      });
-    },
   },
 });
 
 export const {
-  getOneCaution,
-  closeCaution,
-  deleteCaution,
-  addCaution,
-  updateCaution,
-  addDuration,
-  CautionApprove,
 } = cautionSlice.actions;
 
 export default cautionSlice.reducer;

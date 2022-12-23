@@ -84,7 +84,8 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
               <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
                 {/* <Route path={`home`} element={<Home />} /> */}
               </Route>
-              <Route path={`home/*`} element={<Home />}>
+              <Route path={`home/*`} element={<Index />}>
+                <Route path={`*`} element={<Cautions />} />
               </Route>
               <Route path={`finance/*`} element={<Index />}>
                   <Route path={`*`} element={<Cautions />} />

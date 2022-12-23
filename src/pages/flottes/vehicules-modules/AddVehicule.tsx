@@ -18,7 +18,6 @@ import {
 import { InboxOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { addCaution } from "../../../features/finance/caution/cautionSlice";
 import FormItem from "antd/lib/form/FormItem";
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -148,22 +147,7 @@ const AddVehicule: React.FC<{
       .localeCompare((optionB?.label ?? "").toLowerCase());
 
   const handleSubmit = (values) => {
-    dispatch(
-      addCaution({
-        id: Math.random(),
-        Nom_Projet: values.name,
-        Demandeur: values.Demandeur,
-        type_caution: values.type,
-        DateD: moment(values.dateTime._d).format("DD/MM/YYYY"),
-        Client: values.client,
-        Montant: values.montant,
-        ligne: values.ligne,
-        Frais_mois: 20,
-        Durée: values.Durée,
-        Etat_main_levée: "En attente",
-        Observation: values.Observation,
-      })
-    );
+
     forceRefresh(Math.random());
     setVisible(false);
     console.log(values);

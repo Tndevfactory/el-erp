@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   AppstoreOutlined,
   BarChartOutlined,
@@ -46,16 +46,33 @@ import HSiderMobile from "./HSiderMobile";
 const profilMenu = (
   <Menu
     items={[
+      // {
+      //   key: "1",
+      //   icon:<UserOutlined/>,
+      //   label: <Link to="#"> Chawki Barhoumi</Link>,
+      // },
+      // {
+      //   key: "2",
+      //   icon:<ExportOutlined/>,
+      //   label: <Link to="#">Déconnexion</Link>,
+      //   onClick: () => alert("test logout"),
+      // },
       {
         key: "1",
         icon:<UserOutlined/>,
-        label: <Link to="#"> Chawki Barhoumi</Link>,
+        label: <Link to="#"> Commerciale</Link>,
+        onClick: () => localStorage.setItem("role", "commerciale"),
       },
       {
         key: "2",
-        icon:<ExportOutlined/>,
-        label: <Link to="#">Déconnexion</Link>,
-        onClick: () => alert("test logout"),
+        icon:<UserOutlined/>,
+        label: <Link to="#">Chef</Link>,
+        onClick: () => localStorage.setItem("role", "chef"),
+      },      {
+        key: "3",
+        icon:<UserOutlined/>,
+        label: <Link to="#"> DAF</Link>,
+        onClick: () => localStorage.setItem("role", "daf"),
       },
     ]}
   />
@@ -112,12 +129,6 @@ export default function Navbar() {
 
   React.useEffect(() => {
     const handleWindowResize = () => {
-      // if (
-      //   (windowWidth <= 620 && window.innerWidth > 620) ||
-      //   (windowWidth > 620 && window.innerWidth <= 620)
-      // ) {
-      //   dispatch(changeWidth({ width: window.innerWidth }));
-      // }
       dispatch(changeWidth({ width: window.innerWidth }));
     };
     window.addEventListener("resize", handleWindowResize);
@@ -134,6 +145,28 @@ export default function Navbar() {
     localStorage.setItem("module", info.key);
     window.dispatchEvent(new Event("storage"));
   };
+
+  const ws = useRef(null);
+
+  // useEffect(() => {
+  //     ws.current = new WebSocket("wss://socketsbay.com/wss/v2/1/demo/12");
+  //     ws.current.onopen = () => console.log("ws opened");
+  //     ws.current.onclose = () => console.log("ws closed");
+
+  //     const wsCurrent = ws.current;
+
+  //     return () => {
+  //         wsCurrent.close();
+  //     };
+  // }, []);
+
+  // useEffect(() => {
+  //     if (!ws.current) return;
+
+  //     ws.current.onmessage = e => {
+  //         console.log(e.data);
+  //     };
+  // }, []);
 
   return (
     <Affix offsetTop={0}>

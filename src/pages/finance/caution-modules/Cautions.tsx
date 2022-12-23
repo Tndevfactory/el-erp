@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../../style/modules/Caution.less";
 import {
   Button,
@@ -17,6 +17,8 @@ import {
   Select,
   DatePicker,
   Input,
+  Tabs,
+  Badge,
 } from "antd";
 import {
   ProTable,
@@ -39,11 +41,9 @@ import CautionForm from "./CautionForm";
 import CautionDetails from "./CautionDetails";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getOneCaution,
-  CautionApprove,
   ICaution,
-  closeCaution,
   getCautions,
+  deleteCaution,
 } from "@/features/finance/caution/cautionSlice";
 import ListeProlongation from "./ListeProlongation";
 import type { ColumnsType } from "antd/es/table";
@@ -53,9 +53,10 @@ const { Paragraph, Title } = Typography;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const dateFormat = "DD/MM/YYYY";
+
 const Cautions: React.FC = ()=>{
   const dispatch = useDispatch();
-
+  const tableRef = useRef<any>( ) ; 
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
   const [update, setUpdate] = useState(false);
   const [prolongation, setProlongation] = useState(false);
@@ -73,49 +74,43 @@ const Cautions: React.FC = ()=>{
         {
           key: "0",
           label: (
-            <a
-              onClick={() => {
-                dispatch(getOneCaution({ id: caution.id }));
-                setVisibleDetails(true);
-                setUpdate(true);
-              }}
-            >
+            <a>
               Modifier
             </a>
           ),
           icon: <EditOutlined />,
           disabled: caution.Etat_main_levée !== "En attente",
+          onClick:() => {
+            setVisibleDetails(true);
+            setUpdate(true);
+          }
         },
         {
           key: "1",
           label: (
-            <a
-              onClick={() => {
-                dispatch(CautionApprove({ id: caution.id }));
-                forceRefresh(Math.random());
-              }}
-            >
+            <a>
               Approuver
             </a>
           ),
           icon: <CheckOutlined />,
           disabled: caution.Etat_main_levée !== "En attente",
+          onClick:() => {
+            tableRef.current.reload( ) ;
+          }
         },
         {
           key: "2",
           label: (
-            <a
-              onClick={() => {
-                dispatch(getOneCaution({ id: caution.id }));
-                setVisibleDetails(true);
-                setProlongation(true);
-              }}
-            >
+            <a>
               Prolonger
             </a>
           ),
           icon: <MdMoreTime />,
           disabled: caution.Etat_main_levée !== "En cours",
+          onClick:() => {
+            setVisibleDetails(true);
+            setProlongation(true);
+          }
         },
         {
           key: "3",
@@ -147,14 +142,16 @@ const Cautions: React.FC = ()=>{
           danger: caution.Etat_main_levée === "En attente",
           label: "Supprimer",
           icon: <DeleteOutlined />,
-          disabled: caution.Etat_main_levée !== "En attente",
+          // disabled: caution.Etat_main_levée !== "En attente",
+          onClick:()=>{handleDeleteCaution(caution.id)}
         },
         {
           key: "5",
           danger: caution.Etat_main_levée === "En cours",
-          label: <a onClick={() => handleCloseCaution(caution.id)}>Fermer</a>,
+          label: <a>Fermer</a>,
           icon: <InboxOutlined />,
           disabled: caution.Etat_main_levée !== "En cours",
+          onClick:() => handleCloseCaution(caution.id)
         },
       ]}
     />
@@ -165,16 +162,21 @@ const Cautions: React.FC = ()=>{
     .format(dateFormat)}`;
   const columns: ProColumns<ICaution>[] = [
     {
+      title: "Entreprise ",
+      key: "entreprise",
+      dataIndex:"entreprise"
+    },
+    {
       title: "Nom du Projet ",
       key: "Nom_Projet",
       render: (x,caution) => <>{caution.projet.designation}</>
     },
-    {
-      title: "Demandeur",
-      dataIndex: "Demandeur",
-      key: "Demandeur",
-      // responsive: ["xxl"],
-    },
+    // {
+    //   title: "Demandeur",
+    //   dataIndex: "Demandeur",
+    //   key: "Demandeur",
+    //   // responsive: ["xxl"],
+    // },
     {
       title: "type de caution",
       key: 2,
@@ -182,11 +184,11 @@ const Cautions: React.FC = ()=>{
       render: (x,caution) => (
         <Tag
           color={
-            caution.id === 1
+            caution.caution_nature_id === 1
               ? "blue"
-              : caution.id === 2
+              : caution.caution_nature_id === 2
               ? "gold"
-              : caution.id === 3
+              : caution.caution_nature_id === 3
               ? "green"
               : "red"
           }
@@ -225,13 +227,13 @@ const Cautions: React.FC = ()=>{
         moment(a.created_at, "YYYY-MM-DD HH:mm:ss" ).valueOf() -
         moment(b.created_at, "YYYY-MM-DD HH:mm:ss").valueOf(),
     },
-    // {
-    //   title: "Client",
-    //   key: "Client",
-    //   dataIndex: "Client",
-    //   width: "15%",
-    //   responsive: ["sm"],
-    // },
+    {
+      title: "Client",
+      key: "Client",
+      dataIndex: "Client",
+      // width: "15%",
+      responsive: ["sm"],
+    },
     {
       title: "Montant",
       key: 5,
@@ -308,8 +310,8 @@ const Cautions: React.FC = ()=>{
       },
       renderFormItem: (item, { type, defaultRender, ...rest }, form) => {
         return (
-          <Space direction="horizontal">
-            <Select value={typeDate} onChange={setTypeDate}>
+          <div>
+            <Select value={typeDate} onChange={setTypeDate} style={{width:"37%", marginRight:"3%"}}>
               <Option value="date">Intervalle</Option>
               <Option value="week">Semaine</Option>
               <Option value="month">Mois</Option>
@@ -318,7 +320,7 @@ const Cautions: React.FC = ()=>{
             </Select>
             {typeDate === "date" ? (
               <RangePicker
-                style={{minWidth:"145px"}}
+                style={{width:"60%"}}
                 onChange={(e, dateString) => {
                   console.log(dateString);
                   setDate(dateString);
@@ -327,7 +329,7 @@ const Cautions: React.FC = ()=>{
               />
             ) : typeDate === "week" ? (
               <DatePicker
-                style={{minWidth:"145px"}}
+              style={{width:"60%"}}
                 picker={typeDate}
                 format={customWeekStartEndFormat}
                 onChange={(e, dateString) => {
@@ -337,6 +339,7 @@ const Cautions: React.FC = ()=>{
               />
             ) : (
               <DatePicker
+                style={{width:"60%"}}
                 picker={typeDate}
                 format={"MM/YYYY"}
                 onChange={(e, dateString) => {
@@ -346,47 +349,47 @@ const Cautions: React.FC = ()=>{
                 }}
               />
             )}
-          </Space>
+          </div>
         );
       },
     },
-    // {
-    //   title: "Etat",
-    //   key: 9,
-    //   dataIndex: "Etat_main_levée",
-    //   // width:"7%",
-    //   search: false,
-    //   render: (_, caution) => (
-    //     <Tag
-    //       color={
-    //         caution.Etat_main_levée === "Fermée"
-    //           ? "blue"
-    //           : caution.Etat_main_levée === "En attente"
-    //           ? "gold"
-    //           : caution.Etat_main_levée === "En cours"
-    //           ? "green"
-    //           : "red"
-    //       }
-    //     >
-    //       {caution.Etat_main_levée}
-    //     </Tag>
-    //   ),
-    //   filters: [
-    //     {
-    //       text: "Fermée",
-    //       value: "Fermée",
-    //     },
-    //     {
-    //       text: "En cours",
-    //       value: "En cours",
-    //     },
-    //     {
-    //       text: "En attente",
-    //       value: "En attente",
-    //     },
-    //   ],
-    //   onFilter: (value, record) => record.Etat_main_levée === value,
-    // },
+    {
+      title: "Etat",
+      key: 9,
+      dataIndex: "Etat_main_levée",
+      // width:"7%",
+      search: false,
+      // render: (_, caution) => (
+      //   <Tag
+      //     color={
+      //       caution.Etat_main_levée === "Fermée"
+      //         ? "blue"
+      //         : caution.Etat_main_levée === "En attente"
+      //         ? "gold"
+      //         : caution.Etat_main_levée === "En cours"
+      //         ? "green"
+      //         : "red"
+      //     }
+      //   >
+      //     {caution.Etat_main_levée}
+      //   </Tag>
+      // ),
+      // filters: [
+      //   {
+      //     text: "Fermée",
+      //     value: "Fermée",
+      //   },
+      //   {
+      //     text: "En cours",
+      //     value: "En cours",
+      //   },
+      //   {
+      //     text: "En attente",
+      //     value: "En attente",
+      //   },
+      // ],
+      // onFilter: (value, record) => record.Etat_main_levée === value,
+    },
     {
       title: "Action",
       valueType: "option",
@@ -412,23 +415,23 @@ const Cautions: React.FC = ()=>{
   ];
   const [data, setData] = useState<ICaution[]>();
   const handleCloseCaution = (id) => {
-    dispatch(closeCaution({ id: id }));
-    forceRefresh(Math.random());
+    // forceRefresh(Math.random());
   };
   const obj = {
     visible: visibleForm,
     setVisible: setVisibleForm,
-    forceRefresh: forceRefresh,
+    tableRef: tableRef,
   };
   const detailsObj = {
     visible: visibleDetails,
     setVisible: setVisibleDetails,
     caution: caution,
-    forceRefresh: forceRefresh,
+    // forceRefresh: forceRefresh,
     update: update,
     setUpdate: setUpdate,
     prolongation: prolongation,
     setProlongation: setProlongation,
+    tableRef: tableRef,
   };
 
   const handleGetCautions=(): Promise < ICaution[] > => 
@@ -448,8 +451,123 @@ const Cautions: React.FC = ()=>{
       console.log(rejectedValueOrSerializedError);
       return []
     });
+
+    const handleDeleteCaution=(id)=>{
+      dispatch(deleteCaution(id))
+      .unwrap()
+      .then((originalPromiseResult) => {
+        tableRef.current.reload( ) ;
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        console.log(rejectedValueOrSerializedError);
+      });
+    }
+
+    const Table =()=>(
+      <ProTable<ICaution>
+      actionRef = { tableRef }
+      headerTitle="Liste de cautions"
+      // rowClassName={(record, index) =>
+      //   record.Etat_main_levée === "En attente"
+      //     ? "table-row-en-attente"
+      //     : record.Etat_main_levée === "En cours" &&
+      //       moment(record.DateE, dateFormat).diff(moment(), "days") <=
+      //         10
+      //     ? "table-row-warning"
+      //     : "nothing"
+      // }
+      search={{
+        labelWidth: "auto",
+      }}
+      
+      cardBordered
+      columnsState={{
+        persistenceKey: "pro-table-singe-demos",
+        persistenceType: "localStorage",
+        // onChange(value) {
+        //   console.log("value: ", value);
+        // },
+      }}
+      columns={columns}
+      onReset={() => {
+        setDate(null);
+      }}
+      request={async (params) => {
+        console.log(`request params:`, params);
+        var dataFilter =await handleGetCautions( ); 
+        if (params.Nom_Projet)
+          dataFilter = dataFilter.filter((item) =>
+            item.projet.designation.toString()
+              .toUpperCase()
+              .search(params.Nom_Projet.toString().toUpperCase()) === -1
+              ? false
+              : true
+          );
+        // if (params.Demandeur)
+        //   dataFilter = dataFilter.filter((item) =>
+        //     item.Demandeur.toString()
+        //       .toUpperCase()
+        //       .search(params.Demandeur.toString().toUpperCase()) === -1
+        //       ? false
+        //       : true
+        //   );
+        // if (params.Client)
+        //   dataFilter = dataFilter.filter((item) =>
+        //     item.Client.toString()
+        //       .toUpperCase()
+        //       .search(params.Client.toString().toUpperCase()) === -1
+        //       ? false
+        //       : true
+        //   );
+        if (date !== null)
+            typeDate==="month"?
+            dataFilter = dataFilter.filter(
+              (item) =>
+              item.DateE.search(date[0])!==-1
+            )
+            :dataFilter = dataFilter.filter(
+            (item) =>
+              moment(item.DateE, dateFormat).valueOf() <=
+                moment(date[1], dateFormat).valueOf() &&
+              moment(item.DateE, dateFormat).valueOf() >=
+                moment(date[0], dateFormat).valueOf()
+          );
+        return {
+          data: dataFilter,
+          success: true,
+        };
+      }}
+      pagination={{
+        size: "small",
+        pageSize: 7,
+      }}
+      expandable={{
+        expandedRowRender: (record) => (
+          <div className="flex justify-center">
+            <div style={{ width: "60%", margin: "15px" }}>
+              <ListeProlongation prolongation={record.prolongation} />
+            </div>
+          </div>
+        ),
+        rowExpandable: (record) => record?.prolongation?.length !== 0,
+        showExpandColumn: false,
+        expandedRowKeys: expandedRowKeys,
+      }}
+      toolBarRender={() => [
+        <Button
+          type="primary"
+          onClick={() => {
+            setVisibleForm(true);
+          }}
+        >
+          Demander une caution
+        </Button>,
+      ]} 
+    />
+    )
   
   useEffect(() => {
+    console.log('refresh')
   }, [refresh]);
 
   return (
@@ -464,103 +582,31 @@ const Cautions: React.FC = ()=>{
             title={<Title level={4}>Gestion des cautions</Title>}
             bordered={false}
           >
-            <ProTable<ICaution>
-              headerTitle="Liste de cautions"
-              // rowClassName={(record, index) =>
-              //   record.Etat_main_levée === "En attente"
-              //     ? "table-row-en-attente"
-              //     : record.Etat_main_levée === "En cours" &&
-              //       moment(record.DateE, dateFormat).diff(moment(), "days") <=
-              //         10
-              //     ? "table-row-warning"
-              //     : "nothing"
-              // }
-              search={{
-                labelWidth: "auto",
-              }}
-              cardBordered
-              columnsState={{
-                persistenceKey: "pro-table-singe-demos",
-                persistenceType: "localStorage",
-                // onChange(value) {
-                //   console.log("value: ", value);
-                // },
-              }}
-              columns={columns}
-              onReset={() => {
-                setData(null);
-              }}
-              request={async (params) => {
-                console.log(`request params:`, params);
-                var dataFilter =await handleGetCautions( ); 
-                if (params.Nom_Projet)
-                  dataFilter = dataFilter.filter((item) =>
-                    item.projet.designation.toString()
-                      .toUpperCase()
-                      .search(params.Nom_Projet.toString().toUpperCase()) === -1
-                      ? false
-                      : true
-                  );
-                // if (params.Demandeur)
-                //   dataFilter = dataFilter.filter((item) =>
-                //     item.Demandeur.toString()
-                //       .toUpperCase()
-                //       .search(params.Demandeur.toString().toUpperCase()) === -1
-                //       ? false
-                //       : true
-                //   );
-                // if (params.Client)
-                //   dataFilter = dataFilter.filter((item) =>
-                //     item.Client.toString()
-                //       .toUpperCase()
-                //       .search(params.Client.toString().toUpperCase()) === -1
-                //       ? false
-                //       : true
-                //   );
-                if (date !== null)
-                    typeDate==="month"?
-                    dataFilter = dataFilter.filter(
-                      (item) =>
-                      item.DateE.search(date[0])!==-1
-                    )
-                    :dataFilter = dataFilter.filter(
-                    (item) =>
-                      moment(item.DateE, dateFormat).valueOf() <=
-                        moment(date[1], dateFormat).valueOf() &&
-                      moment(item.DateE, dateFormat).valueOf() >=
-                        moment(date[0], dateFormat).valueOf()
-                  );
-                return {
-                  data: dataFilter,
-                  success: true,
-                };
-              }}
-              pagination={{
-                size: "small",
-                pageSize: 7,
-              }}
-              expandable={{
-                expandedRowRender: (record) => (
-                  <div className="flex justify-center">
-                    <div style={{ width: "60%", margin: "15px" }}>
-                      <ListeProlongation prolongation={record.prolongation} />
-                    </div>
-                  </div>
-                ),
-                rowExpandable: (record) => record?.prolongation?.length !== 0,
-                showExpandColumn: false,
-                expandedRowKeys: expandedRowKeys,
-              }}
-              toolBarRender={() => [
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    setVisibleForm(true);
-                  }}
-                >
-                  Demander une caution
-                </Button>,
-              ]} 
+            <Tabs
+              defaultActiveKey="1"
+              onChange={() => {}}
+              items={[
+                {
+                  label: <Space><>Tout les cautions</><Badge count={10} showZero color='#CACFD2' /></Space >,
+                  key: "1",
+                  children: Table(),
+                },
+                {
+                  label: <Space><>Les demandes</><Badge count={2} showZero color='#CACFD2' /></Space >,
+                  key: "2",
+                  children: Table()
+                },
+                {
+                  label: <Space><>Cautions en cours</><Badge count={2} showZero color='#CACFD2' /></Space >,
+                  key: "3",
+                  children: Table()
+                },
+                {
+                  label: <Space><>Cautions fermer</><Badge count={4} showZero color='#CACFD2' /></Space >,
+                  key: "4",
+                  children: Table()
+                },
+              ]}
             />
           </Card>
         </Col>
