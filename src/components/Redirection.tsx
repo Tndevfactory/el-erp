@@ -1,0 +1,27 @@
+import React, { useEffect } from 'react';
+import { Button, Result } from 'antd';
+import { useNavigate, useParams } from 'react-router-dom';
+
+  const Redirection: React.FC = ()=>{
+  let { token } = useParams();
+  const navigate = useNavigate()
+  useEffect(()=>{
+    alert(token)
+    setTimeout(() => {
+      navigate(`/finance`)
+    }, 2000);
+  },[])
+  return<Result
+    status="success"
+    title="Redirection successfully !"
+    // subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
+    // extra={[
+    //   <Button type="primary" key="console">
+    //     Go Console
+    //   </Button>,
+    //   <Button key="buy">Buy Again</Button>,
+    // ]}
+  />
+};
+
+export default Redirection;

@@ -130,7 +130,7 @@ const CautionDetails: React.FC<{
         id: caution.id,
         projet_id: values.projet,
         // Demandeur: values.Demandeur,
-        caution_nature_id: values.caution_nature,
+        type_id: values.caution_nature.parseInt() ,
         date_max_retour: moment(aFaireAvant,"DD/MM/YYYY").format("YYYY-MM-DD"),
         Client: values.client,
         montant: values.montant,
@@ -138,6 +138,7 @@ const CautionDetails: React.FC<{
         period_valid: values.duree,
         // Etat_main_levée: "En attente",
         // Observation: values.Observation,
+        etat_id: 1,
       })
     )
       .unwrap()
@@ -154,7 +155,8 @@ const CautionDetails: React.FC<{
     dispatch(deleteCaution(id))
     .unwrap()
     .then((originalPromiseResult) => {
-      tableRef.current.reload( ) ;
+      tableRef.current.reload() ;
+      console.log("x")
     })
     .catch((rejectedValueOrSerializedError) => {
       console.log(rejectedValueOrSerializedError);

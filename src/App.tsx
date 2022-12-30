@@ -54,6 +54,8 @@ import { Session } from "inspector";
 // check localstorage here
 //console.log(`${process.env.REACT_APP_BASE_PUBLIC_URL}/`);
 
+import Redirection from "./components/Redirection";
+
 export interface IApplicationProps {}
 
 const App: React.FunctionComponent<IApplicationProps> = (props) => {
@@ -77,6 +79,7 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
       >
         <BrowserRouter>
           <Routes>
+          <Route path={`/redirection/:token`} element={<Redirection/>} />
             <Route path={`*`} element={<Login />} />
             <Route path={`/*`} element={<Layout />}>
               {/* <Route element={<GuestPath />}> */}

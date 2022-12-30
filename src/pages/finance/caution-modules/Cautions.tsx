@@ -165,7 +165,7 @@ const Cautions: React.FC = ()=>{
     {
       title: "Entreprise ",
       key: "entreprise",
-      dataIndex:"entreprise"
+      dataIndex:"entreprise_name"
     },
     {
       title: "Nom du Projet ",
@@ -471,7 +471,7 @@ const Cautions: React.FC = ()=>{
       actionRef = { tableRef }
       headerTitle="Liste de cautions"
       rowClassName={(record, index) =>
-        record.type_id === 1
+        record.etat_id === 1
           ? "table-row-en-attente"
           : 
           // record.Etat_main_levée === "En cours" &&

@@ -71,7 +71,7 @@ const CautionForm: React.FC<{
       createCaution({
         projet_id: values.projet,
         // Demandeur: values.Demandeur,
-        caution_nature_id: values.caution_nature,
+        type_id: values.caution_nature,
         date_max_retour: moment(aFaireAvant, 'DD/MM/YYYY').format('YYYY-MM-DD'),
         Client: values.client,
         montant: values.montant,
@@ -80,6 +80,7 @@ const CautionForm: React.FC<{
         period_valid: values.duree,
         // Etat_main_levée: "En attente",
         // Observation: values.Observation,
+        etat_id: 1,
       }),
     )
       .unwrap()
