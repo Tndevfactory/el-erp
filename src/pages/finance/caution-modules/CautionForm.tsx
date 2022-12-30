@@ -309,9 +309,9 @@ const CautionForm: React.FC<{
                   <Option
                     key={item.id}
                     value={item.id}
-                    label={item.designation}
+                    label={item.type}
                   >
-                    {item.designation}
+                    {item.type}
                   </Option>
                 ))}
               </Select>
@@ -408,6 +408,7 @@ const CautionForm: React.FC<{
               />
             </Form.Item>
           </Col>
+          {localStorage.getItem('role') === 'chef'&&
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="eps"
@@ -420,12 +421,12 @@ const CautionForm: React.FC<{
                 },
               ]}
             >
-              <Radio.Group disabled={localStorage.getItem('role') !== 'chef'}>
+              <Radio.Group >
                 <Radio value={1}> Ligne eps </Radio>
                 <Radio value={0}> Compte courant </Radio>
               </Radio.Group>
             </Form.Item>
-          </Col>
+          </Col>}
           <Col span={24}>
             <Form.Item
               name="files"

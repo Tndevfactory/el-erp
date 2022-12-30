@@ -152,9 +152,7 @@ export default function Navbar() {
   //     ws.current = new WebSocket("wss://socketsbay.com/wss/v2/1/demo/12");
   //     ws.current.onopen = () => console.log("ws opened");
   //     ws.current.onclose = () => console.log("ws closed");
-
   //     const wsCurrent = ws.current;
-
   //     return () => {
   //         wsCurrent.close();
   //     };
@@ -162,7 +160,6 @@ export default function Navbar() {
 
   // useEffect(() => {
   //     if (!ws.current) return;
-
   //     ws.current.onmessage = e => {
   //         console.log(e.data);
   //     };

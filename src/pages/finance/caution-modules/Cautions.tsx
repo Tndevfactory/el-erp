@@ -68,7 +68,7 @@ const Cautions: React.FC = ()=>{
   const [caution, setCaution] = useState<ICaution>();
   const [refresh, forceRefresh] = useState(0);
 
-  const menu = (caution) => (
+  const menu = (caution: ICaution) => (
     <Menu
       items={[
         {
@@ -79,7 +79,7 @@ const Cautions: React.FC = ()=>{
             </a>
           ),
           icon: <EditOutlined />,
-          disabled: caution.Etat_main_levée !== "En attente",
+          disabled: caution.etat_id !== 1,
           onClick:() => {
             setVisibleDetails(true);
             setUpdate(true);
@@ -93,7 +93,7 @@ const Cautions: React.FC = ()=>{
             </a>
           ),
           icon: <CheckOutlined />,
-          disabled: caution.Etat_main_levée !== "En attente",
+          disabled: caution.etat_id !== 1,
           onClick:() => {
             tableRef.current.reload( ) ;
           }
@@ -106,7 +106,7 @@ const Cautions: React.FC = ()=>{
             </a>
           ),
           icon: <MdMoreTime />,
-          disabled: caution.Etat_main_levée !== "En cours",
+          disabled: caution.etat_id === 1,
           onClick:() => {
             setVisibleDetails(true);
             setProlongation(true);
@@ -135,11 +135,11 @@ const Cautions: React.FC = ()=>{
             ) : (
               <EyeInvisibleOutlined />
             ),
-          disabled: caution?.Prolongations?.length === 0,
+          disabled: caution?.prolongations?.length === 0,
         },
         {
           key: "4",
-          danger: caution.Etat_main_levée === "En attente",
+          danger: caution.etat_id === 1,
           label: "Supprimer",
           icon: <DeleteOutlined />,
           // disabled: caution.Etat_main_levée !== "En attente",
@@ -147,11 +147,12 @@ const Cautions: React.FC = ()=>{
         },
         {
           key: "5",
-          danger: caution.Etat_main_levée === "En cours",
+          // danger: caution.etat_id === 1,
           label: <a>Fermer</a>,
           icon: <InboxOutlined />,
-          disabled: caution.Etat_main_levée !== "En cours",
+          disabled: caution.etat_id === 1,
           onClick:() => handleCloseCaution(caution.id)
+          
         },
       ]}
     />
@@ -184,44 +185,44 @@ const Cautions: React.FC = ()=>{
       render: (x,caution) => (
         <Tag
           color={
-            caution.caution_nature_id === 1
+            caution.type_id === 1
               ? "blue"
-              : caution.caution_nature_id === 2
+              : caution.type_id === 2
               ? "gold"
-              : caution.caution_nature_id === 3
+              : caution.type_id === 3
               ? "green"
               : "red"
           }
         >
-          {caution.caution_nature.designation}
+          {caution.caution_type.type}
         </Tag>
       ),
-      filters: [
-        {
-          text: "Provisoire-CSP",
-          value: 1,
-        },
-        {
-          text: "Retenue de Garantie",
-          value: 2,
-        },
-        {
-          text: "Définitive-CSP",
-          value: 3,
-        },
-        {
-          text: "Avance",
-          value: 4,
-        },
-      ],
-      onFilter: (value, record) => record.caution_nature_id
-       === value,
+      // filters: [
+      //   {
+      //     text: "Provisoire-CSP",
+      //     value: 1,
+      //   },
+      //   {
+      //     text: "Retenue de Garantie",
+      //     value: 2,
+      //   },
+      //   {
+      //     text: "Définitive-CSP",
+      //     value: 3,
+      //   },
+      //   {
+      //     text: "Avance",
+      //     value: 4,
+      //   },
+      // ],
+      // onFilter: (value, record) => record.caution_nature_id
+      //  === value,
     },
     {
       title: "Date de début ",
       key: 3,
       render:(_,caution)=><>{moment(new Date(caution.created_at)).format(dateFormat)}</>,
-      // responsive: ["xxl"],
+      responsive: ["xxl"],
       search: false,
       sorter: (a, b) =>
         moment(a.created_at, "YYYY-MM-DD HH:mm:ss" ).valueOf() -
@@ -230,8 +231,7 @@ const Cautions: React.FC = ()=>{
     {
       title: "Client",
       key: "Client",
-      dataIndex: "Client",
-      // width: "15%",
+      dataIndex: "tier_name",
       responsive: ["sm"],
     },
     {
@@ -243,7 +243,6 @@ const Cautions: React.FC = ()=>{
         <Statistic value={caution.montant} precision={3} style={{}} />
       ),
       responsive: ["xl"],
-      // width:"7%",
       sorter: (a, b) => a.montant - b.montant,
     },
     {
@@ -253,7 +252,7 @@ const Cautions: React.FC = ()=>{
       render: (_, caution) => (
         <Space size="small">
           {caution.period_valid}
-          {caution?.prolongation?.length !== 0 && (
+          {caution?.prolongations?.length !== 0 && (
             <Tooltip title="Voir liste prolongations">
               <MdMoreTime
                 style={{ cursor: "pointer" }}
@@ -278,7 +277,7 @@ const Cautions: React.FC = ()=>{
       key: 7,
       dataIndex: "ligne",
       search: false,
-      // responsive: ["xxl"],
+      responsive: ["xxl"],
       render: (_, caution) => (
         <Tag color={caution.eps === 1 ? "geekblue" : "volcano"}>
           {caution.eps === 1? "EPS" : "Compte courant"}
@@ -359,21 +358,25 @@ const Cautions: React.FC = ()=>{
       dataIndex: "Etat_main_levée",
       // width:"7%",
       search: false,
-      // render: (_, caution) => (
-      //   <Tag
-      //     color={
-      //       caution.Etat_main_levée === "Fermée"
-      //         ? "blue"
-      //         : caution.Etat_main_levée === "En attente"
-      //         ? "gold"
-      //         : caution.Etat_main_levée === "En cours"
-      //         ? "green"
-      //         : "red"
-      //     }
-      //   >
-      //     {caution.Etat_main_levée}
-      //   </Tag>
-      // ),
+      render: (_, caution) => (
+        <Tag
+          color={
+            caution.etat_id === 3
+              ? "blue"
+              : caution.etat_id === 1
+              ? "gold"
+              : caution.etat_id === 2
+              ? "red"
+              : caution.etat_id === 4
+              ? "gold"
+              : caution.etat_id === 5
+              ? "green"
+              : ""
+          }
+        >
+          {caution.caution_etat.etat}
+        </Tag>
+      ),
       // filters: [
       //   {
       //     text: "Fermée",
@@ -467,15 +470,16 @@ const Cautions: React.FC = ()=>{
       <ProTable<ICaution>
       actionRef = { tableRef }
       headerTitle="Liste de cautions"
-      // rowClassName={(record, index) =>
-      //   record.Etat_main_levée === "En attente"
-      //     ? "table-row-en-attente"
-      //     : record.Etat_main_levée === "En cours" &&
-      //       moment(record.DateE, dateFormat).diff(moment(), "days") <=
-      //         10
-      //     ? "table-row-warning"
-      //     : "nothing"
-      // }
+      rowClassName={(record, index) =>
+        record.type_id === 1
+          ? "table-row-en-attente"
+          : 
+          // record.Etat_main_levée === "En cours" &&
+            moment(record.DateE, dateFormat).diff(moment(), "days") <=
+              10
+          ? "table-row-warning"
+          : "nothing"
+      }
       search={{
         labelWidth: "auto",
       }}
@@ -511,14 +515,14 @@ const Cautions: React.FC = ()=>{
         //       ? false
         //       : true
         //   );
-        // if (params.Client)
-        //   dataFilter = dataFilter.filter((item) =>
-        //     item.Client.toString()
-        //       .toUpperCase()
-        //       .search(params.Client.toString().toUpperCase()) === -1
-        //       ? false
-        //       : true
-        //   );
+        if (params.Client)
+          dataFilter = dataFilter.filter((item) =>
+            item.tier_name.toString()
+              .toUpperCase()
+              .search(params.Client.toString().toUpperCase()) === -1
+              ? false
+              : true
+          );
         if (date !== null)
             typeDate==="month"?
             dataFilter = dataFilter.filter(
@@ -545,11 +549,11 @@ const Cautions: React.FC = ()=>{
         expandedRowRender: (record) => (
           <div className="flex justify-center">
             <div style={{ width: "60%", margin: "15px" }}>
-              <ListeProlongation prolongation={record.prolongation} />
+              <ListeProlongation prolongation={record.prolongations} />
             </div>
           </div>
         ),
-        rowExpandable: (record) => record?.prolongation?.length !== 0,
+        rowExpandable: (record) => record?.prolongations?.length !== 0,
         showExpandColumn: false,
         expandedRowKeys: expandedRowKeys,
       }}

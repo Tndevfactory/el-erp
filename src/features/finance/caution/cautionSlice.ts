@@ -162,38 +162,71 @@ export interface IProlongation {
   duree: string;
   etat?: string;
 }
+export interface Projet {
+  id: number;
+  tier_id: number;
+  departement_id: number;
+  designation: string;
+  reference: string;
+  projet_id?: any;
+  date_ordre_service: string;
+  duree_exec?: any;
+  lien_partage?: string;
+  signature_contrat: string;
+  deleted_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CautionEtat {
+  id: number;
+  etat: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
+}
+
 export interface ICautionNature {
   id: number;
-  designation: string;
-  deleted_at?: any;
-  created_at?: Date;
-  updated_at?: Date;
+  type: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 }
+
 export interface ICaution {
-  key?: string;
-  DateE?: string;
   id: number;
-  projet_id: number;
-  caution_nature_id: number;
   designation?: string;
+  projet_id: number;
+  etat_id: number;
+  type_id: number;
+  created_by?: string;
   montant: number;
   eps: number;
-  date_max_retour: string;
+  date_max_retour?: string;
   period_valid: number;
   date_validation_chef?: string;
   date_validation_dep?: string;
   date_env_bnq?: string;
   date_retour_bnq?: string;
   date_close?: string;
+  DateE?: string;
   pourcentage?: string;
+  created_at: string;
+  updated_at: string;
   deleted_at?: string;
-  created_at?: string;
-  updated_at?: string;
-  projet: IProject;
-  caution_nature: ICautionNature;
-  prolongation?: IProlongation[];
+  tier_id: number;
+  tier_name: string;
+  entreprise_id?: string;
+  entreprise_name?: string;
+  projet: Projet;
+  caution_etat: CautionEtat;
+  caution_type: ICautionNature;
+  user?: string;
+  caution_files: string[];
+  prolongations: IProlongation[];
+  key:string;
 }
-
 export const getCautions: any = createAsyncThunk(
   "cautions",
   async (espace_id, thunkAPI) => {
@@ -210,7 +243,7 @@ export const getCautionNatures: any = createAsyncThunk(
   "cautions",
   async (espace_id, thunkAPI) => {
     try {
-      let url = `/cautionnatures`;
+      let url = `/caution_types`;
       const resp = await api.get(url);
       return resp.data;
     } catch (error) {

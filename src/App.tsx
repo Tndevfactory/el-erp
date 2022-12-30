@@ -77,10 +77,10 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
       >
         <BrowserRouter>
           <Routes>
+            <Route path={`*`} element={<Login />} />
             <Route path={`/*`} element={<Layout />}>
-              <Route element={<GuestPath />}>
-                <Route path={`*`} element={<Login />} />
-              </Route>
+              {/* <Route element={<GuestPath />}> */}
+              {/* </Route> */}
               <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
                 {/* <Route path={`home`} element={<Home />} /> */}
               </Route>

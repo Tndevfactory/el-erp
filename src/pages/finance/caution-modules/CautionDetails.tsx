@@ -227,7 +227,7 @@ const CautionDetails: React.FC<{
         },
         {
           name: ["caution_nature"],
-          value: caution.caution_nature_id,
+          value: caution.caution_type.type,
         },
         {
           name: ["montant"],
@@ -451,9 +451,9 @@ const CautionDetails: React.FC<{
                   <Option
                     key={item.id}
                     value={item.id}
-                    label={item.designation}
+                    label={item.type}
                   >
-                    {item.designation}
+                    {item.type}
                   </Option>
                 ))}
               </Select>
@@ -548,6 +548,7 @@ const CautionDetails: React.FC<{
               />
             </Form.Item>
           </Col>
+          {localStorage.getItem('role') === 'chef'&&
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
               name="eps"
@@ -565,7 +566,7 @@ const CautionDetails: React.FC<{
                 <Radio value={0}> Compte courant </Radio>
               </Radio.Group>
             </Form.Item>
-          </Col>
+          </Col>}
           <Col span={24}>
             <Form.Item
               name="files"

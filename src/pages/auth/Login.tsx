@@ -1,115 +1,145 @@
-import { Col, Button, Row, Space, Checkbox, Form, Input } from "antd";
-import React from "react";
-import backgroundSaas from "../../assets/saas.svg";
-import elasticLogo from "../../assets/elastic.jpg";
+import {
+  AlipayOutlined,
+  GoogleOutlined,
+  LockOutlined,
+  MobileOutlined,
+  TaobaoOutlined,
+  UserOutlined,
+  WeiboOutlined,
+  WindowsOutlined
+} from "@ant-design/icons";
+import {
+  LoginFormPage,
+  ProFormCaptcha,
+  ProFormCheckbox,
+  ProFormText,
+} from "@ant-design/pro-components";
+import { Button, Divider, message, Space, Tabs, Typography } from "antd";
+import type { CSSProperties } from "react";
+import { useState } from "react";
+import elasticLogo from "@/assets/elastic-logo.png";
+import image from "@/assets/preview/ERP-3.png";
+import { useNavigate } from 'react-router-dom'
+const { Text, Link } = Typography;
+type LoginType = "phone" | "account";
 
-const styleLoginPage: React.CSSProperties = {
-  height: "100vh",
-  backgroundColor: "transparent",
-};
-const styleLoginRow: React.CSSProperties = {
-  height: "100%",
-  backgroundColor: "transparent",
-};
-const stylePhotoCol: React.CSSProperties = {
-  height: "100%",
-  background: " linear-gradient(to top, #c471f5 0%, #fa71cd 100%)",
-};
-
-const styleDivPhoto: React.CSSProperties = {
-  height: "100%",
-  backgroundImage: `url(${backgroundSaas})`,
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "content",
-  backgroundPosition: "50%",
-};
-const styleLoginCol: React.CSSProperties = {
-  height: "100%",
-  width: "100%",
-  backgroundColor: "transparent",
-};
-const styleDivLogin: React.CSSProperties = {
-  height: "100%",
-  background: "transparent",
+const iconStyles: CSSProperties = {
+  color: "rgba(0, 0, 0, 0.2)",
+  fontSize: "18px",
+  verticalAlign: "middle",
+  cursor: "pointer",
 };
 
-const onFinish = (values: any) => {
-  console.log("Success:", values);
-};
-
-const onFinishFailed = (errorInfo: any) => {
-  console.log("Failed:", errorInfo);
-};
-
-const Login: React.FC = () => {
+export default () => {
+  const navigate = useNavigate()
+  const [loginType, setLoginType] = useState<LoginType>("account");
   return (
-    <div style={styleLoginPage}>
-      <Row style={styleLoginRow} gutter={{ xs: 0 }}>
-        <Col xs={0} md={12} style={stylePhotoCol}>
-          <div style={styleDivPhoto}></div>
-        </Col>
-        <Col xs={24} md={12} style={styleLoginCol}>
-          <div style={styleDivLogin}>
-            <Space
-              direction="vertical"
-              style={{
-                height: "100%",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <img src={elasticLogo} width="250" height="100" alt="" />
-              <h2>Login</h2>
-              <Form
-                name="basic"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
-                initialValues={{ remember: true }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
+    <div
+      style={{
+        backgroundColor: "white",
+        height: "100vh",
+      }}
+    >
+      <LoginFormPage
+        backgroundImageUrl={image}
+        logo={elasticLogo}
+        title="EL-ERP"
+        subTitle={<Text type="secondary" >Bienvenue dans la gestion moderne du travail</Text>}
+        onFinish={async (values) => { console.log(values);   navigate(`/finance`)}}
+        actions={
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Divider plain>
+              <span
+                style={{ color: "#CCC", fontWeight: "normal", fontSize: 14 }}
               >
-                <Form.Item
-                  label="Username"
-                  name="username"
-                  rules={[
-                    { required: true, message: "Please input your username!" },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  label="Password"
-                  name="password"
-                  rules={[
-                    { required: true, message: "Please input your password!" },
-                  ]}
-                >
-                  <Input.Password />
-                </Form.Item>
-
-                <Form.Item
-                  name="remember"
-                  valuePropName="checked"
-                  wrapperCol={{ offset: 8, span: 16 }}
-                >
-                  <Checkbox>Remember me</Checkbox>
-                </Form.Item>
-
-                <Form.Item wrapperCol={{ offset: 13, span: 16 }}>
-                  <Button type="primary" htmlType="submit">
-                    Submit
-                  </Button>
-                </Form.Item>
-              </Form>
+                ou
+              </span>
+            </Divider>
+            <Space align="center" size={24}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  height: 40,
+                  width: 40,
+                  border: "1px solid #D4D8DD",
+                  borderRadius: "50%",
+                }}
+              >
+                <GoogleOutlined  style={{ ...iconStyles, color: "#1677FF" }} />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  height: 40,
+                  width: 40,
+                  border: "1px solid #D4D8DD",
+                  borderRadius: "50%",
+                }}
+              >
+                <WindowsOutlined style={{ ...iconStyles, color: "#FF6A10" }} />
+              </div>
             </Space>
           </div>
-        </Col>
-      </Row>
+        }
+      >
+        <Tabs
+          centered
+          activeKey={loginType}
+          onChange={(activeKey) => setLoginType(activeKey as LoginType)}
+        >
+          <Tabs.TabPane key={"account"} tab={"Se connecter"} />
+        </Tabs>
+        {loginType === "account" && (
+          <>
+            <ProFormText
+              name=" username "
+              fieldProps={{
+                size: "large",
+                prefix: <UserOutlined />,
+              }}
+              placeholder={"E-mail"}
+
+            />
+            <ProFormText.Password
+              name=" password "
+              fieldProps={{
+                size: "large",
+                prefix: <LockOutlined />,
+              }}
+              placeholder={"Mot de passe "}
+            />
+          </>
+        )}
+        <div
+          style={{
+            marginBlockEnd: 24,
+          }}
+        >
+          <ProFormCheckbox noStyle name=" autoLogin ">
+          souviens de moi
+          </ProFormCheckbox>
+          <Link href="#" target="_blank"
+            style={{
+              float: "right",
+            }}
+          >
+            Mot de passe oublié
+          </Link>{" "}
+        </div>
+      </LoginFormPage>
     </div>
   );
 };
-
-export default Login;
