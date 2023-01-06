@@ -15,8 +15,13 @@ import {
   Radio,
   Spin,
   Statistic,
+  Divider,
 } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
+import {
+  InboxOutlined,
+  FileAddOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -34,6 +39,7 @@ import {
 import ListeProlongation from "./ListeProlongation";
 import type { RangePickerProps } from "antd/es/date-picker";
 import dayjs from "dayjs";
+import type { UploadFile } from "antd/es/upload/interface";
 const { Dragger } = Upload;
 const { Option } = Select;
 
@@ -46,7 +52,7 @@ const CautionDetails: React.FC<{
   prolongation: boolean;
   setProlongation: React.Dispatch<React.SetStateAction<boolean>>;
   tableRef: any;
-  cautions:ICaution[]
+  cautions: ICaution[];
 }> = ({
   visible,
   setVisible,
@@ -56,7 +62,7 @@ const CautionDetails: React.FC<{
   prolongation,
   setProlongation,
   tableRef,
-  cautions
+  cautions,
 }) => {
   var { windowWidth } = useSelector((store: any) => store.ui);
   const dispatch = useDispatch();
@@ -66,11 +72,23 @@ const CautionDetails: React.FC<{
   const [cautionNatures, setCautionNatures] = useState<ICautionNature[]>();
   const [clients, setClients] = useState<IClient[]>();
   const [entreprises, setEntreprises] = useState<IEntreprise[]>();
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([
+    {
+      uid: "-1",
+      name: "cahier_de_charges.pdf",
+      status: "done",
+    },
+    {
+      uid: "-1",
+      name: "avis_de_caution.pdf",
+      status: "done",
+    },
+  ]);
   const [aFaireAvant, setAFaireAvant] = useState("");
   const [refresh, forceUpdate] = useState(0);
   const [isLoading, setLoading] = useState(true);
   const [ligneEPS, setlingeEPS] = useState(0);
+
   const props: UploadProps = {
     onRemove: (file) => {
       const index = fileList.indexOf(file);
@@ -147,21 +165,21 @@ const CautionDetails: React.FC<{
       });
   };
 
-  const calculCumulCautions = (entreprises,montant) : number => {
+  const calculCumulCautions = (entreprises, montant): number => {
     // let cumul=entreprises.filter(item => item.id.toString()===caution.entreprise_id)[0].caution_mnt_max-caution.montant;
-    let cumul=0;
-    cumul=entreprises.filter(
-      (item) =>
-        item.id === parseInt(caution.entreprise_id)
-    )[0].caution_mnt_max-montant
-    cautions.map(item => {
-      if(item.etat_id===5 && item.entreprise_id===caution.entreprise_id){
-        cumul-=item.montant
+    let cumul = 0;
+    cumul =
+      entreprises.filter(
+        (item) => item.id === parseInt(caution.entreprise_id)
+      )[0].caution_mnt_max - montant;
+    cautions.map((item) => {
+      if (item.etat_id === 5 && item.entreprise_id === caution.entreprise_id) {
+        cumul -= item.montant;
       }
-    })
-    return cumul
+    });
+    return cumul;
   };
-  
+
   //select search and sort
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
@@ -201,7 +219,9 @@ const CautionDetails: React.FC<{
         .unwrap()
         .then((originalPromiseResult) => {
           setEntreprises(originalPromiseResult.data);
-          setlingeEPS(calculCumulCautions(originalPromiseResult.data,caution.montant))
+          setlingeEPS(
+            calculCumulCautions(originalPromiseResult.data, caution.montant)
+          );
           setLoading(false);
         })
         .catch((rejectedValueOrSerializedError) => {
@@ -571,12 +591,17 @@ const CautionDetails: React.FC<{
                         form.setFieldsValue({
                           eps: 1,
                         });
-                        setlingeEPS(calculCumulCautions(entreprises,parseFloat(e.target.value.replace(",", ""))))
+                        setlingeEPS(
+                          calculCumulCautions(
+                            entreprises,
+                            parseFloat(e.target.value.replace(",", ""))
+                          )
+                        );
                       } else {
                         form.setFieldsValue({
                           eps: 0,
                         });
-                        setlingeEPS(calculCumulCautions(entreprises,0))
+                        setlingeEPS(calculCumulCautions(entreprises, 0));
                       }
                     }}
                   />
@@ -649,21 +674,25 @@ const CautionDetails: React.FC<{
                   />
                 </Form.Item>
               </Col>
-              {localStorage.getItem("role") === "chef" && (
+              {(localStorage.getItem("role") === "chef" ||
+                localStorage.getItem("role") === "daf") && (
                 <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                   <Form.Item
                     name="eps"
                     label="Ligne"
                     extra={
-                      caution && caution.eps === 1 && caution.etat_id === 1 && (
-                          <Space>
-                            Ligne EPS aprés opération:
-                            <Statistic
-                              value={ligneEPS}
-                              precision={3}
-                            />
-                            dinars
-                          </Space>
+                      caution &&
+                      caution.eps === 1 &&
+                      caution.etat_id === 1 && (
+                        <Space>
+                          Ligne EPS aprés opération:
+                          <Statistic
+                            value={ligneEPS}
+                            precision={3}
+                            valueStyle={{ color: ligneEPS < 0 && "#cf1322" }}
+                          />
+                          dinars
+                        </Space>
                       )
                     }
                     rules={[
@@ -699,16 +728,21 @@ const CautionDetails: React.FC<{
                   //   }),
                   // ]}
                 >
-                  <Dragger {...props} multiple listType="picture">
+                  <Dragger
+                    {...props}
+                    multiple
+                    listType="picture-card"
+                    style={{ display: !update ? "none" : "block" }}
+                  >
                     <p className="ant-upload-drag-icon">
                       <InboxOutlined />
                     </p>
                     <p className="ant-upload-text">
-                      Cliquez ou faites glisser le fichier dans cette zone pour
-                      le télécharger
+                      Cliquez ou faites glisser les fichiers dans cette zone
+                      pour les télécharger
                     </p>
                     <p className="ant-upload-hint">
-                      Merci d'attacher le fichier ..., ... et ...
+                      Merci d'attacher le cahier de charges et l'avis de caution
                     </p>
                   </Dragger>
                 </Form.Item>
@@ -736,26 +770,21 @@ const CautionDetails: React.FC<{
               )}
             </Row>
           </Form>
-
           <div style={{ textAlign: "right" }}>
             {!update && (
               <>
                 {caution.etat_id === 7 &&
                   localStorage.getItem("role") === "commerciale" && (
                     <Space>
-                    <Button
-                      onClick={() => setUpdate(true)}
-                    >
-                      Modifier
-                    </Button>
-                    <Button
-                      onClick={() => handlechangeStateCaution(1)}
-                      type="primary"
-                    >
-                      Envoyer
-                    </Button>
+                      <Button onClick={() => setUpdate(true)}>Modifier</Button>
+                      <Button
+                        onClick={() => handlechangeStateCaution(1)}
+                        type="primary"
+                      >
+                        Envoyer
+                      </Button>
                     </Space>
-                )}
+                  )}
                 {caution.etat_id === 1 &&
                   localStorage.getItem("role") === "commerciale" && (
                     <Button
@@ -764,13 +793,13 @@ const CautionDetails: React.FC<{
                     >
                       Modifier
                     </Button>
-                )}
+                  )}
                 {caution.etat_id === 1 &&
                   localStorage.getItem("role") === "chef" && (
                     <Space>
                       <Button
                         onClick={() => {
-                          handlechangeStateCaution(2)
+                          handlechangeStateCaution(2);
                         }}
                         danger
                       >
@@ -794,16 +823,128 @@ const CautionDetails: React.FC<{
                       </Button>
                     </Space>
                   )}
-                  {caution.etat_id === 4 &&
+                {caution.etat_id === 5 &&
                   localStorage.getItem("role") === "commerciale" && (
-                    <Button
-                  >
-                    Prolonger
-                  </Button>
+                    <Button>Prolonger</Button>
                   )}
               </>
             )}
           </div>
+
+          {caution.etat_id === 3 && localStorage.getItem("role") === "daf" && (
+            <div>
+              {/* <Divider>DAF</Divider> */}
+              <Form
+                layout="vertical"
+                hideRequiredMark
+                onFinish={()=>handlechangeStateCaution(4)}
+              >
+                <Row>
+                  <Col span={24}>
+                    <Form.Item
+                      name="formulaire"
+                      label="Formulaire"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Veuillez ratacher les fichiers",
+                        },
+                      //   () => ({
+                      //     validator() {
+                      //       if (fileList.length>=3) {
+                      //         return Promise.resolve();
+                      //       }
+                      //       return Promise.reject(new Error('Les fichiers ... et ... sont obligatoires'));
+                      //     },
+                      //   }),
+                      ]}
+                    >
+                      <Dragger multiple listType="picture">
+                        <p className="ant-upload-drag-icon">
+                          <FileAddOutlined />
+                        </p>
+                        <p className="ant-upload-text">
+                          Cliquez ou faites glisser la formulaire dans cette
+                          zone pour la télécharger
+                        </p>
+                      </Dragger>
+                    </Form.Item>
+                  </Col>
+                  <Col span={24} style={{ textAlign: "right" }}>
+                    <Form.Item>
+                      <Space>
+                        <Button htmlType="reset">Annuler</Button>
+                        <Button
+                          className="btnModofier"
+                          htmlType="submit"
+                          type="primary"
+                        >
+                          Envoyer
+                        </Button>
+                      </Space>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </div>
+          )}
+                    {caution.etat_id === 4 && localStorage.getItem("role") === "commerciale" && (
+            <div>
+              {/* <Divider>DAF</Divider> */}
+              <Form
+                layout="vertical"
+                hideRequiredMark
+                onFinish={()=>handlechangeStateCaution(5)}
+              >
+                <Row>
+                  <Col span={24}>
+                    <Form.Item
+                      label="Reçu banque"
+                      name="reçu"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Veuillez ratacher les fichiers",
+                        },
+                      //   () => ({
+                      //     validator() {
+                      //       if (fileList.length>=3) {
+                      //         return Promise.resolve();
+                      //       }
+                      //       return Promise.reject(new Error('Les fichiers ... et ... sont obligatoires'));
+                      //     },
+                      //   }),
+                      ]}
+                    >
+                      <Dragger multiple listType="picture">
+                        <p className="ant-upload-drag-icon">
+                          <FileAddOutlined />
+                        </p>
+                        <p className="ant-upload-text">
+                          Cliquez ou faites glisser le reçu de la banque dans cette
+                          zone pour le télécharger
+                        </p>
+                      </Dragger>
+                    </Form.Item>
+                  </Col>
+                  <Col span={24} style={{ textAlign: "right" }}>
+                    <Form.Item>
+                      <Space>
+                        <Button htmlType="reset">Annuler</Button>
+                        <Button
+                          className="btnModofier"
+                          htmlType="submit"
+                          type="primary"
+                        >
+                          Envoyer
+                        </Button>
+                      </Space>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </div>
+          )}
 
           {/* {caution?.prolongation?.length !== 0 && (
         <>

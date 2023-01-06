@@ -58,6 +58,7 @@ const CautionForm: React.FC<{
       setFileList(newFileList);
     },
     beforeUpload: (file) => {
+      console.log(file)
       setFileList([...fileList, file]);
       return false;
     },
@@ -548,18 +549,18 @@ const CautionForm: React.FC<{
               //   }),
               // ]}
             >
-              <Dragger {...props} multiple listType="picture">
-                <p className="ant-upload-drag-icon">
-                  <InboxOutlined />
-                </p>
-                <p className="ant-upload-text">
-                  Cliquez ou faites glisser le fichier dans cette zone pour le
-                  télécharger
-                </p>
-                <p className="ant-upload-hint">
-                  Merci d'attacher le fichier ..., ... et ...
-                </p>
-              </Dragger>
+                  <Dragger {...props} multiple listType="picture-card">
+                    <p className="ant-upload-drag-icon">
+                      <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">
+                      Cliquez ou faites glisser les fichiers dans cette zone pour
+                      les télécharger
+                    </p>
+                    <p className="ant-upload-hint">
+                      Merci d'attacher le cahier de charges et l'avis de caution
+                    </p>
+                  </Dragger>
             </Form.Item>
           </Col>
           <Col span={24}>
