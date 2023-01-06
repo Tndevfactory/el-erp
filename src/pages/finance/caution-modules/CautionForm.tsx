@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Space,
@@ -13,152 +13,155 @@ import {
   Upload,
   UploadProps,
   Radio,
-} from 'antd'
-import { InboxOutlined } from '@ant-design/icons'
-import dayjs from 'dayjs'
-import { useDispatch, useSelector } from 'react-redux'
+} from "antd";
+import { InboxOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
+import { useDispatch, useSelector } from "react-redux";
 import {
   createCaution,
   getCautionNatures,
   ICautionNature,
-} from '../../../features/finance/caution/cautionSlice'
-import { getProjects, IProject } from '@/features/project/projectSlice'
-import { getClients, IClient } from '@/features/client/clientSlice'
+} from "../../../features/finance/caution/cautionSlice";
+import { getProjects, IProject } from "@/features/project/projectSlice";
+import { getClients, IClient } from "@/features/client/clientSlice";
 import {
   getEntreprises,
   IEntreprise,
-} from '@/features/entreprise/entrepriseSlice'
-import type { RangePickerProps } from 'antd/es/date-picker'
-import moment from 'moment'
-const { Option } = Select
-const { Dragger } = Upload
+} from "@/features/entreprise/entrepriseSlice";
+import type { RangePickerProps } from "antd/es/date-picker";
+import moment from "moment";
+const { Option } = Select;
+const { Dragger } = Upload;
 
 const CautionForm: React.FC<{
-  visible: boolean
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>
-  tableRef: any
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  tableRef: any;
 }> = ({ visible, setVisible, tableRef }) => {
-  const dispatch = useDispatch()
-  var { windowWidth } = useSelector((store: any) => store.ui)
-  const [form] = Form.useForm()
-  const [projects, setProjects] = useState<IProject[]>()
-  const [cautionNatures, setCautionNatures] = useState<ICautionNature[]>()
-  const [clients, setClients] = useState<IClient[]>()
-  const [entreprises, setEntreprises] = useState<IEntreprise[]>()
-  const [aFaireAvant, setAFaireAvant] = useState('')
+  const dispatch = useDispatch();
+  var { windowWidth } = useSelector((store: any) => store.ui);
+  const [form] = Form.useForm();
+  const [projects, setProjects] = useState<IProject[]>();
+  const [cautionNatures, setCautionNatures] = useState<ICautionNature[]>();
+  const [clients, setClients] = useState<IClient[]>();
+  const [entreprises, setEntreprises] = useState<IEntreprise[]>();
+  const [aFaireAvant, setAFaireAvant] = useState("");
+  const [refresh, forceUpdate] = useState(0);
+  const [cautionState, setCautionState] = useState(1);
   //upload files
-  const [fileList, setFileList] = useState([])
+  const [fileList, setFileList] = useState([]);
   const props: UploadProps = {
     onRemove: (file) => {
-      const index = fileList.indexOf(file)
-      const newFileList = fileList.slice()
-      newFileList.splice(index, 1)
-      setFileList(newFileList)
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
     },
     beforeUpload: (file) => {
-      setFileList([...fileList, file])
-      return false
+      setFileList([...fileList, file]);
+      return false;
     },
     fileList,
-  }
+  };
   const onClose = () => {
-    setFileList([])
-    setVisible(false)
-    form.resetFields()
-  }
+    setFileList([]);
+    setVisible(false);
+    form.resetFields();
+  };
   const handleSubmit = (values) => {
     dispatch(
       createCaution({
         projet_id: values.projet,
         // Demandeur: values.Demandeur,
         type_id: values.caution_nature,
-        date_max_retour: moment(aFaireAvant, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+        date_max_retour: moment(aFaireAvant, "DD/MM/YYYY").format("YYYY-MM-DD"),
         Client: values.client,
         montant: values.montant,
-        eps: values.eps,
+        eps: values.montant>=1000?1:0,
         Frais_mois: 20,
         period_valid: values.duree,
         // Etat_main_levée: "En attente",
         // Observation: values.Observation,
-        etat_id: 1,
-      }),
+        etat_id: cautionState,
+      })
     )
       .unwrap()
       .then((originalPromiseResult) => {
-        tableRef.current.reload()
-        onClose()
+        tableRef.current.reload();
+        onClose();
       })
       .catch((rejectedValueOrSerializedError) => {
         // handle error here
-      })
-  }
+      });
+  };
 
   //select search and sort
   const filterOption = (input, option) =>
-    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const filterSort = (optionA, optionB) =>
-    (optionA?.label ?? '')
+    (optionA?.label ?? "")
       .toLowerCase()
-      .localeCompare((optionB?.label ?? '').toLowerCase())
+      .localeCompare((optionB?.label ?? "").toLowerCase());
 
   //Disable date
-  const disabledDateDebut: RangePickerProps['disabledDate'] = (current) => {
+  const disabledDateDebut: RangePickerProps["disabledDate"] = (current) => {
     return (
       current &&
-      current.valueOf() < dayjs().endOf('day').valueOf() + 86400000 * 6
-    )
-  }
-  const disabledDateFaireAvant: RangePickerProps['disabledDate'] = (
-    current,
+      current.valueOf() < dayjs().endOf("day").valueOf() + 86400000 * 6
+    );
+  };
+  const disabledDateFaireAvant: RangePickerProps["disabledDate"] = (
+    current
   ) => {
-    console.log(form.getFieldValue('date_debut'))
+    console.log(form.getFieldValue("date_debut"));
     return (
       current &&
       current.valueOf() >
-        form.getFieldValue('date_debut').endOf('day').valueOf() - 86400000 * 2
-    )
-  }
+        form.getFieldValue("date_debut").endOf("day").valueOf() - 86400000 * 2
+    );
+  };
 
   useEffect(() => {
     if (visible) {
       dispatch(getProjects())
         .unwrap()
         .then((originalPromiseResult) => {
-          setProjects(originalPromiseResult.data)
+          setProjects(originalPromiseResult.data);
         })
         .catch((rejectedValueOrSerializedError) => {
-          console.log(rejectedValueOrSerializedError)
-        })
+          console.log(rejectedValueOrSerializedError);
+        });
       dispatch(getClients())
         .unwrap()
         .then((originalPromiseResult) => {
-          setClients(originalPromiseResult.data)
+          setClients(originalPromiseResult.data);
         })
         .catch((rejectedValueOrSerializedError) => {
-          console.log(rejectedValueOrSerializedError)
-        })
+          console.log(rejectedValueOrSerializedError);
+        });
       dispatch(getCautionNatures())
         .unwrap()
         .then((originalPromiseResult) => {
-          setCautionNatures(originalPromiseResult.data)
+          setCautionNatures(originalPromiseResult.data);
         })
         .catch((rejectedValueOrSerializedError) => {
-          console.log(rejectedValueOrSerializedError)
-        })
+          console.log(rejectedValueOrSerializedError);
+        });
       dispatch(getEntreprises())
         .unwrap()
         .then((originalPromiseResult) => {
-          setEntreprises(originalPromiseResult.data)
+          setEntreprises(originalPromiseResult.data);
         })
         .catch((rejectedValueOrSerializedError) => {
-          console.log(rejectedValueOrSerializedError)
-        })
+          console.log(rejectedValueOrSerializedError);
+        });
     }
-  }, [visible])
+  }, [visible]);
+  useEffect(()=>{},[refresh])
   return (
     <Drawer
       title="Demander une nouvelle caution"
-      width={windowWidth > 750 ? 720 : '90%'}
+      width={windowWidth > 750 ? 720 : "90%"}
       className="CautionForm"
       onClose={onClose}
       open={visible}
@@ -170,6 +173,7 @@ const CautionForm: React.FC<{
         layout="vertical"
         hideRequiredMark
         onFinish={handleSubmit}
+        onReset={()=>{forceUpdate(Math.random())}}
         form={form}
       >
         <Row gutter={16}>
@@ -189,6 +193,23 @@ const CautionForm: React.FC<{
                 showSearch
                 filterOption={filterOption}
                 filterSort={filterSort}
+                onSelect={() => {
+                  forceUpdate(Math.random());
+                  form.setFields([
+                    {
+                      name: ["client"],
+                      value: null,
+                    },
+                    {
+                      name: ["projet"],
+                      value: null,
+                    },
+                    {
+                      name: ["num_appel_offre"],
+                      value: null,
+                    },
+                  ]);
+                }}
               >
                 {entreprises?.map((item) => (
                   <Option
@@ -209,7 +230,7 @@ const CautionForm: React.FC<{
               rules={[
                 {
                   required: true,
-                  message: 'Veuillez choisir le client',
+                  message: "Veuillez choisir le client",
                 },
               ]}
             >
@@ -218,16 +239,40 @@ const CautionForm: React.FC<{
                 showSearch
                 filterOption={filterOption}
                 filterSort={filterSort}
+                onSelect={(e) => {
+                  forceUpdate(Math.random())
+                  form.setFields([
+                    {
+                      name: ["entreprise"],
+                      value: clients.filter((item) => item.id === e)[0]
+                        .entreprise_id,
+                    },
+                    {
+                      name: ["projet"],
+                      value: null,
+                    },
+                    {
+                      name: ["num_appel_offre"],
+                      value: null,
+                    },
+                  ]);
+                }}
               >
-                {clients?.map((item) => (
-                  <Option
-                    key={item.id}
-                    value={item.id}
-                    label={item.designation}
-                  >
-                    {item.designation}
-                  </Option>
-                ))}
+                {clients
+                  ?.filter((item) =>
+                    form.getFieldValue("entreprise")
+                      ? item.entreprise_id === form.getFieldValue("entreprise")
+                      : true
+                  )
+                  .map((item) => (
+                    <Option
+                      key={item.id}
+                      value={item.id}
+                      label={item.designation}
+                    >
+                      {item.designation}
+                    </Option>
+                  ))}
               </Select>
             </Form.Item>
           </Col>
@@ -238,7 +283,7 @@ const CautionForm: React.FC<{
               rules={[
                 {
                   required: true,
-                  message: 'Veuillez entrer le titre du projet',
+                  message: "Veuillez entrer le titre du projet",
                 },
               ]}
             >
@@ -247,17 +292,43 @@ const CautionForm: React.FC<{
                 showSearch
                 filterOption={filterOption}
                 filterSort={filterSort}
-                onChange={(e) => form.setFieldValue('num_appel_offre', e)}
+                onChange={(e) => {
+                  form.setFields([
+                    {
+                      name: ["num_appel_offre"],
+                      value: e,
+                    },
+                    {
+                      name: ["entreprise"],
+                      value: projects.filter((item) => item.id === e)[0]
+                        .departement.entreprise_id,
+                    },
+                    {
+                      name: ["client"],
+                      value: projects.filter((item) => item.id === e)[0]
+                        .tier_id,
+                    },
+                  ]);
+                }}
               >
-                {projects?.map((item) => (
-                  <Option
-                    key={item.id}
-                    value={item.id}
-                    label={item.designation}
-                  >
-                    {item.designation}
-                  </Option>
-                ))}
+                {projects
+                  ?.filter((item) =>
+                    form.getFieldValue("client")
+                      ? item.tier_id === form.getFieldValue("client")
+                      : form.getFieldValue("entreprise")
+                      ? item.departement.entreprise_id ===
+                        form.getFieldValue("entreprise")
+                      : true
+                  )
+                  .map((item) => (
+                    <Option
+                      key={item.id}
+                      value={item.id}
+                      label={item.designation}
+                    >
+                      {item.designation}
+                    </Option>
+                  ))}
               </Select>
             </Form.Item>
           </Col>
@@ -278,10 +349,32 @@ const CautionForm: React.FC<{
                 filterOption={filterOption}
                 filterSort={filterSort}
                 onChange={(e) => {
-                  form.setFieldValue('projet', e)
+                  form.setFields([
+                    {
+                      name: ["projet"],
+                      value: e,
+                    },
+                    {
+                      name: ["entreprise"],
+                      value: projects.filter((item) => item.id === e)[0]
+                        .departement.entreprise_id,
+                    },
+                    {
+                      name: ["client"],
+                      value: projects.filter((item) => item.id === e)[0]
+                        .tier_id,
+                    },
+                  ]);
                 }}
               >
-                {projects?.map((item) => (
+                {projects?.filter((item) =>
+                    form.getFieldValue("client")
+                      ? item.tier_id === form.getFieldValue("client")
+                      : form.getFieldValue("entreprise")
+                      ? item.departement.entreprise_id ===
+                        form.getFieldValue("entreprise")
+                      : true
+                  ).map((item) => (
                   <Option key={item.id} value={item.id} label={item.reference}>
                     {item.reference}
                   </Option>
@@ -296,7 +389,7 @@ const CautionForm: React.FC<{
               rules={[
                 {
                   required: true,
-                  message: 'Veuillez entrer le type de caution',
+                  message: "Veuillez entrer le type de caution",
                 },
               ]}
             >
@@ -307,11 +400,7 @@ const CautionForm: React.FC<{
                 filterSort={filterSort}
               >
                 {cautionNatures?.map((item) => (
-                  <Option
-                    key={item.id}
-                    value={item.id}
-                    label={item.type}
-                  >
+                  <Option key={item.id} value={item.id} label={item.type}>
                     {item.type}
                   </Option>
                 ))}
@@ -325,28 +414,28 @@ const CautionForm: React.FC<{
               rules={[
                 {
                   required: true,
-                  message: 'Veuillez entrer le montant',
+                  message: "Veuillez entrer le montant",
                 },
               ]}
             >
               <InputNumber
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
-                parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
                 placeholder="Veuillez entrer le montant"
-                onBlur={(e) => {
-                  if (parseFloat(e.target.value.replace(',', '')) >= 1000) {
-                    form.setFieldsValue({
-                      eps: 1,
-                    })
-                  } else {
-                    form.setFieldsValue({
-                      eps: 0,
-                    })
-                  }
-                }}
+                // onBlur={(e) => {
+                //   if (parseFloat(e.target.value.replace(",", "")) >= 1000) {
+                //     form.setFieldsValue({
+                //       eps: 1,
+                //     });
+                //   } else {
+                //     form.setFieldsValue({
+                //       eps: 0,
+                //     });
+                //   }
+                // }}
               />
             </Form.Item>
           </Col>
@@ -357,16 +446,26 @@ const CautionForm: React.FC<{
               rules={[
                 {
                   required: true,
-                  message: 'Veuillez choisir la date de debut',
+                  message: "Veuillez choisir la date de debut",
                 },
               ]}
             >
               <DatePicker
-                style={{ width: '100%' }}
-                format={'DD/MM/YYYY'}
+                style={{ width: "100%" }}
+                format={"DD/MM/YYYY"}
                 placement="topLeft"
-                onChange={(value, dateString: string) => {}}
+                onChange={(value, dateString: string) => {
+                  form.setFields([
+                    {
+                      name: ["a_faire_avant"],
+                      value: null,
+                    },
+                  ]);
+                }}
                 disabledDate={disabledDateDebut}
+                onSelect={() => {
+                  forceUpdate(Math.random());
+                }}
               />
             </Form.Item>
           </Col>
@@ -377,12 +476,12 @@ const CautionForm: React.FC<{
               rules={[
                 {
                   required: true,
-                  message: 'Veuillez entrer la durée du caution',
+                  message: "Veuillez entrer la durée du caution",
                 },
               ]}
             >
               <InputNumber
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 placeholder="Veuillez entrer la durée du caution"
               />
             </Form.Item>
@@ -394,40 +493,42 @@ const CautionForm: React.FC<{
               rules={[
                 {
                   required: true,
-                  message: 'Veuillez choisir la date',
+                  message: "Veuillez choisir la date",
                 },
               ]}
             >
               <DatePicker
-                style={{ width: '100%' }}
-                format={'DD/MM/YYYY'}
+                style={{ width: "100%" }}
+                format={"DD/MM/YYYY"}
                 placement="topLeft"
                 onChange={(value, dateString: string) => {
-                  setAFaireAvant(dateString)
+                  setAFaireAvant(dateString);
                 }}
                 disabledDate={disabledDateFaireAvant}
+                disabled={!form.getFieldValue("date_debut")}
               />
             </Form.Item>
           </Col>
-          {localStorage.getItem('role') === 'chef'&&
-          <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
-            <Form.Item
-              name="eps"
-              label="Ligne"
-              // tooltip={{ title: 'Tooltip with customize icon', icon: <InboxOutlined /> }}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please choose the approver',
-                },
-              ]}
-            >
-              <Radio.Group >
-                <Radio value={1}> Ligne eps </Radio>
-                <Radio value={0}> Compte courant </Radio>
-              </Radio.Group>
-            </Form.Item>
-          </Col>}
+          {/* {localStorage.getItem("role") === "chef" && (
+            <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
+              <Form.Item
+                name="eps"
+                label="Ligne"
+                // tooltip={{ title: 'Tooltip with customize icon', icon: <InboxOutlined /> }}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please choose the approver",
+                  },
+                ]}
+              >
+                <Radio.Group>
+                  <Radio value={1}> Ligne eps </Radio>
+                  <Radio value={0}> Compte courant </Radio>
+                </Radio.Group>
+              </Form.Item>
+            </Col>
+          )} */}
           <Col span={24}>
             <Form.Item
               name="files"
@@ -462,7 +563,7 @@ const CautionForm: React.FC<{
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item style={{ textAlign: 'right' }}>
+            <Form.Item style={{ textAlign: "right" }}>
               <Space>
                 <Button
                   className="btnAnnuler"
@@ -471,13 +572,12 @@ const CautionForm: React.FC<{
                 >
                   Annuler
                 </Button>
-                <Button htmlType="submit">
-                  Enregistrer
-                </Button>
+                <Button htmlType="submit" onClick={() => setCautionState(7)}>Enregistrer</Button>
                 <Button
                   className="btnModofier"
                   htmlType="submit"
                   type="primary"
+                  onClick={() => setCautionState(1)}
                 >
                   Envoyer
                 </Button>
@@ -487,7 +587,7 @@ const CautionForm: React.FC<{
         </Row>
       </Form>
     </Drawer>
-  )
-}
+  );
+};
 
-export default CautionForm
+export default CautionForm;

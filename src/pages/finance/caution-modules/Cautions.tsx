@@ -66,97 +66,9 @@ const Cautions: React.FC = ()=>{
   const [typeDate, setTypeDate] = useState<PickerType>("week");
   const [date, setDate] = useState<string[]>(null);
   const [caution, setCaution] = useState<ICaution>();
+  const [cautions, setCautions] = useState<ICaution[]>();
   const [refresh, forceRefresh] = useState(0);
 
-  const menu = (caution: ICaution) => (
-    <Menu
-      items={[
-        {
-          key: "0",
-          label: (
-            <a>
-              Modifier
-            </a>
-          ),
-          icon: <EditOutlined />,
-          disabled: caution.etat_id !== 1,
-          onClick:() => {
-            setVisibleDetails(true);
-            setUpdate(true);
-          }
-        },
-        {
-          key: "1",
-          label: (
-            <a>
-              Approuver
-            </a>
-          ),
-          icon: <CheckOutlined />,
-          disabled: caution.etat_id !== 1,
-          onClick:() => {
-            tableRef.current.reload( ) ;
-          }
-        },
-        {
-          key: "2",
-          label: (
-            <a>
-              Prolonger
-            </a>
-          ),
-          icon: <MdMoreTime />,
-          disabled: caution.etat_id === 1,
-          onClick:() => {
-            setVisibleDetails(true);
-            setProlongation(true);
-          }
-        },
-        {
-          key: "3",
-          label: (
-            <a
-              onClick={() => {
-                if (expandedRowKeys.indexOf(caution.key) === -1) {
-                  setExpandedRowKeys([...expandedRowKeys, caution.key]);
-                } else {
-                  setExpandedRowKeys(
-                    expandedRowKeys.filter((item) => item !== caution.key)
-                  );
-                }
-              }}
-            >
-              Liste de prolongation
-            </a>
-          ),
-          icon:
-            expandedRowKeys.indexOf(caution.key) === -1 ? (
-              <EyeOutlined />
-            ) : (
-              <EyeInvisibleOutlined />
-            ),
-          disabled: caution?.prolongations?.length === 0,
-        },
-        {
-          key: "4",
-          danger: caution.etat_id === 1,
-          label: "Supprimer",
-          icon: <DeleteOutlined />,
-          // disabled: caution.Etat_main_levée !== "En attente",
-          onClick:()=>{handleDeleteCaution(caution.id)}
-        },
-        {
-          key: "5",
-          // danger: caution.etat_id === 1,
-          label: <a>Fermer</a>,
-          icon: <InboxOutlined />,
-          disabled: caution.etat_id === 1,
-          onClick:() => handleCloseCaution(caution.id)
-          
-        },
-      ]}
-    />
-  );
   const customWeekStartEndFormat: DatePickerProps["format"] = (value) =>
   `${dayjs(value).startOf("week").format(dateFormat)} ~ ${dayjs(value)
     .endOf("week")
@@ -172,12 +84,6 @@ const Cautions: React.FC = ()=>{
       key: "Nom_Projet",
       render: (x,caution) => <>{caution.projet.designation}</>
     },
-    // {
-    //   title: "Demandeur",
-    //   dataIndex: "Demandeur",
-    //   key: "Demandeur",
-    //   // responsive: ["xxl"],
-    // },
     {
       title: "type de caution",
       key: 2,
@@ -219,6 +125,16 @@ const Cautions: React.FC = ()=>{
       //  === value,
     },
     {
+      title: "A faire avant",
+      key: 31,
+      render:(_,caution)=><>{moment(new Date(caution.date_max_retour)).format(dateFormat)}</>,
+      responsive: ["xxl"],
+      search: false,
+      sorter: (a, b) =>
+        moment(a.date_max_retour, "YYYY-MM-DD HH:mm:ss" ).valueOf() -
+        moment(b.date_max_retour, "YYYY-MM-DD HH:mm:ss").valueOf(),
+    },
+    {
       title: "Date de début ",
       key: 3,
       render:(_,caution)=><>{moment(new Date(caution.created_at)).format(dateFormat)}</>,
@@ -240,7 +156,7 @@ const Cautions: React.FC = ()=>{
       search: false,
       dataIndex: "Montant",
       render: (_, caution) => (
-        <Statistic value={caution.montant} precision={3} style={{}} />
+        <Statistic value={caution.montant} precision={3} />
       ),
       responsive: ["xl"],
       sorter: (a, b) => a.montant - b.montant,
@@ -368,10 +284,11 @@ const Cautions: React.FC = ()=>{
               : caution.etat_id === 2
               ? "red"
               : caution.etat_id === 4
-              ? "gold"
+              ? "blue"
               : caution.etat_id === 5
               ? "green"
-              : ""
+              : caution.etat_id === 6
+              ? "gold":""
           }
         >
           {caution.caution_etat.etat}
@@ -398,7 +315,7 @@ const Cautions: React.FC = ()=>{
       valueType: "option",
       key: "10",
       render: (_, caution) => (
-        <Space size="small">
+        <Space size="small" >
           <a
             onClick={() => {
               setCaution(caution)
@@ -407,11 +324,6 @@ const Cautions: React.FC = ()=>{
           >
             Détails
           </a>
-          <Dropdown overlay={menu(caution)} placement="bottom">
-            <div style={{ paddingBottom: "5px" }}>
-              <MoreOutlined onClick={(e) => e.preventDefault()} />
-            </div>
-          </Dropdown>
         </Space>
       ),
     },
@@ -435,12 +347,14 @@ const Cautions: React.FC = ()=>{
     prolongation: prolongation,
     setProlongation: setProlongation,
     tableRef: tableRef,
+    cautions:cautions
   };
 
   const handleGetCautions=(): Promise < ICaution[] > => 
     dispatch(getCautions())
     .unwrap()
     .then((originalPromiseResult) => {
+      setCautions(originalPromiseResult.data)
       return originalPromiseResult.data.map((item, index) =>
       Object.assign({}, item, {
         DateE: moment(
@@ -466,12 +380,12 @@ const Cautions: React.FC = ()=>{
       });
     }
 
-    const Table =()=>(
+    const Table =(etat:number)=>(
       <ProTable<ICaution>
       actionRef = { tableRef }
       headerTitle="Liste de cautions"
       rowClassName={(record, index) =>
-        record.etat_id === 1
+        record.etat_id === 1 && localStorage.getItem('role')==='chef' ||record.etat_id === 3 && localStorage.getItem('role')==='daf' 
           ? "table-row-en-attente"
           : 
           // record.Etat_main_levée === "En cours" &&
@@ -499,6 +413,18 @@ const Cautions: React.FC = ()=>{
       request={async (params) => {
         console.log(`request params:`, params);
         var dataFilter =await handleGetCautions( ); 
+        if (etat)
+        dataFilter = dataFilter.filter((item) =>
+          item.etat_id===etat
+        );
+        if (params.entreprise)
+          dataFilter = dataFilter.filter((item) =>
+            item.entreprise_name.toString()
+              .toUpperCase()
+              .search(params.entreprise.toString().toUpperCase()) === -1
+              ? false
+              : true
+          );
         if (params.Nom_Projet)
           dataFilter = dataFilter.filter((item) =>
             item.projet.designation.toString()
@@ -557,7 +483,7 @@ const Cautions: React.FC = ()=>{
         showExpandColumn: false,
         expandedRowKeys: expandedRowKeys,
       }}
-      toolBarRender={() => [
+      toolBarRender={() => localStorage.getItem('role')==="commerciale"&&[
         <Button
           type="primary"
           onClick={() => {
@@ -591,24 +517,39 @@ const Cautions: React.FC = ()=>{
               onChange={() => {}}
               items={[
                 {
-                  label: <Space><>Tout les cautions</><Badge count={10} showZero color='#CACFD2' /></Space >,
+                  label: <Space><>Tout les cautions</><Badge count={cautions?.length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
                   key: "1",
-                  children: Table(),
+                  children: Table(0),
                 },
                 {
-                  label: <Space><>Les demandes</><Badge count={2} showZero color='#CACFD2' /></Space >,
+                  label: <Space><>Demandes</><Badge count={cautions?.filter(item=>item.etat_id===1).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
                   key: "2",
-                  children: Table()
+                  children: Table(1)
                 },
                 {
-                  label: <Space><>Cautions en cours</><Badge count={2} showZero color='#CACFD2' /></Space >,
+                  label: <Space><>Encours DAF</><Badge count={cautions?.filter(item=>item.etat_id===3).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
                   key: "3",
-                  children: Table()
+                  children: Table(3)
                 },
                 {
-                  label: <Space><>Cautions fermer</><Badge count={4} showZero color='#CACFD2' /></Space >,
+                  label: <Space><>Encours Banque</><Badge count={cautions?.filter(item=>item.etat_id===4).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
                   key: "4",
-                  children: Table()
+                  children: Table(4)
+                },
+                {
+                  label: <Space><>Fermer</><Badge count={cautions?.filter(item=>item.etat_id===5).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  key: "5",
+                  children: Table(5)
+                },
+                {
+                  label: <Space><>Refuser</><Badge count={cautions?.filter(item=>item.etat_id===6).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  key: "6",
+                  children: Table(2)
+                },
+                {
+                  label: <Space><>Enregistrer</><Badge count={cautions?.filter(item=>item.etat_id===7).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  key: "7",
+                  children: Table(7)
                 },
               ]}
             />

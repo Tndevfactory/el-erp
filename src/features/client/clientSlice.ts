@@ -4,14 +4,26 @@ const api = axios.create({
   baseURL: "http://127.0.0.1:8000/api/",
 });
 
+export interface IEntreprise {
+  id: number;
+  entreprise_id: number;
+  designation: string;
+  caution_mnt_max: number;
+  deleted_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface IClient {
-    id: number;
-    designation: string;
-    adresse: string ;
-    deleted_at: string; 
-    created_at: string ; 
-    updated_at: string ;
-} 
+  id: number;
+  designation: string;
+  entreprise_id: number;
+  adresse: string;
+  deleted_at?: string;
+  created_at: string;
+  updated_at: string;
+  entreprise: IEntreprise;
+}
 export const getClients: any = createAsyncThunk(
     "client",
     async (espace_id, thunkAPI) => {
