@@ -29,6 +29,7 @@ import {
   ICautionNature,
   ICaution,
   updateCaution,
+  deleteCaution,
 } from "../../../features/finance/caution/cautionSlice";
 import { getProjects, IProject } from "@/features/project/projectSlice";
 import { getClients, IClient } from "@/features/client/clientSlice";
@@ -40,6 +41,7 @@ import ListeProlongation from "./ListeProlongation";
 import type { RangePickerProps } from "antd/es/date-picker";
 import dayjs from "dayjs";
 import type { UploadFile } from "antd/es/upload/interface";
+import ProlongationForm from "./ProlongationForm";
 const { Dragger } = Upload;
 const { Option } = Select;
 
@@ -47,26 +49,20 @@ const CautionDetails: React.FC<{
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   caution: ICaution;
-  update: boolean;
-  setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-  prolongation: boolean;
-  setProlongation: React.Dispatch<React.SetStateAction<boolean>>;
   tableRef: any;
   cautions: ICaution[];
 }> = ({
   visible,
   setVisible,
   caution,
-  update,
-  setUpdate,
-  prolongation,
-  setProlongation,
   tableRef,
   cautions,
 }) => {
   var { windowWidth } = useSelector((store: any) => store.ui);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const [update, setUpdate] = useState(false);
+  const [prolongation, setProlongation] = useState(false);
   const [fields, setFields] = useState([]);
   const [projects, setProjects] = useState<IProject[]>();
   const [cautionNatures, setCautionNatures] = useState<ICautionNature[]>();
@@ -165,8 +161,21 @@ const CautionDetails: React.FC<{
       });
   };
 
+  const handleDeleteCaution = () => {
+    dispatch(
+      deleteCaution(caution.id)
+    )
+      .unwrap()
+      .then((originalPromiseResult) => {
+        tableRef.current.reload();
+        onClose();
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        console.log(rejectedValueOrSerializedError);
+      });
+  };
+
   const calculCumulCautions = (entreprises, montant): number => {
-    // let cumul=entreprises.filter(item => item.id.toString()===caution.entreprise_id)[0].caution_mnt_max-caution.montant;
     let cumul = 0;
     cumul =
       entreprises.filter(
@@ -299,11 +308,12 @@ const CautionDetails: React.FC<{
     setTimeout(() => {
       setLoading(false);
     }, 1000);
+  }, [caution]);
+  useEffect(() => {
     setTimeout(() => {
       if (prolongation) scrollToBottom();
-    }, 200);
-  }, [caution, update, prolongation]);
-  useEffect(() => {}, [refresh]);
+    }, 500);
+  }, [refresh, update, prolongation]);
   return (
     <Drawer
       title={update ? "Modifer la caution" : "Détails de caution"}
@@ -776,6 +786,7 @@ const CautionDetails: React.FC<{
                 {caution.etat_id === 7 &&
                   localStorage.getItem("role") === "commerciale" && (
                     <Space>
+                      <Button onClick={handleDeleteCaution} danger>Supprimer</Button>
                       <Button onClick={() => setUpdate(true)}>Modifier</Button>
                       <Button
                         onClick={() => handlechangeStateCaution(1)}
@@ -824,8 +835,9 @@ const CautionDetails: React.FC<{
                     </Space>
                   )}
                 {caution.etat_id === 5 &&
-                  localStorage.getItem("role") === "commerciale" && (
-                    <Button>Prolonger</Button>
+                  localStorage.getItem("role") === "commerciale" &&
+                  !prolongation && (
+                    <Button onClick={()=>setProlongation(true)}>Prolonger</Button>
                   )}
               </>
             )}
@@ -833,7 +845,6 @@ const CautionDetails: React.FC<{
 
           {caution.etat_id === 3 && localStorage.getItem("role") === "daf" && (
             <div>
-              {/* <Divider>DAF</Divider> */}
               <Form
                 layout="vertical"
                 hideRequiredMark
@@ -890,7 +901,6 @@ const CautionDetails: React.FC<{
           )}
                     {caution.etat_id === 4 && localStorage.getItem("role") === "commerciale" && (
             <div>
-              {/* <Divider>DAF</Divider> */}
               <Form
                 layout="vertical"
                 hideRequiredMark
@@ -945,13 +955,17 @@ const CautionDetails: React.FC<{
               </Form>
             </div>
           )}
-
-          {/* {caution?.prolongation?.length !== 0 && (
+          <br/>
+          {prolongation && (
+        <ProlongationForm setProlongation={setProlongation} caution={caution}/>
+      )}
+      <div ref={drawerEndRef}/>
+          {caution?.prolongations?.length !== 0 && (
         <>
           <Divider>Liste de prolongation</Divider>
-          <ListeProlongation prolongation={caution.prolongation} />
+          <ListeProlongation cautionId={caution.id} />
         </>
-      )} */}
+      )}
         </>
       )}
     </Drawer>

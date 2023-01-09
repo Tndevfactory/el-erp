@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IProject } from "@/features/project/projectSlice";
+import { IProlongation } from "./prolongationCaution";
 const api = axios.create({
   baseURL: "http://127.0.0.1:8000/api/",
 });
@@ -157,11 +158,7 @@ const dataSource = [
       "Reste la validation du directeur de l'IRT + PAM (PV DE VALIDATION). Garantie 10 mois, réception déf 30 jrs après la garantie.",
   },
 ];
-export interface IProlongation {
-  reference: string;
-  duree: string;
-  etat?: string;
-}
+
 export interface Projet {
   id: number;
   tier_id: number;
@@ -229,7 +226,7 @@ export interface ICaution {
 }
 export const getCautions: any = createAsyncThunk(
   "cautions",
-  async (espace_id, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
       let url = `/cautions`;
       const resp = await api.get(url);
@@ -241,7 +238,7 @@ export const getCautions: any = createAsyncThunk(
 );
 export const getCautionNatures: any = createAsyncThunk(
   "cautions",
-  async (espace_id, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
       let url = `/caution_types`;
       const resp = await api.get(url);

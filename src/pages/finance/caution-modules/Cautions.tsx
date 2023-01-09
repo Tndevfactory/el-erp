@@ -4,36 +4,22 @@ import {
   Button,
   Space,
   Tag,
-  message,
   Breadcrumb,
   Card,
   Col,
   Row,
   Typography,
-  Dropdown,
-  Menu,
   Tooltip,
   Statistic,
   Select,
   DatePicker,
-  Input,
   Tabs,
   Badge,
 } from "antd";
 import {
   ProTable,
-  TableDropdown,
   ProColumns,
 } from "@ant-design/pro-components";
-import {
-  DeleteOutlined,
-  MoreOutlined,
-  EditOutlined,
-  InboxOutlined,
-  CheckOutlined,
-  EyeOutlined,
-  EyeInvisibleOutlined,
-} from "@ant-design/icons";
 import { MdMoreTime } from "react-icons/md";
 import moment from "moment";
 import { Console } from "console";
@@ -43,7 +29,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   ICaution,
   getCautions,
-  deleteCaution,
 } from "@/features/finance/caution/cautionSlice";
 import ListeProlongation from "./ListeProlongation";
 import type { ColumnsType } from "antd/es/table";
@@ -58,8 +43,6 @@ const Cautions: React.FC = ()=>{
   const dispatch = useDispatch();
   const tableRef = useRef<any>( ) ; 
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-  const [update, setUpdate] = useState(false);
-  const [prolongation, setProlongation] = useState(false);
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
   type PickerType = "date" | "week" | "month" | "quarter" | "year";
@@ -103,26 +86,6 @@ const Cautions: React.FC = ()=>{
           {caution.caution_type.type}
         </Tag>
       ),
-      // filters: [
-      //   {
-      //     text: "Provisoire-CSP",
-      //     value: 1,
-      //   },
-      //   {
-      //     text: "Retenue de Garantie",
-      //     value: 2,
-      //   },
-      //   {
-      //     text: "Définitive-CSP",
-      //     value: 3,
-      //   },
-      //   {
-      //     text: "Avance",
-      //     value: 4,
-      //   },
-      // ],
-      // onFilter: (value, record) => record.caution_nature_id
-      //  === value,
     },
     {
       title: "A faire avant",
@@ -294,21 +257,6 @@ const Cautions: React.FC = ()=>{
           {caution.caution_etat.etat}
         </Tag>
       ),
-      // filters: [
-      //   {
-      //     text: "Fermée",
-      //     value: "Fermée",
-      //   },
-      //   {
-      //     text: "En cours",
-      //     value: "En cours",
-      //   },
-      //   {
-      //     text: "En attente",
-      //     value: "En attente",
-      //   },
-      // ],
-      // onFilter: (value, record) => record.Etat_main_levée === value,
     },
     {
       title: "Action",
@@ -328,10 +276,7 @@ const Cautions: React.FC = ()=>{
       ),
     },
   ];
-  const [data, setData] = useState<ICaution[]>();
-  const handleCloseCaution = (id) => {
-    // forceRefresh(Math.random());
-  };
+
   const obj = {
     visible: visibleForm,
     setVisible: setVisibleForm,
@@ -341,11 +286,6 @@ const Cautions: React.FC = ()=>{
     visible: visibleDetails,
     setVisible: setVisibleDetails,
     caution: caution,
-    // forceRefresh: forceRefresh,
-    update: update,
-    setUpdate: setUpdate,
-    prolongation: prolongation,
-    setProlongation: setProlongation,
     tableRef: tableRef,
     cautions:cautions
   };
@@ -368,17 +308,6 @@ const Cautions: React.FC = ()=>{
       console.log(rejectedValueOrSerializedError);
       return []
     });
-
-    const handleDeleteCaution=(id)=>{
-      dispatch(deleteCaution(id))
-      .unwrap()
-      .then((originalPromiseResult) => {
-        tableRef.current.reload( ) ;
-      })
-      .catch((rejectedValueOrSerializedError) => {
-        console.log(rejectedValueOrSerializedError);
-      });
-    }
 
     const Table =(etat:number)=>(
       <ProTable<ICaution>
@@ -433,14 +362,6 @@ const Cautions: React.FC = ()=>{
               ? false
               : true
           );
-        // if (params.Demandeur)
-        //   dataFilter = dataFilter.filter((item) =>
-        //     item.Demandeur.toString()
-        //       .toUpperCase()
-        //       .search(params.Demandeur.toString().toUpperCase()) === -1
-        //       ? false
-        //       : true
-        //   );
         if (params.Client)
           dataFilter = dataFilter.filter((item) =>
             item.tier_name.toString()
@@ -475,7 +396,7 @@ const Cautions: React.FC = ()=>{
         expandedRowRender: (record) => (
           <div className="flex justify-center">
             <div style={{ width: "60%", margin: "15px" }}>
-              <ListeProlongation prolongation={record.prolongations} />
+              <ListeProlongation cautionId={record.id} />
             </div>
           </div>
         ),

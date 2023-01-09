@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Divider, Table, Space, Tooltip, Tag } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { IProlongation } from "@/features/finance/caution/cautionSlice";
+import { useDispatch, useSelector } from "react-redux";
 import type { ColumnsType } from 'antd/es/table';
+import { getProlongations, IProlongation } from "@/features/finance/caution/prolongationCaution";
 const columns : ColumnsType<IProlongation>= [
   {
     title: "Référence",
@@ -18,23 +19,29 @@ const columns : ColumnsType<IProlongation>= [
     responsive:["sm"]
   },
   {
-    title: "Nouvelle date d'échéance",
+    title: "Date d'échéance",
     key: 2,
     dataIndex: "DateE",
+    render:()=><>12/02/2023</>
+  },
+  {
+    title: "A faire avant",
+    key: 2,
+    dataIndex: "DateE",
+    render:()=><>12/02/2023</>
   },
   {
     title: "Etat",
     key: 3,
-    dataIndex: "etat",
-    render: (Etat: string) => (
+    render: (record) => (
         <Tag
           color={
-            Etat === "Approuver"
+            record.etat_id === 2
               ? "green"
               : "gold"
           }
         >
-          {Etat}
+          {record.prolongation_etat.etat}
         </Tag>
       ),
   },
@@ -43,8 +50,10 @@ const columns : ColumnsType<IProlongation>= [
     key: "10",
     width: "15%",
     render: (prolongation) =>
-      prolongation.Etat === "En attente" && (
+      prolongation.etat_id === 1 && (
         <Space size="small">
+          {/* <a style={{ color: "#52BE80" }}>Approuver</a>
+          <a style={{ color: "#E74C3C" }}>Refuser</a> */}
           <Tooltip title="Approuver">
             <CheckOutlined style={{ color: "#52BE80" }} onClick={() => {}} />
           </Tooltip>
@@ -55,16 +64,32 @@ const columns : ColumnsType<IProlongation>= [
       ),
   },
 ];
-const ListeProlongation:React.FC<{prolongation:IProlongation[]}>=({ prolongation })=> {
+const ListeProlongation:React.FC<{cautionId:number}>=({ cautionId })=> {
+  const dispatch = useDispatch();
+  const [prolongations, setProlongations] = useState<IProlongation[]>()
+  const [isLoading, setLoading] = useState(false)
+  useEffect(()=>{
+    setLoading(true)
+    dispatch(getProlongations())
+    .unwrap()
+    .then((originalPromiseResult) => {
+      setProlongations(originalPromiseResult.data.filter(item=>item.caution_id===cautionId))
+      setLoading(false)
+    })
+    .catch((rejectedValueOrSerializedError) => {
+      // handle error here
+    });
+  },[])
   return (
     <div className="ProlongationListe">
       <Table
-        rowClassName={(record, index) =>
-          record.etat === "En attente" ? "table-row-en-attente" : "nothing"
-        }
+        // rowClassName={(record, index) =>
+        //   record.etat === "En attente" ? "table-row-en-attente" : "nothing"
+        // }
         columns={columns}
-        dataSource={prolongation}
+        dataSource={prolongations}
         pagination={false}
+        loading={isLoading}
       />
     </div>
   );
