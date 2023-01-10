@@ -30,7 +30,7 @@ import {
   ICaution,
   getCautions,
 } from "@/features/finance/caution/cautionSlice";
-import ListeProlongation from "./ListeProlongation";
+import ListeProlongation from "./prolongation/ListeProlongation";
 import type { ColumnsType } from "antd/es/table";
 import type { DatePickerProps } from "antd";
 import dayjs from "dayjs";
@@ -131,7 +131,7 @@ const Cautions: React.FC = ()=>{
       render: (_, caution) => (
         <Space size="small">
           {caution.period_valid}
-          {caution?.prolongations?.length !== 0 && (
+          {caution.etat_id === 6 && (
             <Tooltip title="Voir liste prolongations">
               <MdMoreTime
                 style={{ cursor: "pointer" }}
@@ -251,7 +251,7 @@ const Cautions: React.FC = ()=>{
               : caution.etat_id === 5
               ? "green"
               : caution.etat_id === 6
-              ? "gold":""
+              ? "green":""
           }
         >
           {caution.caution_etat.etat}
@@ -418,7 +418,6 @@ const Cautions: React.FC = ()=>{
     )
   
   useEffect(() => {
-    console.log('refresh')
   }, [refresh]);
 
   return (

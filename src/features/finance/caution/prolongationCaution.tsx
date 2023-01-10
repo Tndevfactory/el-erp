@@ -5,11 +5,13 @@ const api = axios.create({
 });
 
 export interface IProlongation {
+    id:number,
     caution_id: number,
-    reference: string;
-    duree: string;
-    etat_id: string;
-    date_validation_dep: string
+    reference: string,
+    duree: string,
+    etat_id: number,
+    date_validation_dep: string,
+    key?:any
   }
 
   export const getProlongations: any = createAsyncThunk(
@@ -30,6 +32,18 @@ export interface IProlongation {
       try {
         let url = `/prolongations`;
         const resp = await api.post(url, data);
+        return resp.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue("something went wrong");
+      }
+    }
+  );
+  export const updateProlongation: any = createAsyncThunk(
+    "prolongation",
+    async (data:{id: number; caution_id: number; etat_id:number; duree:number; reference:string}, thunkAPI) => {
+      try {
+        let url = `/prolongations/${data.id}`;
+        const resp = await api.put(url, data);
         return resp.data;
       } catch (error) {
         return thunkAPI.rejectWithValue("something went wrong");

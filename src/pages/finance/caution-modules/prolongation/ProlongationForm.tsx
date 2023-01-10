@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InboxOutlined } from '@ant-design/icons'
 import { createProlongation } from '@/features/finance/caution/prolongationCaution';
 import { ICaution } from '@/features/finance/caution/cautionSlice';
+import moment from 'moment';
 const { Dragger } = Upload
 const { Title } = Typography
 const ProlongationForm: React.FC<{
@@ -57,6 +58,21 @@ const ProlongationForm: React.FC<{
       });
   };
   useEffect(()=>{
+    form.setFields([
+        {
+          name: ["debutProl"],
+          value: moment(
+            moment(
+              moment(
+                caution.created_at.substring(0, 10),
+                "YYYY-MM-DD"
+              ).valueOf() +
+                86400000 * caution.period_valid
+            ).format("DD/MM/YYYY"),
+            "DD/MM/YYYY"
+          ),
+        },
+    ])
 
   },[])
   return (
@@ -67,7 +83,12 @@ const ProlongationForm: React.FC<{
       <Form form={form} layout="vertical" hideRequiredMark onFinish={handleSubmit}>
         <Row gutter={16}>
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
-            <Form.Item name="reference" label="Référence demande">
+            <Form.Item name="reference" label="Référence demande" rules={[
+                {
+                  required: true,
+                  message: 'Please choose the approver',
+                },
+              ]}>
               <Input placeholder="Veuillez entrer la référence de prolongation" />
             </Form.Item>
           </Col>
@@ -89,7 +110,7 @@ const ProlongationForm: React.FC<{
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
-            <Form.Item name="reference" label="Début prolongation">
+            <Form.Item name="debutProl" label="Début prolongation">
             <DatePicker
                 style={{ width: "100%" }}
                 format={"DD/MM/YYYY"}
@@ -99,7 +120,7 @@ const ProlongationForm: React.FC<{
           </Col>
           <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
             <Form.Item
-              name="duree"
+              name="a_faire_avant"
               label="A faire avant"
               rules={[
                 {

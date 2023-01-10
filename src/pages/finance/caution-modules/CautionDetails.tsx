@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from 'react'
 import {
   UploadProps,
   Button,
@@ -16,104 +16,96 @@ import {
   Spin,
   Statistic,
   Divider,
-} from "antd";
-import {
-  InboxOutlined,
-  FileAddOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
+} from 'antd'
+import { InboxOutlined, FileAddOutlined, PlusOutlined } from '@ant-design/icons'
+import moment from 'moment'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   getCautionNatures,
   ICautionNature,
   ICaution,
   updateCaution,
   deleteCaution,
-} from "../../../features/finance/caution/cautionSlice";
-import { getProjects, IProject } from "@/features/project/projectSlice";
-import { getClients, IClient } from "@/features/client/clientSlice";
+} from '../../../features/finance/caution/cautionSlice'
+import { getProjects, IProject } from '@/features/project/projectSlice'
+import { getClients, IClient } from '@/features/client/clientSlice'
 import {
   getEntreprises,
   IEntreprise,
-} from "@/features/entreprise/entrepriseSlice";
-import ListeProlongation from "./ListeProlongation";
-import type { RangePickerProps } from "antd/es/date-picker";
-import dayjs from "dayjs";
-import type { UploadFile } from "antd/es/upload/interface";
-import ProlongationForm from "./ProlongationForm";
-const { Dragger } = Upload;
-const { Option } = Select;
+} from '@/features/entreprise/entrepriseSlice'
+import ListeProlongation from './prolongation/ListeProlongation'
+import type { RangePickerProps } from 'antd/es/date-picker'
+import dayjs from 'dayjs'
+import type { UploadFile } from 'antd/es/upload/interface'
+import ProlongationForm from './prolongation/ProlongationForm'
+import ProlongationDetails from './prolongation/ProlongationDetails'
+
+const { Dragger } = Upload
+const { Option } = Select
 
 const CautionDetails: React.FC<{
-  visible: boolean;
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  caution: ICaution;
-  tableRef: any;
-  cautions: ICaution[];
-}> = ({
-  visible,
-  setVisible,
-  caution,
-  tableRef,
-  cautions,
-}) => {
-  var { windowWidth } = useSelector((store: any) => store.ui);
-  const dispatch = useDispatch();
-  const [form] = Form.useForm();
-  const [update, setUpdate] = useState(false);
-  const [prolongation, setProlongation] = useState(false);
-  const [fields, setFields] = useState([]);
-  const [projects, setProjects] = useState<IProject[]>();
-  const [cautionNatures, setCautionNatures] = useState<ICautionNature[]>();
-  const [clients, setClients] = useState<IClient[]>();
-  const [entreprises, setEntreprises] = useState<IEntreprise[]>();
+  visible: boolean
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>
+  caution: ICaution
+  tableRef: any
+  cautions: ICaution[]
+}> = ({ visible, setVisible, caution, tableRef, cautions }) => {
+  var { windowWidth } = useSelector((store: any) => store.ui)
+  const dispatch = useDispatch()
+  const [form] = Form.useForm()
+  const [update, setUpdate] = useState(false)
+  const [prolongation, setProlongation] = useState(false)
+  const [fields, setFields] = useState([])
+  const [projects, setProjects] = useState<IProject[]>()
+  const [cautionNatures, setCautionNatures] = useState<ICautionNature[]>()
+  const [clients, setClients] = useState<IClient[]>()
+  const [entreprises, setEntreprises] = useState<IEntreprise[]>()
   const [fileList, setFileList] = useState<UploadFile[]>([
     {
-      uid: "-1",
-      name: "cahier_de_charges.pdf",
-      status: "done",
+      uid: '0',
+      name: 'cahier_de_charges.pdf',
+      status: 'done',
     },
     {
-      uid: "-1",
-      name: "avis_de_caution.pdf",
-      status: "done",
+      uid: '1',
+      name: 'avis_de_caution.pdf',
+      status: 'done',
     },
-  ]);
-  const [aFaireAvant, setAFaireAvant] = useState("");
-  const [refresh, forceUpdate] = useState(0);
-  const [isLoading, setLoading] = useState(true);
-  const [ligneEPS, setlingeEPS] = useState(0);
+  ])
+  const [aFaireAvant, setAFaireAvant] = useState('')
+  const [refresh, forceUpdate] = useState(0)
+  const [isLoading, setLoading] = useState(true)
+  const [ligneEPS, setlingeEPS] = useState(0)
 
   const props: UploadProps = {
     onRemove: (file) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList.splice(index, 1);
-      setFileList(newFileList);
+      const index = fileList.indexOf(file)
+      const newFileList = fileList.slice()
+      newFileList.splice(index, 1)
+      setFileList(newFileList)
     },
     beforeUpload: (file) => {
-      setFileList([...fileList, file]);
-      return false;
+      setFileList([...fileList, file])
+      return false
     },
     fileList,
-  };
-  const drawerEndRef = useRef(null);
-  const drawerTopRef = useRef(null);
+  }
+  const drawerEndRef = useRef(null)
+  const drawerTopRef = useRef(null)
 
   const scrollToBottom = () => {
-    drawerEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+    drawerEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
   const scrollToTop = () => {
-    drawerTopRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+    drawerTopRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   const onClose = () => {
-    setVisible(false);
-    setUpdate(false);
-    setProlongation(false);
-    scrollToTop();
-  };
+    setVisible(false)
+    setUpdate(false)
+    setProlongation(false)
+    scrollToTop()
+  }
 
   const handleUpdate = (values) => {
     dispatch(
@@ -122,7 +114,7 @@ const CautionDetails: React.FC<{
         projet_id: values.projet,
         // Demandeur: values.Demandeur,
         type_id: parseInt(values.caution_nature),
-        date_max_retour: moment(aFaireAvant, "DD/MM/YYYY").format("YYYY-MM-DD"),
+        date_max_retour: moment(aFaireAvant, 'DD/MM/YYYY').format('YYYY-MM-DD'),
         Client: values.client,
         montant: values.montant,
         eps: values.eps,
@@ -130,18 +122,18 @@ const CautionDetails: React.FC<{
         // Etat_main_levée: "En attente",
         // Observation: values.Observation,
         // etat_id: 1,
-      })
+      }),
     )
       .unwrap()
       .then((originalPromiseResult) => {
-        tableRef.current.reload();
-        setUpdate(false);
-        onClose();
+        tableRef.current.reload()
+        setUpdate(false)
+        onClose()
       })
       .catch((rejectedValueOrSerializedError) => {
         // handle error here
-      });
-  };
+      })
+  }
   const handlechangeStateCaution = (state) => {
     dispatch(
       updateCaution({
@@ -149,124 +141,122 @@ const CautionDetails: React.FC<{
         type_id: caution.type_id,
         etat_id: state,
         projet_id: caution.projet_id,
-      })
+      }),
     )
       .unwrap()
       .then((originalPromiseResult) => {
-        tableRef.current.reload();
-        onClose();
+        tableRef.current.reload()
+        onClose()
       })
       .catch((rejectedValueOrSerializedError) => {
-        console.log(rejectedValueOrSerializedError);
-      });
-  };
+        console.log(rejectedValueOrSerializedError)
+      })
+  }
 
   const handleDeleteCaution = () => {
-    dispatch(
-      deleteCaution(caution.id)
-    )
+    dispatch(deleteCaution(caution.id))
       .unwrap()
       .then((originalPromiseResult) => {
-        tableRef.current.reload();
-        onClose();
+        tableRef.current.reload()
+        onClose()
       })
       .catch((rejectedValueOrSerializedError) => {
-        console.log(rejectedValueOrSerializedError);
-      });
-  };
+        console.log(rejectedValueOrSerializedError)
+      })
+  }
 
   const calculCumulCautions = (entreprises, montant): number => {
-    let cumul = 0;
+    let cumul = 0
     cumul =
       entreprises.filter(
-        (item) => item.id === parseInt(caution.entreprise_id)
-      )[0].caution_mnt_max - montant;
+        (item) => item.id === parseInt(caution.entreprise_id),
+      )[0].caution_mnt_max - montant
     cautions.map((item) => {
       if (item.etat_id === 5 && item.entreprise_id === caution.entreprise_id) {
-        cumul -= item.montant;
+        cumul -= item.montant
       }
-    });
-    return cumul;
-  };
+    })
+    return cumul
+  }
 
   //select search and sort
   const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
   const filterSort = (optionA, optionB) =>
-    (optionA?.label ?? "")
+    (optionA?.label ?? '')
       .toLowerCase()
-      .localeCompare((optionB?.label ?? "").toLowerCase());
+      .localeCompare((optionB?.label ?? '').toLowerCase())
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(true)
     if (visible) {
       dispatch(getProjects())
         .unwrap()
         .then((originalPromiseResult) => {
-          setProjects(originalPromiseResult.data);
+          setProjects(originalPromiseResult.data)
         })
         .catch((rejectedValueOrSerializedError) => {
-          console.log(rejectedValueOrSerializedError);
-        });
+          console.log(rejectedValueOrSerializedError)
+        })
       dispatch(getClients())
         .unwrap()
         .then((originalPromiseResult) => {
-          setClients(originalPromiseResult.data);
+          setClients(originalPromiseResult.data)
         })
         .catch((rejectedValueOrSerializedError) => {
-          console.log(rejectedValueOrSerializedError);
-        });
+          console.log(rejectedValueOrSerializedError)
+        })
       dispatch(getCautionNatures())
         .unwrap()
         .then((originalPromiseResult) => {
-          setCautionNatures(originalPromiseResult.data);
+          setCautionNatures(originalPromiseResult.data)
         })
         .catch((rejectedValueOrSerializedError) => {
-          console.log(rejectedValueOrSerializedError);
-        });
+          console.log(rejectedValueOrSerializedError)
+        })
       dispatch(getEntreprises())
         .unwrap()
         .then((originalPromiseResult) => {
-          setEntreprises(originalPromiseResult.data);
+          setEntreprises(originalPromiseResult.data)
           setlingeEPS(
-            calculCumulCautions(originalPromiseResult.data, caution.montant)
-          );
-          setLoading(false);
+            calculCumulCautions(originalPromiseResult.data, caution.montant),
+          )
+          setLoading(false)
         })
         .catch((rejectedValueOrSerializedError) => {
-          console.log(rejectedValueOrSerializedError);
-        });
+          console.log(rejectedValueOrSerializedError)
+        })
       setFields([
         {
-          name: ["entreprise"],
+          name: ['entreprise'],
           value: caution.entreprise_id,
         },
         {
-          name: ["client"],
+          name: ['client'],
           value: caution.projet.tier_id,
         },
         {
-          name: ["projet"],
+          name: ['projet'],
           value: caution.projet.id,
         },
         {
-          name: ["num_appel_offre"],
+          name: ['num_appel_offre'],
           value: caution.projet.id,
         },
         {
-          name: ["caution_nature"],
+          name: ['caution_nature'],
           value: caution.caution_type.id,
         },
         {
-          name: ["montant"],
+          name: ['montant'],
           value: caution.montant,
         },
         {
-          name: ["date_debut"],
-          value: dayjs(caution.created_at.substring(0, 10), "YYYY-MM-DD"),
+          name: ['date_debut'],
+          value: dayjs(caution.created_at.substring(0, 10), 'YYYY-MM-DD'),
         },
         {
-          name: ["duree"],
+          name: ['duree'],
           value:
             //  update
             //   ? caution.period_valid
@@ -276,49 +266,47 @@ const CautionDetails: React.FC<{
             caution.period_valid,
         },
         {
-          name: ["a_faire_avant"],
+          name: ['a_faire_avant'],
           value:
             caution.date_max_retour &&
-            dayjs(caution.date_max_retour.substring(0, 10), "YYYY-MM-DD"),
+            dayjs(caution.date_max_retour.substring(0, 10), 'YYYY-MM-DD'),
         },
         {
-          name: ["eps"],
+          name: ['eps'],
           value: caution.eps,
         },
         {
-          name: ["dateE"],
+          name: ['dateE'],
           value: moment(
             moment(
               moment(
                 caution.created_at.substring(0, 10),
-                "YYYY-MM-DD"
+                'YYYY-MM-DD',
               ).valueOf() +
-                86400000 * caution.period_valid
-            ).format("DD/MM/YYYY"),
-            "DD/MM/YYYY"
+                86400000 * caution.period_valid,
+            ).format('DD/MM/YYYY'),
+            'DD/MM/YYYY',
           ),
         },
-      ]);
+      ])
       setAFaireAvant(
-        moment(caution.date_max_retour, "YYYY-MM-DD").format("DD/MM/YYYY")
-      );
+        moment(caution.date_max_retour, 'YYYY-MM-DD').format('DD/MM/YYYY'),
+      )
     }
-
-    console.log(caution);
     setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, [caution]);
+      setLoading(false)
+    }, 1000)
+  }, [caution])
   useEffect(() => {
     setTimeout(() => {
-      if (prolongation) scrollToBottom();
-    }, 500);
-  }, [refresh, update, prolongation]);
+      if (prolongation) scrollToBottom()
+    }, 500)
+  }, [refresh, update, prolongation])
   return (
     <Drawer
-      title={update ? "Modifer la caution" : "Détails de caution"}
+      title={update ? 'Modifer la caution' : 'Détails de caution'}
       className="CautionDetails"
-      width={windowWidth > 750 ? 720 : "90%"}
+      width={windowWidth > 750 ? 720 : '90%'}
       onClose={onClose}
       open={visible}
       bodyStyle={{
@@ -358,21 +346,21 @@ const CautionDetails: React.FC<{
                     filterOption={filterOption}
                     filterSort={filterSort}
                     onSelect={() => {
-                      forceUpdate(Math.random());
+                      forceUpdate(Math.random())
                       form.setFields([
                         {
-                          name: ["client"],
+                          name: ['client'],
                           value: null,
                         },
                         {
-                          name: ["projet"],
+                          name: ['projet'],
                           value: null,
                         },
                         {
-                          name: ["num_appel_offre"],
+                          name: ['num_appel_offre'],
                           value: null,
                         },
-                      ]);
+                      ])
                     }}
                   >
                     {entreprises?.map((item) => (
@@ -394,7 +382,7 @@ const CautionDetails: React.FC<{
                   rules={[
                     {
                       required: true,
-                      message: "Veuillez choisir le client",
+                      message: 'Veuillez choisir le client',
                     },
                   ]}
                 >
@@ -404,30 +392,30 @@ const CautionDetails: React.FC<{
                     filterOption={filterOption}
                     filterSort={filterSort}
                     onSelect={(e) => {
-                      forceUpdate(Math.random());
+                      forceUpdate(Math.random())
                       form.setFields([
                         {
-                          name: ["entreprise"],
+                          name: ['entreprise'],
                           value: clients.filter((item) => item.id === e)[0]
                             .entreprise_id,
                         },
                         {
-                          name: ["projet"],
+                          name: ['projet'],
                           value: null,
                         },
                         {
-                          name: ["num_appel_offre"],
+                          name: ['num_appel_offre'],
                           value: null,
                         },
-                      ]);
+                      ])
                     }}
                   >
                     {clients
                       ?.filter((item) =>
-                        form.getFieldValue("entreprise")
+                        form.getFieldValue('entreprise')
                           ? item.entreprise_id ===
-                            form.getFieldValue("entreprise")
-                          : true
+                            form.getFieldValue('entreprise')
+                          : true,
                       )
                       .map((item) => (
                         <Option
@@ -448,7 +436,7 @@ const CautionDetails: React.FC<{
                   rules={[
                     {
                       required: true,
-                      message: "Veuillez entrer le titre du projet",
+                      message: 'Veuillez entrer le titre du projet',
                     },
                   ]}
                 >
@@ -460,30 +448,30 @@ const CautionDetails: React.FC<{
                     onChange={(e) => {
                       form.setFields([
                         {
-                          name: ["num_appel_offre"],
+                          name: ['num_appel_offre'],
                           value: e,
                         },
                         {
-                          name: ["entreprise"],
+                          name: ['entreprise'],
                           value: projects.filter((item) => item.id === e)[0]
                             .departement.entreprise_id,
                         },
                         {
-                          name: ["client"],
+                          name: ['client'],
                           value: projects.filter((item) => item.id === e)[0]
                             .tier_id,
                         },
-                      ]);
+                      ])
                     }}
                   >
                     {projects
                       ?.filter((item) =>
-                        form.getFieldValue("client")
-                          ? item.tier_id === form.getFieldValue("client")
-                          : form.getFieldValue("entreprise")
+                        form.getFieldValue('client')
+                          ? item.tier_id === form.getFieldValue('client')
+                          : form.getFieldValue('entreprise')
                           ? item.departement.entreprise_id ===
-                            form.getFieldValue("entreprise")
-                          : true
+                            form.getFieldValue('entreprise')
+                          : true,
                       )
                       .map((item) => (
                         <Option
@@ -516,30 +504,30 @@ const CautionDetails: React.FC<{
                     onChange={(e) => {
                       form.setFields([
                         {
-                          name: ["projet"],
+                          name: ['projet'],
                           value: e,
                         },
                         {
-                          name: ["entreprise"],
+                          name: ['entreprise'],
                           value: projects.filter((item) => item.id === e)[0]
                             .departement.entreprise_id,
                         },
                         {
-                          name: ["client"],
+                          name: ['client'],
                           value: projects.filter((item) => item.id === e)[0]
                             .tier_id,
                         },
-                      ]);
+                      ])
                     }}
                   >
                     {projects
                       ?.filter((item) =>
-                        form.getFieldValue("client")
-                          ? item.tier_id === form.getFieldValue("client")
-                          : form.getFieldValue("entreprise")
+                        form.getFieldValue('client')
+                          ? item.tier_id === form.getFieldValue('client')
+                          : form.getFieldValue('entreprise')
                           ? item.departement.entreprise_id ===
-                            form.getFieldValue("entreprise")
-                          : true
+                            form.getFieldValue('entreprise')
+                          : true,
                       )
                       .map((item) => (
                         <Option
@@ -560,7 +548,7 @@ const CautionDetails: React.FC<{
                   rules={[
                     {
                       required: true,
-                      message: "Veuillez entrer le type de caution",
+                      message: 'Veuillez entrer le type de caution',
                     },
                   ]}
                 >
@@ -585,33 +573,33 @@ const CautionDetails: React.FC<{
                   rules={[
                     {
                       required: true,
-                      message: "Veuillez entrer le montant",
+                      message: 'Veuillez entrer le montant',
                     },
                   ]}
                 >
                   <InputNumber
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     formatter={(value) =>
-                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     }
-                    parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                    parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
                     placeholder="Veuillez entrer le montant"
                     onBlur={(e) => {
-                      if (parseFloat(e.target.value.replace(",", "")) >= 1000) {
+                      if (parseFloat(e.target.value.replace(',', '')) >= 1000) {
                         form.setFieldsValue({
                           eps: 1,
-                        });
+                        })
                         setlingeEPS(
                           calculCumulCautions(
                             entreprises,
-                            parseFloat(e.target.value.replace(",", ""))
-                          )
-                        );
+                            parseFloat(e.target.value.replace(',', '')),
+                          ),
+                        )
                       } else {
                         form.setFieldsValue({
                           eps: 0,
-                        });
-                        setlingeEPS(calculCumulCautions(entreprises, 0));
+                        })
+                        setlingeEPS(calculCumulCautions(entreprises, 0))
                       }
                     }}
                   />
@@ -624,24 +612,24 @@ const CautionDetails: React.FC<{
                   rules={[
                     {
                       required: true,
-                      message: "Veuillez choisir la date de debut",
+                      message: 'Veuillez choisir la date de debut',
                     },
                   ]}
                 >
                   <DatePicker
-                    style={{ width: "100%" }}
-                    format={"DD/MM/YYYY"}
+                    style={{ width: '100%' }}
+                    format={'DD/MM/YYYY'}
                     placement="topLeft"
                     onChange={(value, dateString: string) => {
                       form.setFields([
                         {
-                          name: ["a_faire_avant"],
+                          name: ['a_faire_avant'],
                           value: null,
                         },
-                      ]);
+                      ])
                     }}
                     onSelect={() => {
-                      forceUpdate(Math.random());
+                      forceUpdate(Math.random())
                     }}
                   />
                 </Form.Item>
@@ -653,12 +641,12 @@ const CautionDetails: React.FC<{
                   rules={[
                     {
                       required: true,
-                      message: "Veuillez entrer la durée du caution",
+                      message: 'Veuillez entrer la durée du caution',
                     },
                   ]}
                 >
                   <InputNumber
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     placeholder="Veuillez entrer la durée du caution"
                   />
                 </Form.Item>
@@ -670,22 +658,22 @@ const CautionDetails: React.FC<{
                   rules={[
                     {
                       required: true,
-                      message: "Veuillez choisir la date",
+                      message: 'Veuillez choisir la date',
                     },
                   ]}
                 >
                   <DatePicker
-                    style={{ width: "100%" }}
-                    format={"DD/MM/YYYY"}
+                    style={{ width: '100%' }}
+                    format={'DD/MM/YYYY'}
                     placement="topLeft"
                     onChange={(value, dateString: string) => {
-                      setAFaireAvant(dateString);
+                      setAFaireAvant(dateString)
                     }}
                   />
                 </Form.Item>
               </Col>
-              {(localStorage.getItem("role") === "chef" ||
-                localStorage.getItem("role") === "daf") && (
+              {(localStorage.getItem('role') === 'chef' ||
+                localStorage.getItem('role') === 'daf') && (
                 <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                   <Form.Item
                     name="eps"
@@ -699,7 +687,7 @@ const CautionDetails: React.FC<{
                           <Statistic
                             value={ligneEPS}
                             precision={3}
-                            valueStyle={{ color: ligneEPS < 0 && "#cf1322" }}
+                            valueStyle={{ color: ligneEPS < 0 && '#cf1322' }}
                           />
                           dinars
                         </Space>
@@ -708,7 +696,7 @@ const CautionDetails: React.FC<{
                     rules={[
                       {
                         required: true,
-                        message: "Please choose the approver",
+                        message: 'Please choose the approver',
                       },
                     ]}
                   >
@@ -742,7 +730,7 @@ const CautionDetails: React.FC<{
                     {...props}
                     multiple
                     listType="picture-card"
-                    style={{ display: !update ? "none" : "block" }}
+                    style={{ display: !update ? 'none' : 'block' }}
                   >
                     <p className="ant-upload-drag-icon">
                       <InboxOutlined />
@@ -758,7 +746,7 @@ const CautionDetails: React.FC<{
                 </Form.Item>
               </Col>
               {update && (
-                <Col span={24} style={{ textAlign: "right" }}>
+                <Col span={24} style={{ textAlign: 'right' }}>
                   <Form.Item>
                     <Space>
                       <Button
@@ -780,13 +768,15 @@ const CautionDetails: React.FC<{
               )}
             </Row>
           </Form>
-          <div style={{ textAlign: "right" }}>
+          <div style={{ textAlign: 'right' }}>
             {!update && (
               <>
                 {caution.etat_id === 7 &&
-                  localStorage.getItem("role") === "commerciale" && (
+                  localStorage.getItem('role') === 'commerciale' && (
                     <Space>
-                      <Button onClick={handleDeleteCaution} danger>Supprimer</Button>
+                      <Button onClick={handleDeleteCaution} danger>
+                        Supprimer
+                      </Button>
                       <Button onClick={() => setUpdate(true)}>Modifier</Button>
                       <Button
                         onClick={() => handlechangeStateCaution(1)}
@@ -797,7 +787,7 @@ const CautionDetails: React.FC<{
                     </Space>
                   )}
                 {caution.etat_id === 1 &&
-                  localStorage.getItem("role") === "commerciale" && (
+                  localStorage.getItem('role') === 'commerciale' && (
                     <Button
                       className="btnModofier"
                       onClick={() => setUpdate(true)}
@@ -806,11 +796,11 @@ const CautionDetails: React.FC<{
                     </Button>
                   )}
                 {caution.etat_id === 1 &&
-                  localStorage.getItem("role") === "chef" && (
+                  localStorage.getItem('role') === 'chef' && (
                     <Space>
                       <Button
                         onClick={() => {
-                          handlechangeStateCaution(2);
+                          handlechangeStateCaution(2)
                         }}
                         danger
                       >
@@ -825,8 +815,8 @@ const CautionDetails: React.FC<{
                       <Button
                         className="btnFermer"
                         onClick={() => {
-                          handlechangeStateCaution(3);
-                          onClose();
+                          handlechangeStateCaution(3)
+                          onClose()
                         }}
                         type="primary"
                       >
@@ -834,21 +824,24 @@ const CautionDetails: React.FC<{
                       </Button>
                     </Space>
                   )}
-                {caution.etat_id === 5 &&
-                  localStorage.getItem("role") === "commerciale" &&
-                  !prolongation && (
-                    <Button onClick={()=>setProlongation(true)}>Prolonger</Button>
+                {(caution.etat_id === 5 || caution.etat_id === 6) &&
+                  localStorage.getItem('role') === 'commerciale' &&
+                  !prolongation &&
+                  caution.prolongations[0]?.etat_id !== 1 && (
+                    <Button onClick={() => setProlongation(true)}>
+                      Prolonger
+                    </Button>
                   )}
               </>
             )}
           </div>
 
-          {caution.etat_id === 3 && localStorage.getItem("role") === "daf" && (
+          {caution.etat_id === 3 && localStorage.getItem('role') === 'daf' && (
             <div>
               <Form
                 layout="vertical"
                 hideRequiredMark
-                onFinish={()=>handlechangeStateCaution(4)}
+                onFinish={() => handlechangeStateCaution(4)}
               >
                 <Row>
                   <Col span={24}>
@@ -858,16 +851,16 @@ const CautionDetails: React.FC<{
                       rules={[
                         {
                           required: true,
-                          message: "Veuillez ratacher les fichiers",
+                          message: 'Veuillez ratacher les fichiers',
                         },
-                      //   () => ({
-                      //     validator() {
-                      //       if (fileList.length>=3) {
-                      //         return Promise.resolve();
-                      //       }
-                      //       return Promise.reject(new Error('Les fichiers ... et ... sont obligatoires'));
-                      //     },
-                      //   }),
+                        //   () => ({
+                        //     validator() {
+                        //       if (fileList.length>=3) {
+                        //         return Promise.resolve();
+                        //       }
+                        //       return Promise.reject(new Error('Les fichiers ... et ... sont obligatoires'));
+                        //     },
+                        //   }),
                       ]}
                     >
                       <Dragger multiple listType="picture">
@@ -881,7 +874,7 @@ const CautionDetails: React.FC<{
                       </Dragger>
                     </Form.Item>
                   </Col>
-                  <Col span={24} style={{ textAlign: "right" }}>
+                  <Col span={24} style={{ textAlign: 'right' }}>
                     <Form.Item>
                       <Space>
                         <Button htmlType="reset">Annuler</Button>
@@ -899,77 +892,89 @@ const CautionDetails: React.FC<{
               </Form>
             </div>
           )}
-                    {caution.etat_id === 4 && localStorage.getItem("role") === "commerciale" && (
-            <div>
-              <Form
-                layout="vertical"
-                hideRequiredMark
-                onFinish={()=>handlechangeStateCaution(5)}
-              >
-                <Row>
-                  <Col span={24}>
-                    <Form.Item
-                      label="Reçu banque"
-                      name="reçu"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Veuillez ratacher les fichiers",
-                        },
-                      //   () => ({
-                      //     validator() {
-                      //       if (fileList.length>=3) {
-                      //         return Promise.resolve();
-                      //       }
-                      //       return Promise.reject(new Error('Les fichiers ... et ... sont obligatoires'));
-                      //     },
-                      //   }),
-                      ]}
-                    >
-                      <Dragger multiple listType="picture">
-                        <p className="ant-upload-drag-icon">
-                          <FileAddOutlined />
-                        </p>
-                        <p className="ant-upload-text">
-                          Cliquez ou faites glisser le reçu de la banque dans cette
-                          zone pour le télécharger
-                        </p>
-                      </Dragger>
-                    </Form.Item>
-                  </Col>
-                  <Col span={24} style={{ textAlign: "right" }}>
-                    <Form.Item>
-                      <Space>
-                        <Button htmlType="reset">Annuler</Button>
-                        <Button
-                          className="btnModofier"
-                          htmlType="submit"
-                          type="primary"
-                        >
-                          Envoyer
-                        </Button>
-                      </Space>
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Form>
-            </div>
-          )}
-          <br/>
+          {caution.etat_id === 4 &&
+            localStorage.getItem('role') === 'commerciale' && (
+              <div>
+                <Form
+                  layout="vertical"
+                  hideRequiredMark
+                  onFinish={() => handlechangeStateCaution(5)}
+                >
+                  <Row>
+                    <Col span={24}>
+                      <Form.Item
+                        label="Reçu banque"
+                        name="reçu"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Veuillez ratacher les fichiers',
+                          },
+                          //   () => ({
+                          //     validator() {
+                          //       if (fileList.length>=3) {
+                          //         return Promise.resolve();
+                          //       }
+                          //       return Promise.reject(new Error('Les fichiers ... et ... sont obligatoires'));
+                          //     },
+                          //   }),
+                        ]}
+                      >
+                        <Dragger multiple listType="picture">
+                          <p className="ant-upload-drag-icon">
+                            <FileAddOutlined />
+                          </p>
+                          <p className="ant-upload-text">
+                            Cliquez ou faites glisser le reçu de la banque dans
+                            cette zone pour le télécharger
+                          </p>
+                        </Dragger>
+                      </Form.Item>
+                    </Col>
+                    <Col span={24} style={{ textAlign: 'right' }}>
+                      <Form.Item>
+                        <Space>
+                          <Button htmlType="reset">Annuler</Button>
+                          <Button
+                            className="btnModofier"
+                            htmlType="submit"
+                            type="primary"
+                          >
+                            Envoyer
+                          </Button>
+                        </Space>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </div>
+            )}
+          <br />
           {prolongation && (
-        <ProlongationForm setProlongation={setProlongation} caution={caution}/>
-      )}
-      <div ref={drawerEndRef}/>
-          {caution?.prolongations?.length !== 0 && (
-        <>
-          <Divider>Liste de prolongation</Divider>
-          <ListeProlongation cautionId={caution.id} />
-        </>
-      )}
+            <ProlongationForm
+              setProlongation={setProlongation}
+              caution={caution}
+            />
+          )}
+          {caution?.prolongations?.length !== 0 &&
+            caution?.prolongations[0]?.etat_id !== 5 &&
+            caution?.prolongations[0]?.etat_id !== 2 && (
+              <ProlongationDetails
+                caution={caution}
+                handlechangeStateCaution={handlechangeStateCaution}
+              />
+            )}
+          <div ref={drawerEndRef} />
+          {caution.etat_id === 6 && (
+            <>
+              <Divider>Liste des prolongations</Divider>
+              <ListeProlongation cautionId={caution.id} />
+            </>
+          )}
         </>
       )}
     </Drawer>
-  );
-};
+  )
+}
 
-export default CautionDetails;
+export default CautionDetails
