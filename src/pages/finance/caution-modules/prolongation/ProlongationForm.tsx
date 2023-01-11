@@ -22,8 +22,9 @@ const { Dragger } = Upload
 const { Title } = Typography
 const ProlongationForm: React.FC<{
   setProlongation: React.Dispatch<React.SetStateAction<boolean>>,
-  caution: ICaution
-}> = ({ setProlongation, caution }) => {
+  caution: ICaution,
+  handlechangeStateCaution:any
+}> = ({ setProlongation, caution, handlechangeStateCaution }) => {
   const dispatch = useDispatch();
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [form] = Form.useForm();
@@ -52,6 +53,7 @@ const ProlongationForm: React.FC<{
       .unwrap()
       .then((originalPromiseResult) => {
         setProlongation(false)
+        handlechangeStateCaution(8)
       })
       .catch((rejectedValueOrSerializedError) => {
         // handle error here

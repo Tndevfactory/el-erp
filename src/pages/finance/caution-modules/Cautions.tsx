@@ -251,7 +251,9 @@ const Cautions: React.FC = ()=>{
               : caution.etat_id === 5
               ? "green"
               : caution.etat_id === 6
-              ? "green":""
+              ? "green"
+              : caution.etat_id === 7
+              ? "":"gold"
           }
         >
           {caution.caution_etat.etat}
@@ -314,7 +316,7 @@ const Cautions: React.FC = ()=>{
       actionRef = { tableRef }
       headerTitle="Liste de cautions"
       rowClassName={(record, index) =>
-        record.etat_id === 1 && localStorage.getItem('role')==='chef' ||record.etat_id === 3 && localStorage.getItem('role')==='daf' 
+        (record.etat_id === 1 ||record.etat_id === 8) && localStorage.getItem('role')==='chef' ||record.etat_id === 3 && localStorage.getItem('role')==='daf' 
           ? "table-row-en-attente"
           : 
           // record.Etat_main_levée === "En cours" &&
@@ -392,18 +394,18 @@ const Cautions: React.FC = ()=>{
         size: "small",
         pageSize: 7,
       }}
-      expandable={{
-        expandedRowRender: (record) => (
-          <div className="flex justify-center">
-            <div style={{ width: "60%", margin: "15px" }}>
-              <ListeProlongation cautionId={record.id} />
-            </div>
-          </div>
-        ),
-        rowExpandable: (record) => record?.prolongations?.length !== 0,
-        showExpandColumn: false,
-        expandedRowKeys: expandedRowKeys,
-      }}
+      // expandable={{
+      //   expandedRowRender: (record) => (
+      //     <div className="flex justify-center">
+      //       <div style={{ width: "60%", margin: "15px" }}>
+      //         <ListeProlongation cautionId={record.id} />
+      //       </div>
+      //     </div>
+      //   ),
+      //   rowExpandable: (record) => record?.prolongations?.length !== 0,
+      //   showExpandColumn: false,
+      //   expandedRowKeys: expandedRowKeys,
+      // }}
       toolBarRender={() => localStorage.getItem('role')==="commerciale"&&[
         <Button
           type="primary"

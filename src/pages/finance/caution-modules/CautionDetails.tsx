@@ -954,6 +954,7 @@ const CautionDetails: React.FC<{
             <ProlongationForm
               setProlongation={setProlongation}
               caution={caution}
+              handlechangeStateCaution={handlechangeStateCaution}
             />
           )}
           {caution?.prolongations?.length !== 0 &&

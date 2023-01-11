@@ -13,8 +13,8 @@ import {
   Button,
   DatePicker,
 } from "antd";
+import { InboxOutlined, FileAddOutlined } from '@ant-design/icons'
 import { useDispatch, useSelector } from "react-redux";
-import { InboxOutlined } from "@ant-design/icons";
 import { createProlongation, updateProlongation } from "@/features/finance/caution/prolongationCaution";
 import { ICaution } from "@/features/finance/caution/cautionSlice";
 import moment from "moment";
@@ -277,6 +277,7 @@ const ProlongationForm: React.FC<{
                     className="btnFermer"
                     onClick={() => {
                       handlechangeStateProlongation(3);
+                      handlechangeStateCaution(3)
                     }}
                     type="primary"
                   >
@@ -287,6 +288,119 @@ const ProlongationForm: React.FC<{
           </>
         )}
       </div>
+      {caution.prolongations[0].etat_id === 3 && localStorage.getItem('role') === 'daf' && (
+            <div>
+              <Form
+                layout="vertical"
+                hideRequiredMark
+                onFinish={() => {handlechangeStateCaution(4);handlechangeStateProlongation(4)}}
+              >
+                <Row>
+                  <Col span={24}>
+                    <Form.Item
+                      name="formulaire"
+                      label="Formulaire"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Veuillez ratacher les fichiers',
+                        },
+                        //   () => ({
+                        //     validator() {
+                        //       if (fileList.length>=3) {
+                        //         return Promise.resolve();
+                        //       }
+                        //       return Promise.reject(new Error('Les fichiers ... et ... sont obligatoires'));
+                        //     },
+                        //   }),
+                      ]}
+                    >
+                      <Dragger multiple listType="picture">
+                        <p className="ant-upload-drag-icon">
+                          <FileAddOutlined />
+                        </p>
+                        <p className="ant-upload-text">
+                          Cliquez ou faites glisser la formulaire dans cette
+                          zone pour la télécharger
+                        </p>
+                      </Dragger>
+                    </Form.Item>
+                  </Col>
+                  <Col span={24} style={{ textAlign: 'right' }}>
+                    <Form.Item>
+                      <Space>
+                        <Button htmlType="reset">Annuler</Button>
+                        <Button
+                          className="btnModofier"
+                          htmlType="submit"
+                          type="primary"
+                        >
+                          Envoyer
+                        </Button>
+                      </Space>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </div>
+          )}
+          {caution.prolongations[0].etat_id &&
+            localStorage.getItem('role') === 'commerciale' && (
+              <div>
+                <Form
+                  layout="vertical"
+                  hideRequiredMark
+                  onFinish={() => {handlechangeStateCaution(6);handlechangeStateProlongation(5)}}
+                >
+                  <Row>
+                    <Col span={24}>
+                      <Form.Item
+                        label="Reçu banque"
+                        name="reçu"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Veuillez ratacher les fichiers',
+                          },
+                          //   () => ({
+                          //     validator() {
+                          //       if (fileList.length>=3) {
+                          //         return Promise.resolve();
+                          //       }
+                          //       return Promise.reject(new Error('Les fichiers ... et ... sont obligatoires'));
+                          //     },
+                          //   }),
+                        ]}
+                      >
+                        <Dragger multiple listType="picture">
+                          <p className="ant-upload-drag-icon">
+                            <FileAddOutlined />
+                          </p>
+                          <p className="ant-upload-text">
+                            Cliquez ou faites glisser le reçu de la banque dans
+                            cette zone pour le télécharger
+                          </p>
+                        </Dragger>
+                      </Form.Item>
+                    </Col>
+                    <Col span={24} style={{ textAlign: 'right' }}>
+                      <Form.Item>
+                        <Space>
+                          <Button htmlType="reset">Annuler</Button>
+                          <Button
+                            className="btnModofier"
+                            htmlType="submit"
+                            type="primary"
+                          >
+                            Envoyer
+                          </Button>
+                        </Space>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </div>
+            )}
     </div>
   );
 };
