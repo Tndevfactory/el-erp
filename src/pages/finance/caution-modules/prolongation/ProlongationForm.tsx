@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   Form,
   Row,
@@ -12,7 +12,7 @@ import {
   Space,
   Button,
   DatePicker,
-} from 'antd'
+} from 'antd';
 import { useDispatch, useSelector } from "react-redux";
 import { InboxOutlined } from '@ant-design/icons'
 import { createProlongation } from '@/features/finance/caution/prolongationCaution';
@@ -88,7 +88,7 @@ const ProlongationForm: React.FC<{
             <Form.Item name="reference" label="Référence demande" rules={[
                 {
                   required: true,
-                  message: 'Please choose the approver',
+                  // message: 'Veuillez entrer la référence de prolongation',
                 },
               ]}>
               <Input placeholder="Veuillez entrer la référence de prolongation" />
@@ -101,7 +101,7 @@ const ProlongationForm: React.FC<{
               rules={[
                 {
                   required: true,
-                  message: 'Please choose the approver',
+                  // message: 'Veuillez entrer la durée de prolongation',
                 },
               ]}
             >
@@ -127,11 +127,11 @@ const ProlongationForm: React.FC<{
               rules={[
                 {
                   required: true,
-                  message: 'Please choose the approver',
+                  // message: 'Please choose the approver',
                 },
               ]}
             >
-                           <DatePicker
+              <DatePicker
                 style={{ width: "100%" }}
                 format={"DD/MM/YYYY"}
               />

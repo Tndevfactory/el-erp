@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../../style/modules/Caution.less";
+
 import {
   Button,
   Space,
@@ -240,17 +241,13 @@ const Cautions: React.FC = ()=>{
       render: (_, caution) => (
         <Tag
           color={
-            caution.etat_id === 3
+            caution.etat_id === 3 || caution.etat_id === 4 ||caution.etat_id === 9
               ? "blue"
               : caution.etat_id === 1
               ? "gold"
               : caution.etat_id === 2
               ? "red"
-              : caution.etat_id === 4
-              ? "blue"
-              : caution.etat_id === 5
-              ? "green"
-              : caution.etat_id === 6
+              : caution.etat_id === 5 || caution.etat_id === 6
               ? "green"
               : caution.etat_id === 7
               ? "":"gold"
@@ -406,7 +403,7 @@ const Cautions: React.FC = ()=>{
       //   showExpandColumn: false,
       //   expandedRowKeys: expandedRowKeys,
       // }}
-      toolBarRender={() => localStorage.getItem('role')==="commerciale"&&[
+      toolBarRender={() => (localStorage.getItem('role')==="commerciale"||localStorage.getItem('role')==="daf")&&[
         <Button
           type="primary"
           onClick={() => {
@@ -449,27 +446,27 @@ const Cautions: React.FC = ()=>{
                   children: Table(1)
                 },
                 {
-                  label: <Space><>Encours DAF</><Badge count={cautions?.filter(item=>item.etat_id===3).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: <Space><>En cours DAF</><Badge count={cautions?.filter(item=>item.etat_id===3).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
                   key: "3",
                   children: Table(3)
                 },
                 {
-                  label: <Space><>Encours Banque</><Badge count={cautions?.filter(item=>item.etat_id===4).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: <Space><>En cours Banque</><Badge count={cautions?.filter(item=>item.etat_id===4).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
                   key: "4",
                   children: Table(4)
                 },
                 {
-                  label: <Space><>Fermer</><Badge count={cautions?.filter(item=>item.etat_id===5).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: <Space><>Fermées</><Badge count={cautions?.filter(item=>item.etat_id===5).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
                   key: "5",
                   children: Table(5)
                 },
                 {
-                  label: <Space><>Refuser</><Badge count={cautions?.filter(item=>item.etat_id===6).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: <Space><>Refusées</><Badge count={cautions?.filter(item=>item.etat_id===6).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
                   key: "6",
                   children: Table(2)
                 },
                 {
-                  label: <Space><>Enregistrer</><Badge count={cautions?.filter(item=>item.etat_id===7).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: <Space><>Enregistrées</><Badge count={cautions?.filter(item=>item.etat_id===7).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
                   key: "7",
                   children: Table(7)
                 },

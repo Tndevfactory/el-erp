@@ -172,7 +172,7 @@ const CautionDetails: React.FC<{
         (item) => item.id === parseInt(caution.entreprise_id),
       )[0].caution_mnt_max - montant
     cautions.map((item) => {
-      if (item.etat_id === 5 && item.entreprise_id === caution.entreprise_id) {
+      if ((item.etat_id === 5 || item.etat_id === 6 || item.etat_id === 8) && item.entreprise_id === caution.entreprise_id) {
         cumul -= item.montant
       }
     })
@@ -681,7 +681,7 @@ const CautionDetails: React.FC<{
                     extra={
                       caution &&
                       caution.eps === 1 &&
-                      caution.etat_id === 1 && (
+                      (caution.etat_id === 1 || caution.etat_id === 3) && (
                         <Space>
                           Ligne EPS aprés opération:
                           <Statistic
@@ -832,11 +832,18 @@ const CautionDetails: React.FC<{
                       Prolonger
                     </Button>
                   )}
+                  {caution.etat_id === 4 &&
+                  localStorage.getItem('role') === 'daf' &&
+                  caution.prolongations.length===0&&(
+                    <Button type='primary' onClick={() => handlechangeStateCaution(9)}>
+                      Acceptée banque
+                    </Button>
+                  )}
               </>
             )}
           </div>
 
-          {caution.etat_id === 3 && localStorage.getItem('role') === 'daf' && (
+          {caution.etat_id === 3 && caution.prolongations.length===0&& localStorage.getItem('role') === 'daf' && (
             <div>
               <Form
                 layout="vertical"
@@ -892,7 +899,8 @@ const CautionDetails: React.FC<{
               </Form>
             </div>
           )}
-          {caution.etat_id === 4 &&
+          {caution.etat_id === 9 &&
+           caution.prolongations.length===0&&
             localStorage.getItem('role') === 'commerciale' && (
               <div>
                 <Form
