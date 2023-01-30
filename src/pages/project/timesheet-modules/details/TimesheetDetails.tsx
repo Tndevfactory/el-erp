@@ -7,8 +7,8 @@ import { ISheet } from '@/features/timesheet/timesheetSlice'
 import type { ColumnsType } from 'antd/es/table';
 const { Title } = Typography
 
-const TimesheetDetails:React.FC<{ detail:ISheet }>=({ detail }) =>{
-  const [data, setData] = useState(detail.detail)
+const TimesheetDetails:React.FC<{ detail:ISheet, filtred:boolean }>=({ detail, filtred }) =>{
+  const [data, setData] = useState(detail.details)
   interface IDetailSheet {
     id: number;
     projet: string;
@@ -63,7 +63,7 @@ const TimesheetDetails:React.FC<{ detail:ISheet }>=({ detail }) =>{
     },
   ]
   const handleOnExport = () => {
-    let data = detail.detail
+    let data = detail.details
     data.map((item, index) => {
       delete item.id
     })
@@ -89,7 +89,7 @@ const TimesheetDetails:React.FC<{ detail:ISheet }>=({ detail }) =>{
         dataSource={data}
         size="middle"
         pagination={
-          detail.detail.length <= 6
+          detail.details.length <= 6
             ? false
             : {
                 size: 'small',
@@ -101,12 +101,12 @@ const TimesheetDetails:React.FC<{ detail:ISheet }>=({ detail }) =>{
       <Row gutter={[10, 10]} >
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Card>
-           <ChartsTest sheets={detail.detail}/> 
+           <ChartsTest sheets={detail.details} filtred={filtred}/> 
           </Card>
         </Col>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
         <Card style={{height:325}}>
-          <Stat sheets={detail.detail}/>
+          <Stat sheets={detail.details} filtred={filtred}/>
         </Card>
         </Col>
       </Row>

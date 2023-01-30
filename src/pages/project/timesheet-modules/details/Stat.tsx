@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Pie } from "@ant-design/plots";
 
-const Stat = ({ sheets }) => {
+const Stat = ({ sheets, filtred}) => {
   const [data, setData] = useState([]);
   const sum = () => {
     var count = 0;
@@ -56,17 +56,29 @@ const Stat = ({ sheets }) => {
   };
   useEffect(() => {
     let t = data;
-    sheets.map((sheet) => {
-      if (t.filter((item) => item.type === sheet.projet).length) {
-        t.map((item) => {
-          if (item.type === sheet.projet) item.value += sheet.nbrHeures;
-        });
-      } else {
-        t.push({ type: sheet.projet, value: sheet.nbrHeures });
-      }
-    });
+    if(filtred){
+      sheets.map((sheet) => {
+        if (t.filter((item) => item.type === sheet.tache).length) {
+          t.map((item) => {
+            if (item.type === sheet.tache) item.value += sheet.nbrHeures;
+          });
+        } else {
+          t.push({ type: sheet.tache, value: sheet.nbrHeures });
+        }
+      });
+    }else{
+      sheets.map((sheet) => {
+        if (t.filter((item) => item.type === sheet.projet).length) {
+          t.map((item) => {
+            if (item.type === sheet.projet) item.value += sheet.nbrHeures;
+          });
+        } else {
+          t.push({ type: sheet.projet, value: sheet.nbrHeures });
+        }
+      });
+    }
     setData(t);
-  }, []);
+  }, [sheets]);
   return (
     <div
       style={{
@@ -75,10 +87,12 @@ const Stat = ({ sheets }) => {
         position: "absolute",
         top: "55%",
         transform: "translateY(-50%)",
-        width:"100%"
+        width:"95%"
       }}
     >
-      {data.length && <Pie {...config} />}
+      {data.length && 
+        <Pie {...config} />
+      }
     </div>
   );
 };

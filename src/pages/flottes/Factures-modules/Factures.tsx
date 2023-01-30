@@ -129,7 +129,6 @@ const Factures : React.FC = ()=>{
             <DatePicker
               picker="month"
               onChange={(e, dateString) => {
-                console.log(e);
               }}
             />
             <Button icon={<SearchOutlined />} type="primary" />

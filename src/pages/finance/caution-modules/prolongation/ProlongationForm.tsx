@@ -157,7 +157,7 @@ const ProlongationForm: React.FC<{
                   télécharger
                 </p>
                 <p className="ant-upload-hint">
-                  Merci d'attacher le fichier ..., ... et ...
+                  Merci d'attacher l'avis de prolongation
                 </p>
               </Dragger>
             </Form.Item>

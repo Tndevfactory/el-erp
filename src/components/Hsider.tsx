@@ -9,19 +9,20 @@ import {
   Grid,
   Image,
 } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import MenuIcon from "./MenuIcon";
+import { getMenus } from "@/features/menus/menuSlice";
 const { Sider } = Layout;
 
 const { useBreakpoint } = Grid;
 
 export default function Hsider() {
-  const { isCollapsed, menu, selectedModule } = useSelector(
+  const { isCollapsed, selectedModule } = useSelector(
     (store: any) => store.ui
   );
-
-
+  const dispatch = useDispatch();
+  const [ menu, setMenu] = useState(JSON.parse(localStorage.getItem("menu")));
 
   const screens = useBreakpoint();
   /* console.log(screens.lg); */
@@ -77,7 +78,7 @@ export default function Hsider() {
             <Menu.Item key={index}  icon={<div><MenuIcon icon={item.icon}/></div>} onClick={()=>setCurrent(index.toString())}><NavLink to={item.link}>{item.designation_fr}</NavLink></Menu.Item>
           ) : (
             <Menu.SubMenu key={index}  title={item.designation_fr} icon={<div><MenuIcon icon={item.icon} /></div>} >
-              {item.child_recursive.map((item,y) =><Menu.Item key={index+"-"+y}  onClick={()=>{setCurrent(index.toString()+"-"+y.toString());console.log(item.link)}}><NavLink to={item.link}>{item.designation_fr}</NavLink></Menu.Item>)}
+              {item.child_recursive.map((item,y) =><Menu.Item key={index+"-"+y}  onClick={()=>{setCurrent(index.toString()+"-"+y.toString())}}><NavLink to={item.link}>{item.designation_fr}</NavLink></Menu.Item>)}
             </Menu.SubMenu>
           )
         )}

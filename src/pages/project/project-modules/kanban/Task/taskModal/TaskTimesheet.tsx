@@ -15,6 +15,7 @@ import {
   DatePicker,
   InputNumber,
   Select,
+  TimePicker
 } from 'antd'
 import * as XLSX from 'xlsx/xlsx.mjs'
 import { RiTeamFill } from 'react-icons/ri'
@@ -26,6 +27,7 @@ import moment from 'moment'
 const { Option } = Select
 const { Title } = Typography
 function TaskTimesheet({ detail }) {
+  const [form] = Form.useForm();
   const [data, setData] = useState(detail)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -111,31 +113,35 @@ function TaskTimesheet({ detail }) {
         showHeader={false}
         size="small"
         pagination={
-          detail.length <= 6
+          detail.length <= 3
             ? false
             : {
                 size: 'small',
-                pageSize: 6,
+                pageSize: 3,
               }
         }
       />
       <Modal
         title="Ajouter timesheet"
         open={isModalOpen}
-        onOk={() => setIsModalOpen(false)}
-        onCancel={() => setIsModalOpen(false)}
+        onOk={() => {
+          form
+            .validateFields()
+            .then((values) => {
+              setIsModalOpen(false)
+              form.resetFields();
+            })
+            .catch((info) => {
+              console.log("Validate Failed:", info);
+            });
+        }}
+        onCancel={() => {form.resetFields();setIsModalOpen(false)}}
         width={700}
         centered
-        footer={[
-          <Button key="back" onClick={() => {}}>
-            Annuler
-          </Button>,
-          <Button key="submit" type="primary">
-            Ajouter
-          </Button>,
-        ]}
+        okText="Ajouter"
+        cancelText="Annuler"
       >
-        <Form name="horizontal_login" layout="vertical" onFinish={() => {}}>
+        <Form name="horizontal_login" layout="vertical" onFinish={() => {}} form={form}>
           <Row gutter={16}>
           <Col span={6}>
             <Form.Item
@@ -143,7 +149,7 @@ function TaskTimesheet({ detail }) {
               rules={[
                 {
                   required: true,
-                  message: "Please choose the type",
+                  // message: "Please choose the type",
                 },
               ]}
             >
@@ -159,22 +165,22 @@ function TaskTimesheet({ detail }) {
               rules={[
                 {
                   required: true,
-                  message: "Please select an owner",
+                  // message: "Please select an owner",
                 },
               ]}
             >
-              <InputNumber placeholder="Durée" style={{width:"100%"}}/>
+              <TimePicker  format='HH:mm' placeholder='Durée' showNow={false}/>
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item
               name="type"
-              rules={[
-                {
-                  required: true,
-                  message: "Please choose the type",
-                },
-              ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //     // message: "Please choose the type",
+              //   },
+              // ]}
             >
               <Select defaultValue="Développement">
               <Option key={0} value="Développement">
@@ -195,12 +201,6 @@ function TaskTimesheet({ detail }) {
           <Col span={6}>
             <Form.Item
               name="information"
-              rules={[
-                {
-                  required: true,
-                  message: "Please select an owner",
-                },
-              ]}
             >
               <Input placeholder="Information" />
             </Form.Item>

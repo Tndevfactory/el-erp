@@ -8,6 +8,8 @@ import {
   Empty,
   Form,
   Drawer,
+  Row,
+  Col
 } from "antd";
 import moment from "moment";
 import { SendOutlined } from "@ant-design/icons";
@@ -33,7 +35,7 @@ const ChatGroup = ({ setVisible, visible }) => {
               description={"No message"}
             />
           <Form
-            className="form"
+            className="absolute bottom-1 w-11/12"
             form={form}
             // onFinish={(values) => {
             //   let data = {
@@ -45,12 +47,14 @@ const ChatGroup = ({ setVisible, visible }) => {
             // }}
             autoComplete="off"
           >
-            <div style={{ display: "flex" }}>
-              <Avatar src="https://joeschmoe.io/api/v1/2" />
+            <Row className="w-full" gutter={16}> 
+              <Col span={2}>
+              <Avatar src="https://xsgames.co/randomusers/avatar.php?g=male" size="default" />
+              </Col>
+              <Col span={20}>
               <Form.Item
                 style={{
-                  marginLeft: "10px",
-                  marginRight: "5px",
+                  marginLeft: "3px",
                   width: "100%",
                 }}
                 name="message"
@@ -66,6 +70,8 @@ const ChatGroup = ({ setVisible, visible }) => {
                   style={{ borderRadius: "15px" }}
                 />
               </Form.Item>
+              </Col>
+              <Col span={2}>
               <Tooltip title="send">
                 <Button
                   type="primary"
@@ -74,7 +80,8 @@ const ChatGroup = ({ setVisible, visible }) => {
                   icon={<SendOutlined style={{ marginLeft: "3px" }} />}
                 />
               </Tooltip>
-            </div>
+              </Col>
+            </Row>
           </Form>
       </div>
     </Drawer>

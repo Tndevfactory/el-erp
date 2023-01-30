@@ -116,7 +116,6 @@ const Home1: React.FC = () => {
   //       {screen[0]}
   //     </Tag>
   //   ))}
-  console.log(screens);
   return (
     <Row
       gutter={[16, 24]}

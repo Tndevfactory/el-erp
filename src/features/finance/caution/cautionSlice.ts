@@ -3,161 +3,8 @@ import axios from "axios";
 import { IProject } from "@/features/project/projectSlice";
 import { IProlongation } from "./prolongationCaution";
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
+  baseURL: import.meta.env.VITE_API_URL,
 });
-const dataSource = [
-  {
-    id: 0,
-    Nom_Projet: "AO N°21/2022",
-    Demandeur: "Asma Manaii",
-    type_caution: "Provisoire-CSP",
-    DateD: "1/11/2022",
-    Client: "Ministère de la Jeunesse et des Sports",
-    Montant: 3500,
-    ligne: "EPS",
-    Durée: 120,
-    DuréeAdditionnelle: null,
-    Frais_mois: 20,
-    Etat_main_levée: "En attente",
-    Date_réception_PV_définitif: null,
-    Observation: null,
-    Prolongations: [],
-  },
-  {
-    id: 1,
-    Nom_Projet: "C N°5 PAQ-DGSE 022-UT",
-    Demandeur: "Asma Manaii",
-    type_caution: "Provisoire-CSP",
-    DateD: "1/08/2022",
-    Client: "ISEAHT",
-    Montant: 300,
-    ligne: "Compte courant",
-    Frais_mois: 20,
-    Durée: 120,
-    DuréeAdditionnelle: null,
-    Etat_main_levée: "En cours",
-    Date_réception_PV_définitif: null,
-    Observation: null,
-    Prolongations: [
-      {
-        Référence: "1FS548E",
-        Durée: 15,
-        DateE: "12/01/2023",
-        Etat: "En attente",
-      },
-      {
-        Référence: "34DS856",
-        Durée: 30,
-        DateE: "28/12/2022",
-        Etat: "Approuver",
-      },
-    ],
-  },
-  {
-    id: 2,
-    Nom_Projet: "AO N°02/2020",
-    Demandeur: "Abdelmonam KOUKA",
-    type_caution: "Retenue de Garantie",
-    DateD: "30/06/2022",
-    Client: "SNIT Nord",
-    Montant: 2142,
-    ligne: "EPS",
-    Frais_mois: 20,
-    Durée: 120,
-    DuréeAdditionnelle: null,
-    Etat_main_levée: "En cours",
-    Date_réception_PV_définitif: null,
-    Observation: null,
-    Prolongations: [],
-  },
-  {
-    id: 3,
-    Nom_Projet: "AO N°02/CN/2021",
-    Demandeur: "Abdelmonam KOUKA",
-    type_caution: "Retenue de Garantie",
-    DateD: "20/10/2022",
-    Client: "Institut National de la Météorologie-INM",
-    Montant: 1458,
-    ligne: "EPS",
-    Frais_mois: 20,
-    Durée: 90,
-    DuréeAdditionnelle: null,
-    Etat_main_levée: "En cours",
-    Date_réception_PV_définitif: "25/10/2023",
-    Prolongations: [],
-    Observation: null,
-  },
-  {
-    id: 4,
-    Nom_Projet: "AO N°21/2022",
-    Demandeur: "Hiba GRAYAA",
-    type_caution: "Définitive-CSP",
-    DateD: "11/8/2022",
-    Client: "Ministère de commerce et du Développement des Exportations",
-    Montant: 4831.4,
-    ligne: "EPS",
-    Durée: 120,
-    DuréeAdditionnelle: 30,
-    Frais_mois: 20,
-    Etat_main_levée: "En cours",
-    Date_réception_PV_définitif: null,
-    Observation:
-      "Reste la validation du directeur de l'IRT + PAM (PV DE VALIDATION). Garantie 10 mois, réception déf 30 jrs après la garantie.",
-    Prolongations: [],
-  },
-  {
-    id: 5,
-    Nom_Projet: "C N°5 PAQ-DGSE 022-UT",
-    Demandeur: "Asma Manaii",
-    type_caution: "Provisoire-CSP",
-    DateD: "1/4/2022",
-    Client: "ISEAHT",
-    Montant: 300,
-    ligne: "Compte courant",
-    Frais_mois: 20,
-    Durée: 90,
-    DuréeAdditionnelle: null,
-    Etat_main_levée: "Fermée",
-    Date_réception_PV_définitif: "12/03/2023",
-    Observation: null,
-    Prolongations: [],
-  },
-  {
-    id: 6,
-    Nom_Projet: "AO N°02/CN/2021",
-    Demandeur: "Abdelmonam KOUKA",
-    type_caution: "Retenue de Garantie",
-    DateD: "20/10/2022",
-    Client: "Institut National de la Météorologie-INM",
-    Montant: 1458,
-    ligne: "EPS",
-    Frais_mois: 20,
-    Durée: 90,
-    DuréeAdditionnelle: null,
-    Etat_main_levée: "En cours",
-    Date_réception_PV_définitif: null,
-    Observation: null,
-    Prolongations: [],
-  },
-  {
-    id: 7,
-    Nom_Projet: "AO N°21/2022",
-    Demandeur: "Hiba GRAYAA",
-    type_caution: "Définitive-CSP",
-    DateD: "11/8/2022",
-    Client: "Ministère de commerce et du Développement des Exportations",
-    Montant: 4831.4,
-    ligne: "EPS",
-    Durée: 120,
-    DuréeAdditionnelle: 30,
-    Frais_mois: 20,
-    Etat_main_levée: "En cours",
-    Date_réception_PV_définitif: null,
-    Prolongations: [],
-    Observation:
-      "Reste la validation du directeur de l'IRT + PAM (PV DE VALIDATION). Garantie 10 mois, réception déf 30 jrs après la garantie.",
-  },
-];
 
 export interface Projet {
   id: number;
@@ -223,6 +70,7 @@ export interface ICaution {
   caution_files: string[];
   prolongations: IProlongation[];
   key:string;
+  dureeAfterProlongation?:number;
 }
 export const getCautions: any = createAsyncThunk(
   "cautions",
@@ -286,19 +134,19 @@ export const deleteCaution: any = createAsyncThunk(
   }
 );
 
-const initialState = {
-  cautions: dataSource,
-  caution: {},
-};
+// const initialState = {
+//   cautions: dataSource,
+//   caution: {},
+// };
 
-const cautionSlice = createSlice({
-  name: "caution",
-  initialState,
-  reducers: {
-  },
-});
+// const cautionSlice = createSlice({
+//   name: "caution",
+//   initialState,
+//   reducers: {
+//   },
+// });
 
-export const {
-} = cautionSlice.actions;
+// export const {
+// } = cautionSlice.actions;
 
-export default cautionSlice.reducer;
+// export default cautionSlice.reducer;

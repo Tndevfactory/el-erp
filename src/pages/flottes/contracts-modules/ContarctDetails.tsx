@@ -32,14 +32,14 @@ const props: UploadProps = {
   onChange(info) {
     const { status } = info.file;
     if (status !== "uploading") {
-      console.log(info.file, info.fileList);
+      // console.log(info.file, info.fileList);
     }
     if (status === "done") {
     } else if (status === "error") {
     }
   },
   onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
+    // console.log("Dropped files", e.dataTransfer.files);
   },
 };
 //Contract form
@@ -231,14 +231,13 @@ export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.Set
     </Row>
   </Form>
 );
-const CautionDetails: React.FC<{
+const ContractDetails: React.FC<{
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
   modify: boolean;
   setModify: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ visible, setVisible, forceRefresh, modify, setModify }) => {
-  var { caution } = useSelector((store: any) => store.caution);
   var { windowWidth } = useSelector((store: any) => store.ui);
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
@@ -329,4 +328,4 @@ const CautionDetails: React.FC<{
   );
 };
 
-export default CautionDetails;
+export default ContractDetails;

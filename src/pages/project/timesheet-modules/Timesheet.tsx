@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Space,
@@ -12,89 +12,202 @@ import {
   Select,
   DatePicker,
 } from "antd";
-import { ProTable, TableDropdown, ProColumns } from '@ant-design/pro-components';
+import {
+  ProTable,
+  TableDropdown,
+  ProColumns,
+} from "@ant-design/pro-components";
 import { SearchOutlined } from "@ant-design/icons";
 import type { DatePickerProps } from "antd";
 import moment from "moment";
 import TimesheetDetails from "./details/TimesheetDetails";
 import { useDispatch, useSelector } from "react-redux";
-import { ISheet } from "@/features/timesheet/timesheetSlice";
+import { getTimesheets, ISheet } from "@/features/timesheet/timesheetSlice";
 import * as XLSX from "xlsx/xlsx.mjs";
+import { getAllProjects, getProjects } from "@/features/project/projectSlice";
+import { getEntreprises, IEntreprise } from "@/features/entreprise/entrepriseSlice";
+import dayjs from "dayjs";
+import { getEmployees } from "@/features/users/userSlice";
 const { Title } = Typography;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 type PickerType = "date" | "week" | "month" | "quarter" | "year";
-const dateFormat = "DD/MM/YYYY";
-const Timesheet:React.FC=()=> {
-  var { sheets } = useSelector((store: any) => store.timesheet);
-  // console.log(sheets)
-  const [search, setSearch] = useState("");
+const dateFormat = "YYYY-MM-DD";
+const Timesheet: React.FC = () => {
+  const dispatch = useDispatch();
   const [typeDate, setTypeDate] = useState<PickerType>("date");
-  const [date, setDate] = useState<string[]>();
+  const [date, setDate] = useState<string[]>(["2023-01-15","2023-01-23"]);
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-
+  const [entreprise, setEntreprise] = useState<number>(null);
+  const [employee, setEmployee] = useState<number>(null);
+  const [project, setProject] = useState<number>(null);
+  const [entreprises, setEntreprises] = useState<IEntreprise[]>([]);
+  const [employees, setEmployees] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [data, setData] = useState<ISheet[]>([])
+  //select search and sort
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  const filterSort = (optionA, optionB) =>
+    (optionA?.label ?? "")
+      .toLowerCase()
+      .localeCompare((optionB?.label ?? "").toLowerCase());
   const columns: ProColumns<ISheet>[] = [
     {
-      title : 'Date' , 
-      key : 'direction' , 
-      hideInTable : true , 
-      dataIndex : 'direction' , 
-      renderFormItem : ( item , { type , defaultRender , ... rest } , form ) => (         
-      <Space direction="horizontal">
-      <Select value={typeDate} onChange={setTypeDate}>
-        <Option value="date">Intervalle</Option>
-        <Option value="week">Semaine</Option>
-        <Option value="month">Mois</Option>
-        {/* <Option value="quarter">Quarter</Option>
+      title: "Date",
+      key: "direction",
+      hideInTable: true,
+      dataIndex: "direction",
+      renderFormItem: (item, { type, defaultRender, ...rest }, form) => (
+        <Space direction="horizontal">
+          <Select value={typeDate} onChange={setTypeDate}>
+            <Option value="date">Intervalle</Option>
+            <Option value="week">Semaine</Option>
+            <Option value="month">Mois</Option>
+            {/* <Option value="quarter">Quarter</Option>
         <Option value="year">Year</Option> */}
-      </Select>
-      {typeDate === "date" ? (
-        <RangePicker onChange={(e, dateString)=>{setDate(dateString)}} format={dateFormat}/>
-      ) : 
-      typeDate === "week" ? (
-        <DatePicker
-          picker={typeDate}
-          format={customWeekStartEndFormat}
-          onChange={(e, dateString)=>{console.log(e)}}
-        />
-      ) : (
-        <DatePicker picker={typeDate} format={dateFormat} onChange={(e,dateString)=>{console.log(dateString)}} />
-      )}
-    </Space>) ,
-    } ,
+          </Select>
+          {typeDate === "date" ? (
+            <RangePicker
+              onChange={(e, dateString) => {
+                setDate(dateString);
+              }}
+              format={dateFormat}
+            />
+          ) : typeDate === "week" ? (
+            <DatePicker
+              picker={typeDate}
+              format={customWeekStartEndFormat}
+              onChange={(e, dateString) => {
+                setDate([
+                  dateString.substring(0, 10),
+                  dateString.substring(13, 23), 
+                ]);
+              }}
+            />
+          ) : (
+            <DatePicker
+              picker={typeDate}
+              format={customMonthStartEndFormat}
+              onChange={(e, dateString) => {
+                setDate([
+                  dateString.substring(0, 10),
+                  dateString.substring(13, 23), 
+                ]);
+              }}
+            />
+          )}
+        </Space>
+      ),
+    },
     {
       title: "Entreprise ",
       dataIndex: "entreprise",
       key: "entreprise",
-      // filters: [
-      //   {
-      //     text: "TAC-TIC",
-      //     value: "TAC-TIC",
-      //   },
-      //   {
-      //     text: "Smart Skills",
-      //     value: "Smart Skills",
-      //   },
-      // ],
-      // onFilter: (value, record) => record.entreprise === value,
-      valueType : 'select' , 
-      valueEnum : {   
-        0:"TAC-TIC",
-        1: "Smart Skills",
-      } ,
+      renderFormItem: (item, { type, defaultRender, ...rest }, form) => {
+        return (
+          <Select
+            showSearch
+            allowClear
+            placeholder="Choisir un entreprise"
+            filterOption={filterOption}
+            filterSort={filterSort}
+            onSelect={(e) => {
+              setEntreprise(e);
+            }}
+            onClear={() => {
+              setEntreprise(null);
+            }}
+          >
+            {entreprises
+              // ?.filter((item) =>
+              //   project
+              //     ? item.id ===
+              //       projects.filter(
+              //         (x) => x.departement.entreprise_id === project
+              //       )[0]?.departement.entreprise_id
+              //     : true
+              // )
+              .map((item) => (
+                <Option key={item.id} value={item.id} label={item.designation}>
+                  {item.designation}
+                </Option>
+              ))}
+          </Select>
+        );
+      },
+    },
+    {
+      title: "Projet",
+      key: "projet",
+      hideInTable: true,
+      renderFormItem: (item, { type, defaultRender, ...rest }, form) => {
+        return (
+          <Select
+            showSearch
+            placeholder="Choisir un projet"
+            filterOption={filterOption}
+            filterSort={filterSort}
+            allowClear
+            onSelect={(e) => {
+              setProject(e);
+            }}
+            onClear={() => {
+              setProject(null);
+            }}
+          >
+            {projects
+              // ?.filter((item) =>
+              //   entreprise
+              //     ? item.departement.entreprise_id === entreprise
+              //     : true
+              // )
+              .map((item) => (
+                <Option key={item.id} value={item.id} label={item.designation}>
+                  {item.designation}
+                </Option>
+              ))}
+          </Select>
+        );
+      },
     },
     {
       title: "Employe ",
       dataIndex: "employe",
       key: "employe",
+      renderFormItem: (item, { type, defaultRender, ...rest }, form) => {
+        return (
+          <Select
+            showSearch
+            allowClear
+            placeholder="Choisir un employer"
+            filterOption={filterOption}
+            filterSort={filterSort}
+            onSelect={(e) => {
+              setEmployee(e);
+            }}
+            onClear={() => {
+              setEmployee(null);
+            }}
+          >
+            {employees
+              ?.filter((item) => true)
+              .map((item) => (
+                <Option key={item.id} value={item.id} label={item.user.name}>
+                  {item.user.name}
+                </Option>
+              ))}
+          </Select>
+        );
+      },
     },
     {
       title: "Nombre d'heures",
       key: 2,
-      search:false,
-      render: (_,data) => {
+      search: false,
+      render: (_, data) => {
         let sum = 0;
-        data.detail.map((item) => {
+        data.details?.map((item) => {
           sum += item.nbrHeures;
         });
         return <>{sum}h</>;
@@ -102,9 +215,9 @@ const Timesheet:React.FC=()=> {
     },
     {
       title: "Action",
-      valueType: 'option',
+      valueType: "option",
       key: "option",
-      render: (_,data) => (
+      render: (_, data) => (
         <Space size="small">
           <a
             onClick={() => {
@@ -125,38 +238,98 @@ const Timesheet:React.FC=()=> {
   ];
   const weekFormat = "DD/MM/YY";
   const customWeekStartEndFormat: DatePickerProps["format"] = (value) =>
-    `${moment().startOf("week").format(weekFormat)} ~ ${moment()
+    `${dayjs(value).startOf("week").format(dateFormat)} ~ ${dayjs(value)
       .endOf("week")
-      .format(weekFormat)}`;
+      .format(dateFormat)}`;
+  const customMonthStartEndFormat: DatePickerProps["format"] = (value) =>
+    `${dayjs(value).startOf("month").format(dateFormat)} ~ ${dayjs(value)
+      .endOf("month")
+      .format(dateFormat)}`;
   //export Excel
   const handleOnExport = () => {
-    let data = sheets;
-    data.map((item, index) => {
+    let sheets = data;
+    sheets.map((item, index) => {
+      let sum = 0;
+      item.details?.map((x) => {
+        sum += x.nbrHeures;
+      });
+      Object.assign(item, {
+        nbrHeures: sum,
+      });
       delete item.key;
-      delete item.detail;
+      delete item.details;
     });
     var wb = XLSX.utils.book_new(),
-      ws = XLSX.utils.json_to_sheet(data);
-    ws["!cols"] = [{ wpx: 120 }, { wpx: 180 }, { wpx: 80 }];
+      ws = XLSX.utils.json_to_sheet(sheets);
+    ws["!cols"] = [{ wpx: 120 }, { wpx: 180 }, { wpx: 60 }];
 
     XLSX.utils.book_append_sheet(wb, ws, "TimeSheet");
     XLSX.writeFile(wb, "TimeSheet.xlsx");
   };
   const handleOnExportPerEmploye = () => {
-    let data = sheets;
+    let sheets = data;
     var wb = XLSX.utils.book_new(),
       ws = [];
-    data.map((item, index) => {
-      item.detail.map((x) => {
+    sheets.map((item, index) => {
+      item.details?.map((x) => {
         delete x.id;
       });
-      ws[index] = XLSX.utils.json_to_sheet(item.detail);
+      ws[index] = XLSX.utils.json_to_sheet(item.details);
       ws[index]["!cols"] = [{ wpx: 120 }, { wpx: 200 }, { wpx: 80 }];
       XLSX.utils.book_append_sheet(wb, ws[index], item.employe);
     });
     XLSX.writeFile(wb, "TimeSheet.xlsx");
   };
 
+  const handleGetTimesheets = (): Promise<ISheet[]> =>
+    dispatch(getTimesheets({
+      project: project,
+      entreprise:entreprise,
+      employee: employee,
+      date: date!==null?date:
+      [dayjs().startOf("month").format(dateFormat),dayjs()
+        .endOf("month")
+        .format(dateFormat)],
+    }))
+    .unwrap()
+    .then((originalPromiseResult) => {
+      return originalPromiseResult.filter(item=>item).map((item, index) =>
+      Object.assign({}, item, {
+        key: Math.random().toString(),
+      })
+    );
+    })
+    .catch((rejectedValueOrSerializedError) => {
+      console.log(rejectedValueOrSerializedError);
+      return[]
+    });
+  
+  useEffect(() => {
+    dispatch(getAllProjects())
+      .unwrap()
+      .then((originalPromiseResult) => {
+        setProjects(originalPromiseResult);
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        console.log(rejectedValueOrSerializedError);
+      });
+    dispatch(getEntreprises())
+      .unwrap()
+      .then((originalPromiseResult) => {
+        setEntreprises(originalPromiseResult.data);
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        console.log(rejectedValueOrSerializedError);
+      });
+      dispatch(getEmployees())
+      .unwrap()
+      .then((originalPromiseResult) => {
+        setEmployees(originalPromiseResult.data);
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        console.log(rejectedValueOrSerializedError);
+      });
+  }, []);
   return (
     <div className="Timesheet">
       <Breadcrumb separator=">" className="mt-5">
@@ -165,21 +338,20 @@ const Timesheet:React.FC=()=> {
       </Breadcrumb>
       <Row className="mt-5" gutter={[12, 24]}>
         <Col xs={24}>
-          <Card
-            title={
-                <Title level={4}>Timesheet</Title>
-            }
-            bordered={false}
-          >
+          <Card title={<Title level={4}>Timesheet</Title>} bordered={false}>
             <ProTable<ISheet>
               headerTitle="Liste de timesheets"
               columns={columns}
+              onReset={() => {
+                setProject(null);
+                setEntreprise(null);
+                setEmployee(null);
+                setDate(["2023-01-15","2023-01-23"]);
+              }}
               request={async (params) => {
                 console.log(`request params:`, params);
-                var dataFilter=sheets
-                if(params.employe) dataFilter=dataFilter.filter((item)=>item.employe.toString().toUpperCase().search(params.employe.toString().toUpperCase())===-1?false:true);
-                // if(params.telephone) dataFilter=dataFilter.filter((item)=>item.telephone.toString().toUpperCase().search(params.telephone.toString().toUpperCase())===-1?false:true);
-                // if(params.designation) dataFilter=dataFilter.filter((item)=>item.designation.toString().toUpperCase().search(params.designation.toString().toUpperCase())===-1?false:true);
+                var dataFilter = await handleGetTimesheets();
+                setData(dataFilter)
                 return {
                   data: dataFilter,
                   success: true,
@@ -187,19 +359,21 @@ const Timesheet:React.FC=()=> {
               }}
               search={{
                 labelWidth: "auto",
+                // collapseRender:(collapsed)=><>{collapsed?<>Agrandir</>:<>Reduire</>}</>
               }}
               pagination={{
                 size: "small",
                 pageSize: 7,
               }}
               expandable={{
-                expandedRowRender: (record) => (
+                expandedRowRender: (record) =>{
+                  return(
                   <div className="flex justify-center">
                     <div style={{ width: "95%" }}>
-                      <TimesheetDetails detail={record} />
+                      <TimesheetDetails detail={record} filtred={project!==null}/>
                     </div>
                   </div>
-                ),
+                )},
                 rowExpandable: (record) => record.entreprise.length !== 0,
                 showExpandColumn: false,
                 expandedRowKeys: expandedRowKeys,
@@ -210,7 +384,7 @@ const Timesheet:React.FC=()=> {
                 </Button>,
                 <Button type="primary" onClick={handleOnExportPerEmploye}>
                   Exporter par employe
-                </Button>
+                </Button>,
               ]}
             />
           </Card>
@@ -218,6 +392,6 @@ const Timesheet:React.FC=()=> {
       </Row>
     </div>
   );
-}
+};
 
 export default Timesheet;

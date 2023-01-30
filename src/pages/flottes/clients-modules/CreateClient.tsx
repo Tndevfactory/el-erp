@@ -38,7 +38,7 @@ const CreateClient: React.FC<{
     );
     forceRefresh(Math.random());
     setVisible(false);
-    console.log(values);
+    // console.log(values);
   };
   return (
     <Drawer

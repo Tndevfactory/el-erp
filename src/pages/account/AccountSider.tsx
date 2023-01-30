@@ -103,13 +103,10 @@ const { useBreakpoint } = Grid;
 
 export default function HomeSider() {
   const { isCollapsed } = useSelector((store: any) => store.ui);
-  console.log("isCollapsed");
-  console.log(isCollapsed);
 
   const dispatch = useDispatch();
 
   const screens = useBreakpoint();
-  console.log(screens.lg);
   return (
     <>
       <Sider

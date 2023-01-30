@@ -155,9 +155,9 @@ const Configuration1: React.FC = () => {
     direction: TransferDirection,
     moveKeys: string[]
   ) => {
-    console.log("targetKeys:", nextTargetKeys);
-    console.log("direction:", direction);
-    console.log("moveKeys:", moveKeys);
+    // console.log("targetKeys:", nextTargetKeys);
+    // console.log("direction:", direction);
+    // console.log("moveKeys:", moveKeys);
     setTargetKeys(nextTargetKeys);
   };
 
@@ -165,8 +165,8 @@ const Configuration1: React.FC = () => {
     sourceSelectedKeys: string[],
     targetSelectedKeys: string[]
   ) => {
-    console.log("sourceSelectedKeys:", sourceSelectedKeys);
-    console.log("targetSelectedKeys:", targetSelectedKeys);
+    // console.log("sourceSelectedKeys:", sourceSelectedKeys);
+    // console.log("targetSelectedKeys:", targetSelectedKeys);
     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
   };
 
@@ -174,8 +174,8 @@ const Configuration1: React.FC = () => {
     direction: TransferDirection,
     e: React.SyntheticEvent<HTMLUListElement>
   ) => {
-    console.log("direction:", direction);
-    console.log("target:", e.target);
+    // console.log("direction:", direction);
+    // console.log("target:", e.target);
   };
 
   return (

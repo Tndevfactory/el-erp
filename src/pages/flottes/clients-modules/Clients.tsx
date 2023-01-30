@@ -164,7 +164,7 @@ const Clients: React.FC = () => {
                 persistenceKey: "pro-table-singe-demos",
                 persistenceType: "localStorage",
                 onChange(value) {
-                  console.log("value: ", value);
+                  // console.log("value: ", value);
                 },
               }}
               search={{
@@ -177,7 +177,7 @@ const Clients: React.FC = () => {
               }}
               pagination={{
                 pageSize: 4,
-                onChange: (page) => console.log(page),
+                // onChange: (page) => console.log(page),
               }}
               headerTitle="Liste de clients"
               request={async (params) => {

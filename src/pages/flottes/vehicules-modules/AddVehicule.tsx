@@ -29,14 +29,14 @@ const props: UploadProps = {
   onChange(info) {
     const { status } = info.file;
     if (status !== "uploading") {
-      console.log(info.file, info.fileList);
+      // console.log(info.file, info.fileList);
     }
     if (status === "done") {
     } else if (status === "error") {
     }
   },
   onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
+    // console.log("Dropped files", e.dataTransfer.files);
   },
 };
 const AddVehicule: React.FC<{
@@ -150,7 +150,6 @@ const AddVehicule: React.FC<{
 
     forceRefresh(Math.random());
     setVisible(false);
-    console.log(values);
   };
   return (
     <Drawer

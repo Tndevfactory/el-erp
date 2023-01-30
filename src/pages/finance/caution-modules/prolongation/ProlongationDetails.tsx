@@ -218,7 +218,7 @@ const ProlongationForm: React.FC<{
                   télécharger
                 </p>
                 <p className="ant-upload-hint">
-                  Merci d'attacher le fichier ..., ... et ...
+                  Merci d'attacher l'avis de prolongation
                 </p>
               </Dragger>
             </Form.Item>
@@ -285,6 +285,12 @@ const ProlongationForm: React.FC<{
                   </Button>
                 </Space>
               )}
+              {caution.prolongations[0].etat_id === 4 &&
+                  localStorage.getItem('role') === 'daf' &&(
+                    <Button type='primary' onClick={() => {handlechangeStateProlongation(8);handlechangeStateCaution(9)}}>
+                      Acceptée banque
+                    </Button>
+                  )}
           </>
         )}
       </div>
@@ -344,7 +350,7 @@ const ProlongationForm: React.FC<{
               </Form>
             </div>
           )}
-          {caution.prolongations[0].etat_id &&
+          {caution.prolongations[0].etat_id ===8 &&
             localStorage.getItem('role') === 'commerciale' && (
               <div>
                 <Form

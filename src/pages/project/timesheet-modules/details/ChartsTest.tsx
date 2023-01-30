@@ -3,19 +3,18 @@ import ReactDOM from 'react-dom';
 import { Column } from '@ant-design/plots';
 import moment from "moment";
 
-const ChartsTest = ({sheets}) => {
+const ChartsTest = ({sheets, filtred}) => {
   const [data, setData] = useState([
   ]);
-console.log(sheets)
   useEffect(() => {
     setData(sheets.slice().sort((a, b) => moment(a.date,"DD/MM/YYYY").valueOf() - moment(b.date,"DD/MM/YYYY").valueOf()))
-  }, []);
+  }, [sheets]);
 
   const config = {
     data,
     xField: 'date',
     yField: 'nbrHeures',
-    seriesField: 'projet',
+    seriesField: filtred?'tache':'projet',
     height: 300,
     isGroup: true,
     // isStack: true,

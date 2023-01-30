@@ -227,7 +227,7 @@ function Contracts() {
                 persistenceKey: "pro-table-singe-demos",
                 persistenceType: "localStorage",
                 onChange(value) {
-                  console.log("value: ", value);
+                  // console.log("value: ", value);
                 },
               }}
               search={{
@@ -240,7 +240,7 @@ function Contracts() {
               }}
               pagination={{
                 pageSize: 4,
-                onChange: (page) => console.log(page),
+                // onChange: (page) => console.log(page),
               }}
               headerTitle="Liste de contrats"
               request={async (params) => {

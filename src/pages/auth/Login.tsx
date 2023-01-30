@@ -14,12 +14,14 @@ import {
   ProFormCheckbox,
   ProFormText,
 } from "@ant-design/pro-components";
-import { Button, Divider, message, Space, Tabs, Typography } from "antd";
+import { useDispatch } from "react-redux";
+import { Button, Divider, message, Space, Tabs, Typography, Image } from "antd";
 import type { CSSProperties } from "react";
 import { useState } from "react";
 import elasticLogo from "@/assets/elastic-logo.png";
 import image from "@/assets/preview/ERP-3.png";
 import { useNavigate } from 'react-router-dom'
+import { login } from "@/features/auth/authSlice";
 const { Text, Link } = Typography;
 type LoginType = "phone" | "account";
 
@@ -31,6 +33,7 @@ const iconStyles: CSSProperties = {
 };
 
 export default () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate()
   const [loginType, setLoginType] = useState<LoginType>("account");
   return (
@@ -45,7 +48,24 @@ export default () => {
         logo={elasticLogo}
         title="EL-ERP"
         subTitle={<Text type="secondary" >Bienvenue dans la gestion moderne du travail</Text>}
-        onFinish={async (values) => { console.log(values);   navigate(`/finance`)}}
+        onFinish={async (values) => { 
+          dispatch(login({
+            email:values[' username '],
+            password:values[' password ']
+          })
+          )
+          .unwrap()
+          .then((originalPromiseResult) => {
+            localStorage.setItem('token',originalPromiseResult.data.token)
+            localStorage.setItem('permissions',JSON.stringify(originalPromiseResult.data.permissions))
+            localStorage.setItem('module','2')
+            navigate(`/projets`)
+          })
+          .catch((rejectedValueOrSerializedError) => {
+            console.log(rejectedValueOrSerializedError);
+            return [];
+          });
+        }}
         actions={
           <div
             style={{

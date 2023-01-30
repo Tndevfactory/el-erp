@@ -9,15 +9,11 @@ const RequireAuth = ({ allowedRoles }: { allowedRoles: string[] }) => {
    // appel backend pour avoir un retour concernant les droits d'acces
 
 
-  return auth ? (
-    role.find((role) => allowedRoles.includes(role)) ? (
+  return localStorage.getItem("token")? (
       <Outlet />
     ) : (
-      <Navigate to="/unauthorized" state={{ from: location }} replace />
+      <Navigate to="/" state={{ from: location }} replace />
     )
-  ) : (
-    <Navigate to="/" state={{ from: location }} replace />
-  );
 };
 
 export default RequireAuth;

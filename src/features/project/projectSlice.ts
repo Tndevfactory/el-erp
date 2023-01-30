@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IClient } from "../client/clientSlice";
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 const data = {
   cards: [
@@ -117,6 +117,18 @@ export const getProjects: any = createAsyncThunk(
   async (espace_id, thunkAPI) => {
     try {
       let url = `/projets`;
+      const resp = await api.get(url);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("something went wrong");
+    }
+  }
+);
+export const getAllProjects: any = createAsyncThunk(
+  "project",
+  async (espace_id, thunkAPI) => {
+    try {
+      let url = `/projets/all`;
       const resp = await api.get(url);
       return resp.data;
     } catch (error) {

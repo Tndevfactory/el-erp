@@ -55,10 +55,13 @@ import { Session } from "inspector";
 //console.log(`${process.env.REACT_APP_BASE_PUBLIC_URL}/`);
 
 import Redirection from "./components/Redirection";
+import { useDispatch } from "react-redux";
+import { getMenus } from "./features/menus/menuSlice";
 
 export interface IApplicationProps {}
 
 const App: React.FunctionComponent<IApplicationProps> = (props) => {
+  const dispatch = useDispatch();
   const messages = {
     en: english,
     fr: french,
@@ -69,7 +72,19 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
     ADMIN: "user",
     USER: "user",
   };
-
+  React.useEffect(() => {
+    if(localStorage.getItem("menu")===null){
+    dispatch(getMenus())
+    .unwrap()
+    .then((originalPromiseResult) => {
+      localStorage.setItem('menu',JSON.stringify(originalPromiseResult))
+    })
+    .catch((rejectedValueOrSerializedError) => {
+      console.log(rejectedValueOrSerializedError);
+      return [];
+    });
+  }
+  }, []);
   return (
     <ConfigProvider direction="ltr" locale={enFR} >
       <IntlProvider
@@ -86,7 +101,6 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
               {/* </Route> */}
               <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
                 {/* <Route path={`home`} element={<Home />} /> */}
-              </Route>
               <Route path={`home/*`} element={<Index />}>
                 <Route path={`*`} element={<Cautions />} />
               </Route>
@@ -95,13 +109,13 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
               </Route>
               <Route path={`flottes/*`} element={<Index />}>
                   <Route path={`*`} element={<FlottesContract />} />
-                  <Route path={`gestion-des-contrat`} element={<FlottesContract />} />
+                  <Route path={`gestion-des-contrats`} element={<FlottesContract />} />
                   <Route path={`gestion-des-clients`} element={<FlottesClients />} />
                   <Route path={`gestion-des-vehicules`} element={<Vehicules />} />
                   <Route path={`gestion-des-livraisons`} element={<Livraison />} />
 
               </Route>
-              <Route path={`projects/*`} element={<Index />}>
+              <Route path={`projets/*`} element={<Index />}>
                   <Route path={`*`} element={<Projects />} />
                   <Route path={`kanban`} element={<Kanban />} />
                   <Route path={`timesheet`} element={<Timesheet />} />
@@ -109,6 +123,7 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
               <Route path={`ressources-humaines/*`} element={<Index />}>
                   <Route path={`*`} element={<Sessions/>} />
                   <Route path={`formation/session`} element={<Sessions />} />
+              </Route>
               </Route>
               </Route>
             <Route path={`unauthorized`} element={<Unauthorized />} />

@@ -17,20 +17,14 @@ import {
   Tabs,
   Badge,
 } from "antd";
-import {
-  ProTable,
-  ProColumns,
-} from "@ant-design/pro-components";
+import { ProTable, ProColumns } from "@ant-design/pro-components";
 import { MdMoreTime } from "react-icons/md";
 import moment from "moment";
 import { Console } from "console";
 import CautionForm from "./CautionForm";
 import CautionDetails from "./CautionDetails";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  ICaution,
-  getCautions,
-} from "@/features/finance/caution/cautionSlice";
+import { ICaution, getCautions } from "@/features/finance/caution/cautionSlice";
 import ListeProlongation from "./prolongation/ListeProlongation";
 import type { ColumnsType } from "antd/es/table";
 import type { DatePickerProps } from "antd";
@@ -40,9 +34,9 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const dateFormat = "DD/MM/YYYY";
 
-const Cautions: React.FC = ()=>{
+const Cautions: React.FC = () => {
   const dispatch = useDispatch();
-  const tableRef = useRef<any>( ) ; 
+  const tableRef = useRef<any>();
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
@@ -54,25 +48,25 @@ const Cautions: React.FC = ()=>{
   const [refresh, forceRefresh] = useState(0);
 
   const customWeekStartEndFormat: DatePickerProps["format"] = (value) =>
-  `${dayjs(value).startOf("week").format(dateFormat)} ~ ${dayjs(value)
-    .endOf("week")
-    .format(dateFormat)}`;
+    `${dayjs(value).startOf("week").format(dateFormat)} ~ ${dayjs(value)
+      .endOf("week")
+      .format(dateFormat)}`;
   const columns: ProColumns<ICaution>[] = [
     {
       title: "Entreprise ",
       key: "entreprise",
-      dataIndex:"entreprise_name"
+      dataIndex: "entreprise_name",
     },
     {
       title: "Nom du Projet ",
       key: "Nom_Projet",
-      render: (x,caution) => <>{caution.projet.designation}</>
+      render: (x, caution) => <>{caution.projet.designation}</>,
     },
     {
       title: "type de caution",
       key: 2,
       search: false,
-      render: (x,caution) => (
+      render: (x, caution) => (
         <Tag
           color={
             caution.type_id === 1
@@ -91,21 +85,25 @@ const Cautions: React.FC = ()=>{
     {
       title: "A faire avant",
       key: 31,
-      render:(_,caution)=><>{moment(new Date(caution.date_max_retour)).format(dateFormat)}</>,
+      render: (_, caution) => (
+        <>{moment(new Date(caution.date_max_retour)).format(dateFormat)}</>
+      ),
       responsive: ["xxl"],
       search: false,
       sorter: (a, b) =>
-        moment(a.date_max_retour, "YYYY-MM-DD HH:mm:ss" ).valueOf() -
+        moment(a.date_max_retour, "YYYY-MM-DD HH:mm:ss").valueOf() -
         moment(b.date_max_retour, "YYYY-MM-DD HH:mm:ss").valueOf(),
     },
     {
       title: "Date de début ",
       key: 3,
-      render:(_,caution)=><>{moment(new Date(caution.created_at)).format(dateFormat)}</>,
+      render: (_, caution) => (
+        <>{moment(new Date(caution.created_at)).format(dateFormat)}</>
+      ),
       responsive: ["xxl"],
       search: false,
       sorter: (a, b) =>
-        moment(a.created_at, "YYYY-MM-DD HH:mm:ss" ).valueOf() -
+        moment(a.created_at, "YYYY-MM-DD HH:mm:ss").valueOf() -
         moment(b.created_at, "YYYY-MM-DD HH:mm:ss").valueOf(),
     },
     {
@@ -160,7 +158,7 @@ const Cautions: React.FC = ()=>{
       responsive: ["xxl"],
       render: (_, caution) => (
         <Tag color={caution.eps === 1 ? "geekblue" : "volcano"}>
-          {caution.eps === 1? "EPS" : "Compte courant"}
+          {caution.eps === 1 ? "EPS" : "Compte courant"}
         </Tag>
       ),
       filters: [
@@ -180,7 +178,7 @@ const Cautions: React.FC = ()=>{
       key: 8,
       // dataIndex: "DateE",
       responsive: ["md"],
-      render: (x,caution) => <>{caution.DateE}</>,
+      render: (x, caution) => <>{caution.DateE}</>,
       sorter: (a, b) => {
         return (
           moment(a.DateE, dateFormat).valueOf() -
@@ -190,7 +188,11 @@ const Cautions: React.FC = ()=>{
       renderFormItem: (item, { type, defaultRender, ...rest }, form) => {
         return (
           <div>
-            <Select value={typeDate} onChange={setTypeDate} style={{width:"37%", marginRight:"3%"}}>
+            <Select
+              value={typeDate}
+              onChange={setTypeDate}
+              style={{ width: "37%", marginRight: "3%" }}
+            >
               <Option value="date">Intervalle</Option>
               <Option value="week">Semaine</Option>
               <Option value="month">Mois</Option>
@@ -199,32 +201,34 @@ const Cautions: React.FC = ()=>{
             </Select>
             {typeDate === "date" ? (
               <RangePicker
-                style={{width:"60%"}}
+                style={{ width: "60%" }}
                 onChange={(e, dateString) => {
-                  console.log(dateString);
+                  // console.log(dateString);
                   setDate(dateString);
                 }}
                 format={dateFormat}
               />
             ) : typeDate === "week" ? (
               <DatePicker
-              style={{width:"60%"}}
+                style={{ width: "60%" }}
                 picker={typeDate}
                 format={customWeekStartEndFormat}
                 onChange={(e, dateString) => {
-                  console.log(dateString);
-                  setDate([dateString.substring(0, 10),dateString.substring(13, 23)])
+                  // console.log(dateString);
+                  setDate([
+                    dateString.substring(0, 10),
+                    dateString.substring(13, 23), 
+                  ]);
                 }}
               />
             ) : (
               <DatePicker
-                style={{width:"60%"}}
+                style={{ width: "60%" }}
                 picker={typeDate}
                 format={"MM/YYYY"}
                 onChange={(e, dateString) => {
-                  console.log(dateString);
-                  setDate([dateString])
-
+                  // console.log(dateString);
+                  setDate([dateString]);
                 }}
               />
             )}
@@ -241,7 +245,9 @@ const Cautions: React.FC = ()=>{
       render: (_, caution) => (
         <Tag
           color={
-            caution.etat_id === 3 || caution.etat_id === 4 ||caution.etat_id === 9
+            caution.etat_id === 3 ||
+            caution.etat_id === 4 ||
+            caution.etat_id === 9
               ? "blue"
               : caution.etat_id === 1
               ? "gold"
@@ -250,7 +256,8 @@ const Cautions: React.FC = ()=>{
               : caution.etat_id === 5 || caution.etat_id === 6
               ? "green"
               : caution.etat_id === 7
-              ? "":"gold"
+              ? ""
+              : "gold"
           }
         >
           {caution.caution_etat.etat}
@@ -262,10 +269,10 @@ const Cautions: React.FC = ()=>{
       valueType: "option",
       key: "10",
       render: (_, caution) => (
-        <Space size="small" >
+        <Space size="small">
           <a
             onClick={() => {
-              setCaution(caution)
+              setCaution(caution);
               setVisibleDetails(true);
             }}
           >
@@ -286,46 +293,49 @@ const Cautions: React.FC = ()=>{
     setVisible: setVisibleDetails,
     caution: caution,
     tableRef: tableRef,
-    cautions:cautions
+    cautions: cautions,
   };
-
-  const handleGetCautions=(): Promise < ICaution[] > => 
+  const handleGetCautions = (): Promise<ICaution[]> =>
     dispatch(getCautions())
-    .unwrap()
-    .then((originalPromiseResult) => {
-      setCautions(originalPromiseResult.data)
-      return originalPromiseResult.data.map((item, index) =>
-      Object.assign({}, item, {
-        DateE: moment(
-          moment(item.created_at,"YYYY-MM-DD HH:mm:ss").valueOf() + 86400000 * item.period_valid
-        ).format("DD/MM/YYYY"),
-        key: index.toString(),
+      .unwrap()
+      .then((originalPromiseResult) => {
+        setCautions(originalPromiseResult.data);
+        return originalPromiseResult.data.map((item, index) =>
+          Object.assign({}, item, {
+            DateE: moment(
+              moment(item.created_at, "YYYY-MM-DD HH:mm:ss").valueOf() +
+                86400000 * item.period_valid
+            ).format("DD/MM/YYYY"),
+            key: index.toString(),
+            dureeAfterProlongation: 15,
+          })
+        );
       })
-    );
-    })
-    .catch((rejectedValueOrSerializedError) => {
-      console.log(rejectedValueOrSerializedError);
-      return []
-    });
+      .catch((rejectedValueOrSerializedError) => {
+        console.log(rejectedValueOrSerializedError);
+        return [];
+      });
 
-    const Table =(etat:number)=>(
-      <ProTable<ICaution>
-      actionRef = { tableRef }
+  const Table = (etat: number) => (
+    <ProTable<ICaution>
+      actionRef={tableRef}
       headerTitle="Liste de cautions"
       rowClassName={(record, index) =>
-        (record.etat_id === 1 ||record.etat_id === 8) && localStorage.getItem('role')==='chef' ||record.etat_id === 3 && localStorage.getItem('role')==='daf' 
+        (record.etat_id === 9 &&
+          localStorage.getItem("role") === "commerciale") ||
+        ((record.etat_id === 1 || record.etat_id === 8) &&
+          localStorage.getItem("role") === "chef") ||
+        ((record.etat_id === 3 || record.etat_id === 4) &&
+          localStorage.getItem("role") === "daf")
           ? "table-row-en-attente"
-          : 
-          // record.Etat_main_levée === "En cours" &&
-            moment(record.DateE, dateFormat).diff(moment(), "days") <=
-              10
+          : // record.Etat_main_levée === "En cours" &&
+          moment(record.DateE, dateFormat).diff(moment(), "days") <= 10
           ? "table-row-warning"
           : "nothing"
       }
       search={{
         labelWidth: "auto",
       }}
-      
       cardBordered
       columnsState={{
         persistenceKey: "pro-table-singe-demos",
@@ -340,14 +350,13 @@ const Cautions: React.FC = ()=>{
       }}
       request={async (params) => {
         console.log(`request params:`, params);
-        var dataFilter =await handleGetCautions( ); 
+        var dataFilter = await handleGetCautions();
         if (etat)
-        dataFilter = dataFilter.filter((item) =>
-          item.etat_id===etat
-        );
+          dataFilter = dataFilter.filter((item) => item.etat_id === etat);
         if (params.entreprise)
           dataFilter = dataFilter.filter((item) =>
-            item.entreprise_name.toString()
+            item.entreprise_name
+              .toString()
               .toUpperCase()
               .search(params.entreprise.toString().toUpperCase()) === -1
               ? false
@@ -355,7 +364,8 @@ const Cautions: React.FC = ()=>{
           );
         if (params.Nom_Projet)
           dataFilter = dataFilter.filter((item) =>
-            item.projet.designation.toString()
+            item.projet.designation
+              .toString()
               .toUpperCase()
               .search(params.Nom_Projet.toString().toUpperCase()) === -1
               ? false
@@ -363,25 +373,25 @@ const Cautions: React.FC = ()=>{
           );
         if (params.Client)
           dataFilter = dataFilter.filter((item) =>
-            item.tier_name.toString()
+            item.tier_name
+              .toString()
               .toUpperCase()
               .search(params.Client.toString().toUpperCase()) === -1
               ? false
               : true
           );
         if (date !== null)
-            typeDate==="month"?
-            dataFilter = dataFilter.filter(
-              (item) =>
-              item.DateE.search(date[0])!==-1
-            )
-            :dataFilter = dataFilter.filter(
-            (item) =>
-              moment(item.DateE, dateFormat).valueOf() <=
-                moment(date[1], dateFormat).valueOf() &&
-              moment(item.DateE, dateFormat).valueOf() >=
-                moment(date[0], dateFormat).valueOf()
-          );
+          typeDate === "month"
+            ? (dataFilter = dataFilter.filter(
+                (item) => item.DateE.search(date[0]) !== -1
+              ))
+            : (dataFilter = dataFilter.filter(
+                (item) =>
+                  moment(item.DateE, dateFormat).valueOf() <=
+                    moment(date[1], dateFormat).valueOf() &&
+                  moment(item.DateE, dateFormat).valueOf() >=
+                    moment(date[0], dateFormat).valueOf()
+              ));
         return {
           data: dataFilter,
           success: true,
@@ -403,19 +413,22 @@ const Cautions: React.FC = ()=>{
       //   showExpandColumn: false,
       //   expandedRowKeys: expandedRowKeys,
       // }}
-      toolBarRender={() => (localStorage.getItem('role')==="commerciale"||localStorage.getItem('role')==="daf")&&[
-        <Button
-          type="primary"
-          onClick={() => {
-            setVisibleForm(true);
-          }}
-        >
-          Demander une caution
-        </Button>,
-      ]} 
+      toolBarRender={() =>
+        (localStorage.getItem("role") === "commerciale" ||
+          localStorage.getItem("role") === "daf") && [
+          <Button
+            type="primary"
+            onClick={() => {
+              setVisibleForm(true);
+            }}
+          >
+            Demander une caution
+          </Button>,
+        ]
+      }
     />
-    )
-  
+  );
+
   useEffect(() => {
   }, [refresh]);
 
@@ -436,39 +449,114 @@ const Cautions: React.FC = ()=>{
               onChange={() => {}}
               items={[
                 {
-                  label: <Space><>Tout les cautions</><Badge count={cautions?.length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: (
+                    <Space>
+                      <>Tout les cautions</>
+                      <Badge
+                        count={cautions?.length}
+                        showZero
+                        style={{ backgroundColor: "#CACFD2" }}
+                      />
+                    </Space>
+                  ),
                   key: "1",
                   children: Table(0),
                 },
                 {
-                  label: <Space><>Demandes</><Badge count={cautions?.filter(item=>item.etat_id===1).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: (
+                    <Space>
+                      <>Demandes</>
+                      <Badge
+                        count={
+                          cautions?.filter((item) => item.etat_id === 1).length
+                        }
+                        showZero
+                        style={{ backgroundColor: "#CACFD2" }}
+                      />
+                    </Space>
+                  ),
                   key: "2",
-                  children: Table(1)
+                  children: Table(1),
                 },
                 {
-                  label: <Space><>En cours DAF</><Badge count={cautions?.filter(item=>item.etat_id===3).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: (
+                    <Space>
+                      <>En cours DAF</>
+                      <Badge
+                        count={
+                          cautions?.filter((item) => item.etat_id === 3).length
+                        }
+                        showZero
+                        style={{ backgroundColor: "#CACFD2" }}
+                      />
+                    </Space>
+                  ),
                   key: "3",
-                  children: Table(3)
+                  children: Table(3),
                 },
                 {
-                  label: <Space><>En cours Banque</><Badge count={cautions?.filter(item=>item.etat_id===4).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: (
+                    <Space>
+                      <>En cours Banque</>
+                      <Badge
+                        count={
+                          cautions?.filter((item) => item.etat_id === 4).length
+                        }
+                        showZero
+                        style={{ backgroundColor: "#CACFD2" }}
+                      />
+                    </Space>
+                  ),
                   key: "4",
-                  children: Table(4)
+                  children: Table(4),
                 },
                 {
-                  label: <Space><>Fermées</><Badge count={cautions?.filter(item=>item.etat_id===5).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: (
+                    <Space>
+                      <>Fermées</>
+                      <Badge
+                        count={
+                          cautions?.filter((item) => item.etat_id === 5).length
+                        }
+                        showZero
+                        style={{ backgroundColor: "#CACFD2" }}
+                      />
+                    </Space>
+                  ),
                   key: "5",
-                  children: Table(5)
+                  children: Table(5),
                 },
                 {
-                  label: <Space><>Refusées</><Badge count={cautions?.filter(item=>item.etat_id===6).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: (
+                    <Space>
+                      <>Refusées</>
+                      <Badge
+                        count={
+                          cautions?.filter((item) => item.etat_id === 6).length
+                        }
+                        showZero
+                        style={{ backgroundColor: "#CACFD2" }}
+                      />
+                    </Space>
+                  ),
                   key: "6",
-                  children: Table(2)
+                  children: Table(2),
                 },
                 {
-                  label: <Space><>Enregistrées</><Badge count={cautions?.filter(item=>item.etat_id===7).length} showZero style={{ backgroundColor: "#CACFD2" }} /></Space >,
+                  label: (
+                    <Space>
+                      <>Enregistrées</>
+                      <Badge
+                        count={
+                          cautions?.filter((item) => item.etat_id === 7).length
+                        }
+                        showZero
+                        style={{ backgroundColor: "#CACFD2" }}
+                      />
+                    </Space>
+                  ),
                   key: "7",
-                  children: Table(7)
+                  children: Table(7),
                 },
               ]}
             />
@@ -479,6 +567,6 @@ const Cautions: React.FC = ()=>{
       <CautionDetails {...detailsObj}></CautionDetails>
     </div>
   );
-}
+};
 
 export default Cautions;

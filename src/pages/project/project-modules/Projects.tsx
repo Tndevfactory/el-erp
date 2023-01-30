@@ -103,7 +103,7 @@ const Projects : React.FC= () => {
         {projects.map((project, index) => (
           <Col xs={24} sm={12} md={12} lg={8} xl={6} xxl={4} key={index}>
             <Badge.Ribbon text={project.etat} color={color(project.etat)}>
-              <NavLink to="/projects/kanban">
+              <NavLink to="/projets/kanban">
                 <Card
                   hoverable={true}
                   bordered={true}

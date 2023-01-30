@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "./cart/cartSlice";
 import modalReducer from "./modal/modalSlice";
 import uiReducer from "./ui/uiSlice";
-import cautionReducer from "./finance/caution/cautionSlice"
+// import cautionReducer from "./finance/caution/cautionSlice"
 import projectReducer from "./project/projectSlice"
 import timesheetReducer from "./timesheet/timesheetSlice"
 import flotteContractReducer from "./flotte/contract/flotteContractSlice"
@@ -15,7 +15,7 @@ export const store = configureStore({
     cart: cartReducer,
     modal: modalReducer,
     ui: uiReducer,
-    caution:cautionReducer,
+    // caution:cautionReducer,
     project:projectReducer,
     timesheet:timesheetReducer,
     flotteContract:flotteContractReducer,

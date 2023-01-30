@@ -15,7 +15,7 @@ const HSiderMobile: React.FC<{
       setCurrent("0");
     });
   }, [current]);
-  const { menu } = useSelector((store: any) => store.ui);
+  const [ menu, setMenu] = useState(JSON.parse(localStorage.getItem("menu")));
   const onClose=()=>{setVisible(false)}
   return (
     <Drawer

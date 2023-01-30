@@ -19,8 +19,8 @@ const Element = ({
 
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
-      console.log("dropBlockName", dropBlockName);
-      console.log("elementType", elementType);
+      // console.log("dropBlockName", dropBlockName);
+      // console.log("elementType", elementType);
       if (item && dropResult) {
         onDropElement(item);
       }

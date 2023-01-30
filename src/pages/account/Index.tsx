@@ -121,7 +121,6 @@ const Index: React.FC = () => {
   //       {screen[0]}
   //     </Tag>
   //   ))}
-  console.log(screens);
   return (
     <Layout className="site-layout bg-gray-100 min-h-screen">
       {/* <Outlet /> */}

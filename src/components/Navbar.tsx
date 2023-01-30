@@ -13,7 +13,8 @@ import {
   SearchOutlined,
   BellOutlined,
   AudioOutlined,
-  ExportOutlined 
+  ExportOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -42,6 +43,7 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 
 import Hsider from "./Hsider";
 import HSiderMobile from "./HSiderMobile";
+import { getMenus } from "@/features/menus/menuSlice";
 
 const profilMenu = (
   <Menu
@@ -59,20 +61,31 @@ const profilMenu = (
       // },
       {
         key: "1",
-        icon:<UserOutlined/>,
+        icon: <UserOutlined />,
         label: <Link to="#"> Commerciale</Link>,
         onClick: () => localStorage.setItem("role", "commerciale"),
       },
       {
         key: "2",
-        icon:<UserOutlined/>,
+        icon: <UserOutlined />,
         label: <Link to="#">Chef</Link>,
         onClick: () => localStorage.setItem("role", "chef"),
-      },      {
+      },
+      {
         key: "3",
-        icon:<UserOutlined/>,
+        icon: <UserOutlined />,
         label: <Link to="#"> DAF</Link>,
         onClick: () => localStorage.setItem("role", "daf"),
+      },
+      {
+        key: "4",
+        icon: <LogoutOutlined />,
+        label: <Link to="/"> Deconnecter</Link>,
+        onClick: () => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("permissions");
+          localStorage.removeItem("menu");
+        },
       },
     ]}
   />
@@ -91,17 +104,17 @@ const notificationsMenu = (
       {
         key: "3",
         label: <Link to="#">Notification de mesure S3</Link>,
-        onClick: () => console.log("Notification de mesure "),
+        // onClick: () => console.log("Notification de mesure "),
       },
       {
         key: "4",
         label: <Link to="#">Notification de mesure S4</Link>,
-        onClick: () => console.log("Notification de mesure "),
+        // onClick: () => console.log("Notification de mesure "),
       },
       {
         key: "5",
         label: <Link to="#">Notification de mesure S5</Link>,
-        onClick: () => console.log("Notification de mesure "),
+        // onClick: () => console.log("Notification de mesure "),
       },
     ]}
   />
@@ -117,11 +130,12 @@ const { useBreakpoint } = Grid;
 
 export default function Navbar() {
   // redux toolkit store
-  const { isCollapsed, menu, selectedModule, windowWidth } = useSelector(
+  const { isCollapsed, selectedModule, windowWidth } = useSelector(
     (store: any) => store.ui
   );
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  const [menu, setMenu] = useState(JSON.parse(localStorage.getItem("menu")));
   const [visibleMenuMobile, setVisibleMenuMobile] = useState(false);
 
   const { Header } = Layout;
@@ -155,13 +169,6 @@ export default function Navbar() {
   //     const wsCurrent = ws.current;
   //     return () => {
   //         wsCurrent.close();
-  //     };
-  // }, []);
-
-  // useEffect(() => {
-  //     if (!ws.current) return;
-  //     ws.current.onmessage = e => {
-  //         console.log(e.data);
   //     };
   // }, []);
 
@@ -242,7 +249,11 @@ export default function Navbar() {
           <Space direction="vertical">
             <Space wrap>
               <Dropdown overlay={profilMenu} placement="bottomLeft">
-                <Avatar className="border-gray-200" size={32} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                <Avatar
+                  className="border-gray-200"
+                  size={32}
+                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                />
               </Dropdown>
             </Space>
           </Space>
