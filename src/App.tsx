@@ -57,6 +57,8 @@ import { Session } from "inspector";
 import Redirection from "./components/Redirection";
 import { useDispatch } from "react-redux";
 import { getMenus } from "./features/menus/menuSlice";
+import Ticketing from "./pages/ticketing/ticketing-modules/Ticketing";
+import Calendar from "./pages/calendrier/calendrier-modules/Calendar";
 
 export interface IApplicationProps {}
 
@@ -106,6 +108,12 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
               </Route>
               <Route path={`finance/*`} element={<Index />}>
                   <Route path={`*`} element={<Cautions />} />
+              </Route>
+              <Route path={`ticketing/*`} element={<Index />}>
+                  <Route path={`*`} element={<Ticketing />} />
+              </Route>
+              <Route path={`calendrier/*`} element={<Index />}>
+                  <Route path={`*`} element={<Calendar />} />
               </Route>
               <Route path={`flottes/*`} element={<Index />}>
                   <Route path={`*`} element={<FlottesContract />} />

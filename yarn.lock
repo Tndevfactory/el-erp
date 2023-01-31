@@ -1310,6 +1310,40 @@
     intl-messageformat "10.2.1"
     tslib "2.4.0"
 
+"@fullcalendar/core@^6.0.3":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-6.1.1.tgz#4638000451941d4ccc6ee8920dbea99ce15b9f68"
+  integrity sha512-im5Dbgi/d7Q8DEUFuLaInL/TG+CrRH+zePq58LrKyFFoJKkx2CP+OS29ijVBnUiGyzCWtZ9lMIzLmWDzIMnJ0A==
+  dependencies:
+    preact "^10.0.5"
+
+"@fullcalendar/daygrid@^6.0.3", "@fullcalendar/daygrid@~6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-6.1.1.tgz#518e8fa70eec590c4df47e788101551c8e42714e"
+  integrity sha512-/yIrN3IZSdob/UvAaPqWzBqyaQf3+DdcGG7xocVpmt2MudFbTpstF+ffPdBAQWqoWoB18Q92s6fn9teva5nDwA==
+
+"@fullcalendar/interaction@^6.0.3":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-6.1.1.tgz#79c2fca08790a0e9b7a265c0c5dc92861c3e82d2"
+  integrity sha512-eJjdBu/ytX4EuV1mAr6mlB9mPhn80uNpuZz0eXjklYbjFNra9VVrEyNpC7kJiqsajGqQxQekbR2mk+SUJA/rzA==
+
+"@fullcalendar/list@^6.0.3":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/list/-/list-6.1.1.tgz#74cecbe29bbeacbbc7a0a912823af37e10c13fe5"
+  integrity sha512-JHhjIREGDYdmoPdniP6fNDypuAXwVZkouWUSD8/8CMmgHAICPuME95ttVZNTmvsE6Jbv1NY4VGoUkTpBGlfG+g==
+
+"@fullcalendar/react@^6.0.4":
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/react/-/react-6.1.2.tgz#6bddcc217e69a5c63b3c5ec6b6204e457625e9fa"
+  integrity sha512-GNKKOGQESVStj66vCd5Qd3fcQYy5ItqzmBVOWxpp5fj/eyhUf2in6Mwox+PeoLPjtroOFlrNvB5aSZDPKManew==
+
+"@fullcalendar/timegrid@^6.0.3":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-6.1.1.tgz#1ad24cd1fd9e8aa4374dd3dbb3e6ba680214651a"
+  integrity sha512-JWjSxjxCBxIhkLsKT1uQmRWUHqfQWjtXJIy25Ur0jPlTHSLne5CBAyW2UWPwdV0nXpUnN5QWXjjTVLpMJB6uNA==
+  dependencies:
+    "@fullcalendar/daygrid" "~6.1.1"
+
 "@icons/material@^0.2.4":
   version "0.2.4"
   resolved "https://registry.npmjs.org/@icons/material/-/material-0.2.4.tgz"
@@ -4049,6 +4083,11 @@ potpack@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/potpack/-/potpack-1.0.2.tgz"
   integrity sha512-choctRBIV9EMT9WGAZHn3V7t0Z2pMQyl0EZE6pFc/6ml3ssw7Dlf/oAOvFwjm1HVsqfQN8GfeFyJ+d8tRzqueQ==
+
+preact@^10.0.5:
+  version "10.11.3"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.11.3.tgz#8a7e4ba19d3992c488b0785afcc0f8aa13c78d19"
+  integrity sha512-eY93IVpod/zG3uMF22Unl8h9KkrcKIRs2EGar8hwLZZDU1lkjph303V9HZBwufh2s736U6VXuhD109LYqPoffg==
 
 pretty-format@^28.0.0, pretty-format@^28.1.3:
   version "28.1.3"
