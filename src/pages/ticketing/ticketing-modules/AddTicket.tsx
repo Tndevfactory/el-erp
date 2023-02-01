@@ -26,6 +26,7 @@ const AddTicket = ({ visible, setVisible, tickets, setTickets, tableRef }) => {
   var { windowWidth } = useSelector((store: any) => store.ui);
   const onClose = () => {
     setVisible(false);
+    form.resetFields()
   };
   //upload files
   const [fileList, setFileList] = useState([]);
@@ -52,7 +53,7 @@ const AddTicket = ({ visible, setVisible, tickets, setTickets, tableRef }) => {
       .localeCompare((optionB?.label ?? "").toLowerCase());
   return (
     <Drawer
-      title="Créer un nouveau Ticket"
+      title="Ouvrir un nouveau Ticket"
       width={windowWidth > 750 ? 720 : "90%"}
       className="CautionForm"
       onClose={onClose}
@@ -64,16 +65,16 @@ const AddTicket = ({ visible, setVisible, tickets, setTickets, tableRef }) => {
       <Form
         layout="vertical"
         hideRequiredMark
-        onFinish={(values) => {setTickets([...tickets,{
+        onFinish={(values) => {setTickets([{
           titre:values.titre,
           description:values.description,
           responsable:"Bassem Soua",
-          assigne_a:employees.filter(item=>item.key===values.assigne_a[0])[0].designation ,
+          assigne_a:values.assigne_a,
           date:moment().format('DD-MM-YYYY'),
           etat:0,
           priorite:values.priorite,
           type:values.type
-        }])
+        },...tickets])
         onClose()
         tableRef.current.reload()
       }}
@@ -157,7 +158,7 @@ const AddTicket = ({ visible, setVisible, tickets, setTickets, tableRef }) => {
               name="assigne_a"
             >
        <Select
-        mode="multiple"
+        // mode="multiple"
         allowClear
         showSearch
         filterOption={filterOption}
@@ -165,6 +166,7 @@ const AddTicket = ({ visible, setVisible, tickets, setTickets, tableRef }) => {
         onChange={(e) => {
         }}
         placeholder="Choisir des employées"
+        disabled
       >
         {employees.map((item) => (
           <Option key={item.key} value={item.key} label={item.designation}>
@@ -178,6 +180,11 @@ const AddTicket = ({ visible, setVisible, tickets, setTickets, tableRef }) => {
             <Form.Item
               name="description"
               label="Description"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
             >
               <TextArea
                 placeholder="Veuillez choisir le client"

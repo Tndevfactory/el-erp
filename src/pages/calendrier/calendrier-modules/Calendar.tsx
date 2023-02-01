@@ -11,14 +11,14 @@ import moment from "moment/moment";
 const Calendar = () => {
   const ws = useRef(null);
   const [events, setEvents] = useState([
-    { title: "consultation", date: "2023-01-22 12:30", state: 3, color:"#52c41a"},
-    { title: "rendez-vouz", date: "2023-01-25 09:00", state: 3, color:"#52c41a" },
-    { title: "operation", date: "2023-01-26 10:30", state: 2, color:"#1677ff" },
-    { title: "rendez-vouz", date: "2023-01-26 13:30", state: 2, color:"#1677ff" },
-    { title: "operation", date: "2023-01-26 11:30", state: 2, color:"#1677ff" },
-    { title: "rendez-vouz",start: "2023-01-26 14:30",end: "2023-01-26 15:00", state: 1, color:"#faad14" },
-    { title: "rendez-vouz",  start: "2023-01-26 15:00",end: "2023-01-26 15:30", state: 0, color:"#ff4d4f" },
-    { title: "rendez-vouz", start: "2023-01-28 11:00",end: "2023-01-28 13:30", state: 1, color:"#faad14" },
+    { title: "consultation", date: "2023-02-13 12:30", state: 3, color:"#52c41a"},
+    { title: "rendez-vouz", date: "2023-02-15 09:00", state: 3, color:"#52c41a" },
+    { title: "operation", date: "2023-02-09 10:30", state: 2, color:"#1677ff" },
+    { title: "rendez-vouz", date: "2023-02-06 13:30", state: 2, color:"#1677ff" },
+    { title: "operation", date: "2023-02-16 11:30", state: 2, color:"#1677ff" },
+    { title: "rendez-vouz",start: "2023-02-06 14:30",end: "2023-02-06 15:00", state: 1, color:"#faad14" },
+    { title: "rendez-vouz",  start: "2023-02-16 15:00",end: "2023-02-16 15:30", state: 0, color:"#ff4d4f" },
+    { title: "rendez-vouz", start: "2023-02-22 11:00",end: "2023-01-22 13:30", state: 1, color:"#faad14" },
   ])
   const [isModalAddOpen, setIsModalAddOpen] = useState(false)
   const [isModalEditOpen, setIsModalEditOpen] = useState(false)

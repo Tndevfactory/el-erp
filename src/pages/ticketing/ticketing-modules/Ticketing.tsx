@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import { ProTable, ProColumns } from "@ant-design/pro-components";
 import AddTicket from "./AddTicket";
 import ShowTicket from "./ShowTicket";
-const { Title, Link } = Typography;
+const { Title, Link, Text } = Typography;
 const { Option } = Select;
 export const employees = [
   {
@@ -84,12 +84,12 @@ export const priorites = [
 export const data = [
   {
     ref: "Ref1",
-    titre: "Titre 2",
+    titre: "Titre 1",
     description: "C'est une petite description...",
     responsable: "Bassem Soua",
-    assigne_a: "Wael Machlouch",
+    assigne_a: null,
     date: "12-01-2023",
-    etat: 0,
+    etat: 0, 
     priorite: 1,
     type: 1,
   },
@@ -98,7 +98,7 @@ export const data = [
     titre: "Titre 2",
     description: "C'est une petite description...",
     responsable: "Bassem Soua",
-    assigne_a: "Nidhal chalbia",
+    assigne_a: 1,
     date: "12-01-2023",
     etat: 1,
     priorite: 2,
@@ -109,7 +109,7 @@ export const data = [
     titre: "Titre 3",
     description: "C'est une petite description...",
     responsable: "Bassem Soua",
-    assigne_a: "Wael Machlouch",
+    assigne_a: 0,
     date: "12-01-2023",
     etat: 2,
     priorite: 3,
@@ -120,7 +120,7 @@ export const data = [
     titre: "Titre 4",
     description: "C'est une petite description...",
     responsable: "Bassem Soua",
-    assigne_a: "Wael Machlouch",
+    assigne_a: 0,
     date: "12-01-2023",
     etat: 3,
     priorite: 0,
@@ -159,6 +159,12 @@ const Ticketing = () => {
       title: "Description",
       key: "description",
       dataIndex: "description",
+      render:(description)=>    <Text
+      style={true && { width: 180 } }
+      ellipsis={true && { tooltip: description } }
+    >
+      {description}
+    </Text>,
       search: false,
       responsive: ["xl"],
     },
@@ -173,6 +179,9 @@ const Ticketing = () => {
       title: "Assigné à",
       key: "assigne_a",
       dataIndex: "assigne_a",
+      render: (_, ticket) => (
+        <>{employees.filter((item) => item.key === _)[0]?employees.filter((item) => item.key === _)[0].designation:"-"}</>
+      ),
       renderFormItem: (item, { type, defaultRender, ...rest }, form) => {
         return (
           <Select
@@ -327,7 +336,7 @@ const Ticketing = () => {
   ];
   //   const handleGetTickets = (): Promise<any[]> => [{}];
   return (
-    <div>
+    <div className="Ticketing">
       <Breadcrumb separator=">" className="mt-5">
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
         <Breadcrumb.Item href="">Gestion des Tecketing</Breadcrumb.Item>
@@ -340,6 +349,11 @@ const Ticketing = () => {
         <ProTable<any>
           actionRef={tableRef}
           headerTitle="Liste des Tickets"
+          rowClassName={(record, index) =>
+            record.etat === 0 
+              ? "table-row-en-attente"
+              : "nothing"
+          }
           search={{
             labelWidth: "auto",
           }}
@@ -368,7 +382,7 @@ const Ticketing = () => {
               if (assigne !== null)
               dataFilter = dataFilter.filter(
                     (item) =>
-                      item.assigne_a===employees.filter(x => x.key===assigne)[0].designation
+                      item.assigne_a==assigne
                   );
                   if (type !== null)
                   dataFilter = dataFilter.filter(
@@ -391,7 +405,7 @@ const Ticketing = () => {
                 setVisible(true);
               }}
             >
-              Ajouter un Ticket
+              Ouvrir un Ticket
             </Button>,
           ]}
         />
@@ -400,6 +414,9 @@ const Ticketing = () => {
         visible={visibleDetails}
         setVisible={setVisibleDetails}
         ticket={ticket}
+        tickets={tickets}
+        setTickets={setTickets}
+        tableRef={tableRef}
       />
       <AddTicket
         visible={visible}

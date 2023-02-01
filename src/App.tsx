@@ -59,6 +59,7 @@ import { useDispatch } from "react-redux";
 import { getMenus } from "./features/menus/menuSlice";
 import Ticketing from "./pages/ticketing/ticketing-modules/Ticketing";
 import Calendar from "./pages/calendrier/calendrier-modules/Calendar";
+import InputTimesheet from "./pages/project/timesheet-modules/InputTimesheet";
 
 export interface IApplicationProps {}
 
@@ -127,6 +128,7 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
                   <Route path={`*`} element={<Projects />} />
                   <Route path={`kanban`} element={<Kanban />} />
                   <Route path={`timesheet`} element={<Timesheet />} />
+                  <Route path={`mes-timesheets`} element={<InputTimesheet />} />
               </Route>
               <Route path={`ressources-humaines/*`} element={<Index />}>
                   <Route path={`*`} element={<Sessions/>} />
