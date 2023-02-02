@@ -17,12 +17,41 @@ import {
 import { PlusOutlined, CloseOutlined } from "@ant-design/icons";
 import type { DatePickerProps } from "antd";
 import dayjs from "dayjs";
+import { getAllProjects } from "@/features/project/projectSlice";
+import { useDispatch } from "react-redux";
 const { Title, Link } = Typography;
+const { Option } = Select;
 const dateFormat = "DD-MM-YY";
-const data = [{ id: Math.random() }];
+const test = {
+  debut:"",
+  fin:"",
+  projet_id:[],
+  type_activite:[],
+  activite:[],
+  h_lun:[],
+  h_mar:[],
+  h_mer:[],
+  h_jeu:[],
+  h_ven:[],
+  h_sam:[],
+  h_dim:[],
+  totalproj:[],
+  tot_lun:"",
+  tot_mar:"",
+  tot_mer:"",
+  tot_jeu:"",
+  tot_ven:"",
+  tot_sam:"",
+  tot_dim:"",
+  total_timesheet:""
+}
 const InputTimesheet = () => {
+  const dispatch = useDispatch();
   const [date, setDate] = useState(dayjs());
-  const [timesheet, setTimesheet] = useState(data);
+  const [cp, setCp] = useState(1);
+  const [timesheet, setTimesheet] = useState([{ id: 0, details:[null,null,null,0,0,0,0,0,0,0,0] }]);
+  const [total, setTotal] = useState([null,null,null,0,0,0,0,0,0,0,0]);
+  const [projects, setProjects] = useState([]);
   const customWeekStartEndFormat: DatePickerProps["format"] = (value) =>
     `${dayjs(value).startOf("week").add(1, "day").format(dateFormat)} ~ ${dayjs(
       value
@@ -30,11 +59,31 @@ const InputTimesheet = () => {
       .endOf("week")
       .add(1, "day")
       .format(dateFormat)}`;
+
+  //select search and sort
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  const filterSort = (optionA, optionB) =>
+    (optionA?.label ?? "")
+      .toLowerCase()
+      .localeCompare((optionB?.label ?? "").toLowerCase());
+
+  useEffect(() => {
+    dispatch(getAllProjects())
+      .unwrap()
+      .then((originalPromiseResult) => {
+        setProjects(originalPromiseResult);
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        console.log(rejectedValueOrSerializedError);
+      });
+  }, []);
   return (
     <div>
       <Breadcrumb separator=">" className="mt-5">
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
         <Breadcrumb.Item href="">Timesheet</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Mes Timesheets</Breadcrumb.Item>
       </Breadcrumb>
       <Card
         className="mt-5"
@@ -110,18 +159,21 @@ const InputTimesheet = () => {
               <span className="text-[#ff0101]">{date.day(7).format("DD")}</span>
             </Space>
           </Col>
-          <Col span={2} className="text-center">
+          <Col span={2} className="text-center font-bold">
             Total (h)
           </Col>
         </Row>
         <Divider />
         {timesheet.map((item, index) => (
-          <>
-            <Space key={index}>
+          <div key={item.id}>
+            <Space>
               <CloseOutlined
                 className="mt-3 text-[#ff0101]"
                 onClick={() => {
                   setTimesheet(timesheet.filter((x) => x.id !== item.id));
+                  // console.log(item.id)
+                  // console.log(timesheet)
+                  // console.log(timesheet.filter((x) => x.id !== item.id))
                 }}
               />
               <Row gutter={12} className="mt-3">
@@ -129,25 +181,53 @@ const InputTimesheet = () => {
                   <Select
                     className="w-full"
                     placeholder="Projet"
-                    options={[{ value: "lucy", label: "Lucy" }]}
-                  />
+                    filterOption={filterOption}
+                    filterSort={filterSort}
+                    showSearch
+                    allowClear
+                  >
+                    {projects.map((project) => (
+                      <Option
+                        key={project.id}
+                        value={project.id}
+                        label={project.designation}
+                      >
+                        {project.designation}
+                      </Option>
+                    ))}
+                  </Select>
                 </Col>
                 <Col span={2}>
                   <Select
                     className="w-full"
                     placeholder="Type"
-                    options={[{ value: "lucy", label: "Lucy" }]}
+                    options={[{ value: "0", label: "Documentation" },
+                    { value: "1", label: "Développement" },
+                    { value: "2", label: "Test" },
+                    { value: "3", label: "Réunion" },
+                    { value: "4", label: "Support" }]}
+                    filterOption={filterOption}
+                    filterSort={filterSort}
+                    showSearch
+                    allowClear
                   />
                 </Col>
                 <Col span={3}>
-                  <Select
+                  <Input
                     className="w-full"
                     placeholder="Tâche"
-                    options={[{ value: "lucy", label: "Lucy" }]}
+                    // options={[{ value: "lucy", label: "Lucy" }]}
+                    // filterOption={filterOption}
+                    // filterSort={filterSort}
+                    // showSearch
+                    // allowClear
                   />
                 </Col>
                 <Col span={2}>
                   <InputNumber
+                    // decimalSeparator=":"
+                    min={0}
+                    max={24}
                     className="w-full"
                     defaultValue={0}
                     step="0.01"
@@ -155,6 +235,9 @@ const InputTimesheet = () => {
                 </Col>
                 <Col span={2}>
                   <InputNumber
+                    // decimalSeparator=":"
+                    min={0}
+                    max={24}
                     className="w-full"
                     defaultValue={0}
                     step="0.01"
@@ -162,6 +245,9 @@ const InputTimesheet = () => {
                 </Col>
                 <Col span={2}>
                   <InputNumber
+                    // decimalSeparator=":"
+                    min={0}
+                    max={24}
                     className="w-full"
                     defaultValue={0}
                     step="0.01"
@@ -169,6 +255,9 @@ const InputTimesheet = () => {
                 </Col>
                 <Col span={2}>
                   <InputNumber
+                    // decimalSeparator=":"
+                    min={0}
+                    max={24}
                     className="w-full"
                     defaultValue={0}
                     step="0.01"
@@ -176,6 +265,9 @@ const InputTimesheet = () => {
                 </Col>
                 <Col span={2}>
                   <InputNumber
+                    // decimalSeparator=":"
+                    min={0}
+                    max={24}
                     className="w-full"
                     defaultValue={0}
                     step="0.01"
@@ -183,6 +275,9 @@ const InputTimesheet = () => {
                 </Col>
                 <Col span={2}>
                   <InputNumber
+                    // decimalSeparator=":"
+                    min={0}
+                    max={24}
                     className="w-full"
                     defaultValue={0}
                     step="0.01"
@@ -190,6 +285,9 @@ const InputTimesheet = () => {
                 </Col>
                 <Col span={2}>
                   <InputNumber
+                    // decimalSeparator=":"
+                    min={0}
+                    max={24}
                     className="w-full"
                     defaultValue={0}
                     step="0.01"
@@ -206,7 +304,7 @@ const InputTimesheet = () => {
               </Row>
             </Space>
             <Divider />
-          </>
+          </div>
         ))}
         <Row gutter={12} className="mt-3 ml-4">
           <Col span={8} className="text-center">
@@ -282,10 +380,11 @@ const InputTimesheet = () => {
             <Link
               className="text-[#347bb7]"
               onClick={() => {
-                setTimesheet([{ id: Math.random() }, ...timesheet]);
+                setTimesheet([...timesheet, { id: cp, details:[null,null,null,0,0,0,0,0,0,0,0] }]);
+                setCp(cp + 1);
                 setTimeout(() => {
                   console.log(timesheet);
-                }, 500);
+                }, 1000);
               }}
             >
               <PlusOutlined /> Ajouter une activité

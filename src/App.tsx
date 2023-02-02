@@ -56,7 +56,6 @@ import { Session } from "inspector";
 
 import Redirection from "./components/Redirection";
 import { useDispatch } from "react-redux";
-import { getMenus } from "./features/menus/menuSlice";
 import Ticketing from "./pages/ticketing/ticketing-modules/Ticketing";
 import Calendar from "./pages/calendrier/calendrier-modules/Calendar";
 import InputTimesheet from "./pages/project/timesheet-modules/InputTimesheet";
@@ -75,19 +74,6 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
     ADMIN: "user",
     USER: "user",
   };
-  React.useEffect(() => {
-    if(localStorage.getItem("menu")===null){
-    dispatch(getMenus())
-    .unwrap()
-    .then((originalPromiseResult) => {
-      localStorage.setItem('menu',JSON.stringify(originalPromiseResult))
-    })
-    .catch((rejectedValueOrSerializedError) => {
-      console.log(rejectedValueOrSerializedError);
-      return [];
-    });
-  }
-  }, []);
   return (
     <ConfigProvider direction="ltr" locale={enFR} >
       <IntlProvider

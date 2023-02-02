@@ -34,7 +34,7 @@ export const etats = [
   },
   {
     key: 2,
-    designation: "Résolut",
+    designation: "Résolu",
   },
   {
     key: 3,

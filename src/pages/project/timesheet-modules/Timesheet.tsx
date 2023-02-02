@@ -335,6 +335,7 @@ const Timesheet: React.FC = () => {
       <Breadcrumb separator=">" className="mt-5">
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
         <Breadcrumb.Item href="">Timesheet</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
       </Breadcrumb>
       <Row className="mt-5" gutter={[12, 24]}>
         <Col xs={24}>

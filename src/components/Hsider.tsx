@@ -12,7 +12,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import MenuIcon from "./MenuIcon";
-import { getMenus } from "@/features/menus/menuSlice";
 const { Sider } = Layout;
 
 const { useBreakpoint } = Grid;

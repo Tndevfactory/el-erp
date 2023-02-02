@@ -15,13 +15,14 @@ import {
   ProFormText,
 } from "@ant-design/pro-components";
 import { useDispatch } from "react-redux";
-import { Button, Divider, message, Space, Tabs, Typography, Image } from "antd";
+import { Button, Divider, message, Space, Tabs, Typography, Alert } from "antd";
 import type { CSSProperties } from "react";
 import { useState } from "react";
 import elasticLogo from "@/assets/elastic-logo.png";
 import image from "@/assets/preview/ERP-3.png";
 import { useNavigate } from 'react-router-dom'
 import { login } from "@/features/auth/authSlice";
+import { getMenus } from "@/features/menus/menuSlice";
 const { Text, Link } = Typography;
 type LoginType = "phone" | "account";
 
@@ -36,6 +37,13 @@ export default () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const [loginType, setLoginType] = useState<LoginType>("account");
+  const [alert, setAlert] = useState(false)
+  const handleAlert=()=>{
+    setAlert(true)
+    setTimeout(() => {
+      setAlert(false)
+    }, 8000);
+  }
   return (
     <div
       style={{
@@ -59,9 +67,19 @@ export default () => {
             localStorage.setItem('token',originalPromiseResult.data.token)
             localStorage.setItem('permissions',JSON.stringify(originalPromiseResult.data.permissions))
             localStorage.setItem('module','2')
-            navigate(`/projets`)
+            dispatch(getMenus())
+            .unwrap()
+            .then((originalPromiseResult) => {
+              localStorage.setItem('menu',JSON.stringify(originalPromiseResult))
+              navigate(`/projets`)
+            })
+            .catch((rejectedValueOrSerializedError) => {
+              console.log(rejectedValueOrSerializedError);
+            });
+
           })
           .catch((rejectedValueOrSerializedError) => {
+            handleAlert()
             console.log(rejectedValueOrSerializedError);
             return [];
           });
@@ -120,10 +138,11 @@ export default () => {
           activeKey={loginType}
           onChange={(activeKey) => setLoginType(activeKey as LoginType)}
         >
-          <Tabs.TabPane key={"account"} tab={"Se connecter"} />
+          <Tabs.TabPane key={"account"} tab={"Se connecter"} disabled />
         </Tabs>
         {loginType === "account" && (
           <>
+              {alert&&<Alert message={<>E-mail ou mot de passe incorrect</>} type="error" className="mb-5" />}
             <ProFormText
               name=" username "
               fieldProps={{

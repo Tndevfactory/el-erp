@@ -43,7 +43,6 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 
 import Hsider from "./Hsider";
 import HSiderMobile from "./HSiderMobile";
-import { getMenus } from "@/features/menus/menuSlice";
 
 const profilMenu = (
   <Menu
