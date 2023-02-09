@@ -23,37 +23,37 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
-import CreateContract from "./CreateContract";
-import ContarctDetails from "./ContarctDetails";
+import Createharge from "./CreateCharge";
+import UpdateCharge from "./UpdateCharge";
 import { useDispatch, useSelector } from "react-redux";
-import { IContract } from "@/features/flotte/contract/flotteContractSlice";
+import { ICharge } from "@/features/finance/charges/chargesSlice";
 const { Title } = Typography;
 
-function ListeCharges() {
+function ListeCharge() {
   const dispatch = useDispatch();
-  var { contracts } = useSelector((store: any) => store.flotteContract);
+  var { charges } = useSelector((store: any) => store.charges);
   var { windowWidth } = useSelector((store: any) => store.ui);
   const [visibleForm, setVisibleForm] = useState(false);
   const [visibleDetails, setVisibleDetails] = useState(false);
   const [refresh, forceRefresh] = useState(0);
   const [modify, setModify] = useState(false);
 
-  const columns: ProColumns<IContract>[] = [
+  const columns: ProColumns<ICharge>[] = [
     {
-      title: "Code dossier",
+      title: "Code mission",
       dataIndex: "code_dossier",
       render: (code) => <a>{code}</a>,
       key: "code_dossier",
     },
     {
-      title: "Code client",
+      title: "Code projet",
       dataIndex: "code_client",
       responsive: ["md"],
       key: "code_client",
     },
 
     {
-      title: "Date établissement",
+      title: "Date de début",
       key: "date_etablissement",
       dataIndex: "date_etablissement",
       responsive: ["xl"],
@@ -63,7 +63,7 @@ function ListeCharges() {
         moment(b.date_etablissement, "DDMMYYYY").valueOf(),
     },
     {
-      title: "Date de fin prévue",
+      title: "Date de fin",
       key: 4,
       search: false,
       dataIndex: "date_fin_prevue",
@@ -72,7 +72,7 @@ function ListeCharges() {
         moment(b.date_fin_prevue, "DDMMYYYY").valueOf(),
     },
     {
-      title: "Nature échéance",
+      title: "Remboursement",
       key: "nature_echeance",
       dataIndex: "nature_echeance",
       search: false,
@@ -108,7 +108,7 @@ function ListeCharges() {
       onFilter: (value, record) => record.nature_echeance === value,
     },
     {
-      title: "Dernière règlement",
+      title: "Date de règlement",
       key: "derniere_reglement",
       dataIndex: "derniere_reglement",
       search: false,
@@ -148,7 +148,7 @@ function ListeCharges() {
             <Divider type="vertical" />
             <a>
               <Popconfirm
-                title="voulez-vous vraiment supprimer ce contrat ?"
+                title="voulez-vous vraiment supprimer cette note de frais ?"
                 onConfirm={() => {}}
                 okText="Oui"
                 cancelText="Non"
@@ -204,7 +204,7 @@ function ListeCharges() {
     setModify: setModify,
   };
   useEffect(() => {
-    setData(contracts);
+    setData(charges);
   }, [refresh]);
 
   return (
@@ -220,7 +220,7 @@ function ListeCharges() {
             title={<Title level={4}>Gestion des frais et charges</Title>}
             bordered={false}
           >
-            <ProTable<IContract>
+            <ProTable<ICharge>
               columns={columns}
               cardBordered
               columnsState={{
@@ -242,10 +242,10 @@ function ListeCharges() {
                 pageSize: 4,
                 // onChange: (page) => console.log(page),
               }}
-              headerTitle="Liste de contrats"
+              headerTitle="Liste des frais"
               request={async (params) => {
                 console.log(`request params:`, params);
-                var dataFilter = contracts;
+                var dataFilter = charges;
                 if (params.code_client)
                   dataFilter = dataFilter.filter((item) =>
                     item.code_client
@@ -280,17 +280,17 @@ function ListeCharges() {
                     setVisibleForm(true);
                   }}
                 >
-                  Ajouter un contrat
+                  Note de frais
                 </Button>,
               ]}
             />
           </Card>
         </Col>
       </Row>
-      <CreateContract {...obj}></CreateContract>
-      <ContarctDetails {...detailsObj}></ContarctDetails>
+      <Createharge {...obj}></Createharge>
+      <UpdateCharge {...detailsObj}></UpdateCharge>
     </div>
   );
 }
 
-export default ListeCharges;
+export default ListeCharge;

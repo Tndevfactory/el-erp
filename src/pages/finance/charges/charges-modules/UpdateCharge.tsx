@@ -43,7 +43,10 @@ const props: UploadProps = {
   },
 };
 //Contract form
-export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.SetStateAction<boolean>>) => (
+export const ContractForm = (
+  modify: boolean,
+  setModify?: React.Dispatch<React.SetStateAction<boolean>>
+) => (
   <Form layout="vertical" hideRequiredMark disabled={!modify} fields={[]}>
     <Row gutter={16}>
       <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
@@ -231,7 +234,7 @@ export const ContractForm = (modify:boolean, setModify?:React.Dispatch<React.Set
     </Row>
   </Form>
 );
-const ContractDetails: React.FC<{
+const UpdateCharge: React.FC<{
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   forceRefresh: React.Dispatch<React.SetStateAction<number>>;
@@ -242,9 +245,9 @@ const ContractDetails: React.FC<{
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
   const styleCard: React.CSSProperties = {
-    padding: '10px',
-    marginBottom: '15px',
-  }
+    padding: "10px",
+    marginBottom: "15px",
+  };
   const onClose = () => {
     setVisible(false);
   };
@@ -253,8 +256,8 @@ const ContractDetails: React.FC<{
 
   return (
     <Drawer
-      title={"Détails de contrat"}
-      width={windowWidth>750?720:"90%"}
+      title={"Détails de la note de frais"}
+      width={windowWidth > 750 ? 720 : "90%"}
       onClose={onClose}
       open={visible}
       bodyStyle={{
@@ -308,12 +311,16 @@ const ContractDetails: React.FC<{
               {
                 label: "Conditions",
                 key: "4",
-                children: <ConditionsContract/>,
+                children: <ConditionsContract />,
               },
               {
                 label: "Kilométrages",
                 key: "5",
-                children: <Card style={styleCard}><KilometrageContarct/></Card>,
+                children: (
+                  <Card style={styleCard}>
+                    <KilometrageContarct />
+                  </Card>
+                ),
               },
               {
                 label: "Autres",
@@ -328,4 +335,4 @@ const ContractDetails: React.FC<{
   );
 };
 
-export default ContractDetails;
+export default UpdateCharge;
