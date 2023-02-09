@@ -8,7 +8,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import enFR from 'antd/lib/locale/fr_FR';
+import enFR from "antd/lib/locale/fr_FR";
 // ltr rtl
 import { ConfigProvider } from "antd";
 // translator
@@ -36,8 +36,12 @@ import Login from "./pages/auth/Login";
 import Home from "./pages/home/Index";
 import Home1 from "./pages/home/home-modules/Home1";
 
-// Cautions
+//Finance
+// Finance // Cautions
 import Cautions from "./pages/finance/caution-modules/Cautions";
+
+// Finance // Charges
+import Charges from "./pages/finance/charges/charges-modules/ListeCharges";
 
 // Project
 import Projects from "./pages/project/project-modules/Projects";
@@ -75,7 +79,7 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
     USER: "user",
   };
   return (
-    <ConfigProvider direction="ltr" locale={enFR} >
+    <ConfigProvider direction="ltr" locale={enFR}>
       <IntlProvider
         messages={messages["fr"]}
         locale={"fr"}
@@ -83,45 +87,65 @@ const App: React.FunctionComponent<IApplicationProps> = (props) => {
       >
         <BrowserRouter>
           <Routes>
-          <Route path={`/redirection/:token`} element={<Redirection/>} />
+            <Route path={`/redirection/:token`} element={<Redirection />} />
             <Route path={`*`} element={<Login />} />
             <Route path={`/*`} element={<Layout />}>
               {/* <Route element={<GuestPath />}> */}
               {/* </Route> */}
               <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
                 {/* <Route path={`home`} element={<Home />} /> */}
-              <Route path={`home/*`} element={<Index />}>
-                <Route path={`*`} element={<Cautions />} />
-              </Route>
-              <Route path={`finance/*`} element={<Index />}>
+                <Route path={`home/*`} element={<Index />}>
                   <Route path={`*`} element={<Cautions />} />
-              </Route>
-              <Route path={`ticketing/*`} element={<Index />}>
+                </Route>
+                <Route path={`finance/*`} element={<Index />}>
+                  <Route path={`*`} element={<Cautions />} />
+                  <Route path={`charges`} element={<Charges />} />
+                  <Route
+                    path={`gestion-des-clients`}
+                    element={<FlottesClients />}
+                  />
+                  <Route
+                    path={`gestion-des-vehicules`}
+                    element={<Vehicules />}
+                  />
+                </Route>
+                <Route path={`ticketing/*`} element={<Index />}>
                   <Route path={`*`} element={<Ticketing />} />
-              </Route>
-              <Route path={`calendrier/*`} element={<Index />}>
+                </Route>
+                <Route path={`calendrier/*`} element={<Index />}>
                   <Route path={`*`} element={<Calendar />} />
-              </Route>
-              <Route path={`flottes/*`} element={<Index />}>
+                </Route>
+                <Route path={`flottes/*`} element={<Index />}>
                   <Route path={`*`} element={<FlottesContract />} />
-                  <Route path={`gestion-des-contrats`} element={<FlottesContract />} />
-                  <Route path={`gestion-des-clients`} element={<FlottesClients />} />
-                  <Route path={`gestion-des-vehicules`} element={<Vehicules />} />
-                  <Route path={`gestion-des-livraisons`} element={<Livraison />} />
-
-              </Route>
-              <Route path={`projets/*`} element={<Index />}>
+                  <Route
+                    path={`gestion-des-contrats`}
+                    element={<FlottesContract />}
+                  />
+                  <Route
+                    path={`gestion-des-clients`}
+                    element={<FlottesClients />}
+                  />
+                  <Route
+                    path={`gestion-des-vehicules`}
+                    element={<Vehicules />}
+                  />
+                  <Route
+                    path={`gestion-des-livraisons`}
+                    element={<Livraison />}
+                  />
+                </Route>
+                <Route path={`projets/*`} element={<Index />}>
                   <Route path={`*`} element={<Projects />} />
                   <Route path={`kanban`} element={<Kanban />} />
                   <Route path={`timesheet`} element={<Timesheet />} />
                   <Route path={`mes-timesheets`} element={<InputTimesheet />} />
-              </Route>
-              <Route path={`ressources-humaines/*`} element={<Index />}>
-                  <Route path={`*`} element={<Sessions/>} />
+                </Route>
+                <Route path={`ressources-humaines/*`} element={<Index />}>
+                  <Route path={`*`} element={<Sessions />} />
                   <Route path={`formation/session`} element={<Sessions />} />
+                </Route>
               </Route>
-              </Route>
-              </Route>
+            </Route>
             <Route path={`unauthorized`} element={<Unauthorized />} />
             {/* <Route path={`*`} element={<Missing />} /> */}
           </Routes>
