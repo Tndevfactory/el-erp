@@ -12,7 +12,7 @@ import {
 } from "antd";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { PlusOutlined } from "@ant-design/icons";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 const CreateCharge: React.FC<{
@@ -24,10 +24,26 @@ const CreateCharge: React.FC<{
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
+  const [indexForm, setIndexForm] = useState<any[]>([0]);
+
   const onClose = () => {
     setVisible(false);
   };
+
+  const removeForm = (i) => {
+    const r = [...indexForm];
+    r.pop();
+
+    setIndexForm(r);
+  };
+  const addForm = (i) => {
+    console.log("indexForm", indexForm);
+    console.log("index", i);
+    setIndexForm([...indexForm, i]);
+  };
   const handleSubmit = (values) => {
+    console.log("form-data", values);
+
     forceRefresh(Math.random());
     setVisible(false);
     // console.log(values);
@@ -43,8 +59,8 @@ const CreateCharge: React.FC<{
         paddingBottom: 80,
       }}
     >
-      <Form layout="vertical" hideRequiredMark>
-        {[1, 2].map((v, i) => (
+      <Form layout="vertical" hideRequiredMark onFinish={handleSubmit}>
+        {indexForm.map((v, i) => (
           <Card
             style={{
               backgroundColor: "#eee",
@@ -57,7 +73,7 @@ const CreateCharge: React.FC<{
             <Row gutter={16}>
               <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                 <Form.Item
-                  name="code_contrat"
+                  name={`${i}-code_contrat`}
                   label="Code contrat"
                   rules={[
                     {
@@ -71,7 +87,7 @@ const CreateCharge: React.FC<{
               </Col>
               <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                 <Form.Item
-                  name="code_client"
+                  name={`${i}-code_client`}
                   label="Code client"
                   rules={[
                     {
@@ -85,7 +101,7 @@ const CreateCharge: React.FC<{
               </Col>
               <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                 <Form.Item
-                  name="immatriculation"
+                  name={`${i}-immatriculation`}
                   label="Immatriculation"
                   rules={[
                     {
@@ -99,7 +115,7 @@ const CreateCharge: React.FC<{
               </Col>
               <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                 <Form.Item
-                  name="numero_chassis"
+                  name={`${i}-numero_chassis`}
                   label="N° de Chassis"
                   rules={[
                     {
@@ -113,7 +129,7 @@ const CreateCharge: React.FC<{
               </Col>
               <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                 <Form.Item
-                  name="marque"
+                  name={`${i}-marque`}
                   label="Marque"
                   rules={[
                     {
@@ -137,7 +153,7 @@ const CreateCharge: React.FC<{
               </Col>
               <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                 <Form.Item
-                  name="modele"
+                  name={`${i}-modele`}
                   label="Modèle"
                   rules={[
                     {
@@ -162,7 +178,7 @@ const CreateCharge: React.FC<{
               <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                 <Form.Item
                   label="Date début contrat"
-                  name="debut_contrat"
+                  name={`${i}-debut_contrat`}
                   rules={[
                     {
                       required: true,
@@ -182,7 +198,7 @@ const CreateCharge: React.FC<{
               <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
                 <Form.Item
                   label="Date fin contrat"
-                  name="fin_contrat"
+                  name={`${i}-fin_contrat`}
                   rules={[
                     {
                       required: true,
@@ -202,17 +218,35 @@ const CreateCharge: React.FC<{
             </Row>
           </Card>
         ))}
+        <div style={{ display: "flex", gap: "1rem" }}>
+          <Button
+            style={{ width: "100%", marginTop: "10px", marginBottom: "20px" }}
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => {
+              addForm(indexForm.length);
+            }}
+          >
+            Ajouter note de frais
+          </Button>
+          <Button
+            style={{
+              width: "100%",
+              marginTop: "10px",
+              marginBottom: "20px",
+              backgroundColor: indexForm.length < 2 ? "lightgray" : "#E80B2C",
+              color: "white",
+            }}
+            icon={<MinusOutlined />}
+            onClick={() => {
+              removeForm(indexForm.length - 1);
+            }}
+            disabled={indexForm.length < 2}
+          >
+            Supprimer note de frais
+          </Button>
+        </div>
 
-        <Button
-          style={{ width: "100%", marginTop: "10px", marginBottom: "20px" }}
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            true;
-          }}
-        >
-          Ajouter note de frais
-        </Button>
         <Form.Item
           style={{
             width: "100%",
