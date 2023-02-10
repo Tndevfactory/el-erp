@@ -40,85 +40,78 @@ function ListeCharge() {
 
   const columns: ProColumns<ICharge>[] = [
     {
-      title: "Code mission",
-      dataIndex: "code_dossier",
+      title: "Titre",
+      dataIndex: "titre_frais",
       render: (code) => <a>{code}</a>,
-      key: "code_dossier",
-    },
-    {
-      title: "Code projet",
-      dataIndex: "code_client",
-      responsive: ["md"],
-      key: "code_client",
+      key: "titre_frais",
     },
 
     {
-      title: "Date de début",
-      key: "date_etablissement",
-      dataIndex: "date_etablissement",
+      title: "Montant",
+      dataIndex: "montant_frais",
+      responsive: ["md"],
+      key: "montant_frais",
+    },
+    {
+      title: "Date",
+      key: "date_frais",
+      dataIndex: "date_frais",
       responsive: ["xl"],
       search: false,
       sorter: (a, b) =>
-        moment(a.date_etablissement, "DDMMYYYY").valueOf() -
-        moment(b.date_etablissement, "DDMMYYYY").valueOf(),
+        moment(a.date_frais, "DDMMYYYY").valueOf() -
+        moment(b.date_frais, "DDMMYYYY").valueOf(),
     },
     {
-      title: "Date de fin",
-      key: 4,
+      title: "Projet ",
+      key: "titre_projet",
+      dataIndex: "titre_projet",
+      responsive: ["xl"],
       search: false,
-      dataIndex: "date_fin_prevue",
-      sorter: (a, b) =>
-        moment(a.date_fin_prevue, "DDMMYYYY").valueOf() -
-        moment(b.date_fin_prevue, "DDMMYYYY").valueOf(),
     },
     {
-      title: "Remboursement",
-      key: "nature_echeance",
-      dataIndex: "nature_echeance",
+      title: "Statut remboursement",
+      key: "status_remboursement_frais",
+      dataIndex: "status_remboursement_frais",
       search: false,
-      render: (_, contrat) => (
+      render: (_, charge) => (
         <Tag
           color={
-            contrat.nature_echeance === "annuelle"
+            charge.status_remboursement_frais == "En cours de traitement"
               ? "blue"
-              : contrat.nature_echeance === "trimestrielle"
-              ? "gold"
-              : contrat.nature_echeance === "mensuel"
+              : charge.status_remboursement_frais == "Rejeté"
+              ? "red"
+              : charge.status_remboursement_frais == "Traité"
               ? "green"
+              : charge.status_remboursement_frais == "Complement d'information"
+              ? "gold"
               : "red"
           }
         >
-          {contrat.nature_echeance}
+          <span style={{ cursor: "pointer" }}>
+            {charge.status_remboursement_frais}
+          </span>
         </Tag>
       ),
       filters: [
         {
-          text: "Annuelle",
-          value: "annuelle",
+          text: "en cours de traitement",
+          value: "en cours de traitement",
         },
         {
-          text: "Trimestrielle",
-          value: "trimestrielle",
+          text: "complement d'information",
+          value: "complement d'information",
         },
         {
-          text: "Mensuel",
-          value: "mensuel",
+          text: "non accepté",
+          value: "non accepté",
+        },
+        {
+          text: "effectué",
+          value: "effectué",
         },
       ],
-      onFilter: (value, record) => record.nature_echeance === value,
-    },
-    {
-      title: "Date de règlement",
-      key: "derniere_reglement",
-      dataIndex: "derniere_reglement",
-      search: false,
-      responsive: ["sm"],
-      sorter: (a, b) => {
-        return (
-          moment(a.derniere_reglement, "DDMMYYYY").valueOf() -
-          moment(b.derniere_reglement, "DDMMYYYY").valueOf()
-        );
-      },
+      onFilter: (value, record) => record.status_remboursement_frais === value,
     },
 
     {
@@ -128,7 +121,7 @@ function ListeCharge() {
       render: () =>
         windowWidth > 620 ? (
           <Space size="small">
-            <a
+            {/* <a
               onClick={() => {
                 setModify(false);
                 setVisibleDetails(true);
@@ -136,7 +129,7 @@ function ListeCharge() {
             >
               <EyeOutlined />
             </a>
-            <Divider type="vertical" />
+            <Divider type="vertical" /> */}
             <a
               onClick={() => {
                 setModify(true);
@@ -217,7 +210,7 @@ function ListeCharge() {
       <Row className="mt-5" gutter={[12, 24]}>
         <Col xs={24}>
           <Card
-            title={<Title level={4}>Gestion des frais et charges</Title>}
+            title={<Title level={4}>Gestion des frais</Title>}
             bordered={false}
           >
             <ProTable<ICharge>

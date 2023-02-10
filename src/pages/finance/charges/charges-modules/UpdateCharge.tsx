@@ -43,7 +43,7 @@ const props: UploadProps = {
   },
 };
 //Contract form
-export const ContractForm = (
+export const ChargesForm = (
   modify: boolean,
   setModify?: React.Dispatch<React.SetStateAction<boolean>>
 ) => (
@@ -268,7 +268,7 @@ const UpdateCharge: React.FC<{
       <Space direction="vertical" size="middle" style={{ display: "flex" }}>
         <Card title="Informations">
           <>
-            {ContractForm(modify, setModify)}
+            {ChargesForm(modify, setModify)}
             {!modify && (
               <div style={{ width: "100%", textAlign: "right" }}>
                 <Button
@@ -283,53 +283,6 @@ const UpdateCharge: React.FC<{
             )}
           </>
         </Card>
-        <ProCard
-          title="Plus de détail"
-          collapsible
-          bordered
-          // defaultCollapsed
-        >
-          <Tabs
-            defaultActiveKey="1"
-            type="card"
-            items={[
-              {
-                label: "Client",
-                key: "1",
-                children: <Card style={styleCard}>{ClientForm(false)}</Card>,
-              },
-              {
-                label: "Véhicule",
-                key: "2",
-                children: <Card style={styleCard}>{VehiculeForm(false)}</Card>,
-              },
-              {
-                label: "Factures",
-                key: "3",
-                children: <Factures />,
-              },
-              {
-                label: "Conditions",
-                key: "4",
-                children: <ConditionsContract />,
-              },
-              {
-                label: "Kilométrages",
-                key: "5",
-                children: (
-                  <Card style={styleCard}>
-                    <KilometrageContarct />
-                  </Card>
-                ),
-              },
-              {
-                label: "Autres",
-                key: "6",
-                children: <Card style={styleCard}></Card>,
-              },
-            ]}
-          />
-        </ProCard>
       </Space>
     </Drawer>
   );
